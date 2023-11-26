@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="../styles/login.css">
+    <title>Profile</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Блог</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <button class="btn btn-secondary btn-block">Главная</button>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Профиль<span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="profilebox border rounded p-4 col-12 col-sm-10 col-md-8 col-lg-6 mx-auto" id="profilebox">
+            <div class="content">
+                <div class="form-group">
+                    <label for="email">ФИО</label>
+                    <input class="form-control" id="fullname" placeholder="Иванов Иван Иванович">
+                </div>
+                <div class="form-group">
+                    <label for="date">Дата рождения</label>
+                    <input type="date" class="form-control" id="birthdate" placeholder="дд.мм.гггг">
+                </div>
+                <script>
+                    $(document).ready(function(){
+                        $('#date').datepicker({
+                            format: 'dd.mm.yyyy',
+                            language: 'ru', 
+                            autoclose: true, 
+                            todayHighlight: true 
+                        });
+                    });
+                </script>
+                <div class="form-group">
+                    <label for="gender">Пол</label>
+                    <select class="form-control" id="gender">
+                        <option value="male">Мужчина</option>
+                        <option value="female">Женщина</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="email">Номер телефона</label>
+                    <input class="form-control" id="phonenumber" placeholder="+7 (xxx) xxx-xx-xx">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="name@example.com">
+                </div>
+                <button class="btn btn-primary btn-block" id ="save_button">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <script type = "module" src ="./scriptsJS/profile.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
+</body>
+</html>

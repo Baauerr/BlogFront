@@ -1,0 +1,9 @@
+{
+  "name": "hitswebproject",
+  "version": "1.0.0",
+  "description": "HITSWebProject",
+  "main": "index.ts",
+  "author": "",
+  "license": "ISC",
+  "build": "tsc --project tsconfig.json"
+}
