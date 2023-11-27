@@ -1,4 +1,4 @@
-import { login_user_server } from "./api/loginAPI.js";
+import { login_user_server } from "../api/loginAPI.js";
 
 class LoginData {
     email: string;
@@ -18,7 +18,7 @@ function login_button_action(){
     login_user_server(requestData)
 }
 
-const loginButton = document.getElementById('login_button');
+const loginButton = document.getElementById('login_button') as HTMLButtonElement;
 
 loginButton.addEventListener('click', () => {
     login_button_action()

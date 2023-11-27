@@ -21,7 +21,7 @@ export function register_user_server(responseData){
         if (data.errors) {
             await takeErrorTextAsync(data, inputErrorMapping);
         } else {
-            // localStorage.setItem("token", data)
+            localStorage.setItem("token", data)
             console.log('request:', data);
         }
     })

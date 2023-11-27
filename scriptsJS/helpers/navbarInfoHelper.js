@@ -1,36 +1,55 @@
+import { getProfile } from "../api/profileAPI.js";
 document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("token");
     if (token !== null) {
         console.log(token);
+        localStorage.clear();
         showLoggedInMenu();
     }
     else {
         showDefaultMenu();
     }
 });
-function showLoggedInMenu() {
-    document.getElementById("loginButton").style.display = "none";
-    document.getElementById("userMenu").style.display = "block";
-    const userEmail = getUserEmailFromToken();
-    document.getElementById("userEmail").innerText = userEmail;
-}
-function showDefaultMenu() {
-    document.getElementById("loginButton").style.display = "block";
-    document.getElementById("userMenu").style.display = "none";
-}
-function getUserEmailFromToken() {
-    const authToken = localStorage.getItem("token");
-    if (authToken) {
-        const tokenParts = authToken.split('.');
-        if (tokenParts.length === 3) {
-            const encodedPayload = tokenParts[1];
-            const decodedPayload = atob(encodedPayload);
-            const payloadObject = JSON.parse(decodedPayload);
-            if (payloadObject.email) {
-                return payloadObject.email;
-            }
+async function showLoggedInMenu() {
+    const loginButtonElement = document.getElementById("loginButton");
+    const userMenuElement = document.getElementById("userMenu");
+    if (loginButtonElement && userMenuElement) {
+        loginButtonElement.style.display = "none";
+        userMenuElement.style.display = "block";
+        const userEmail = await getUserEmail();
+        const dropdownMenuButton = document.getElementById("dropdownMenuButton");
+        if (dropdownMenuButton) {
+            dropdownMenuButton.innerText = userEmail;
         }
     }
-    return null;
+}
+function showDefaultMenu() {
+    const loginButtonElement = document.getElementById("loginButton");
+    const userMenuElement = document.getElementById("userMenu");
+    if (loginButtonElement && userMenuElement) {
+        loginButtonElement.style.display = "block";
+        userMenuElement.style.display = "none";
+    }
+}
+async function getUserEmail() {
+    try {
+        const userInfo = await getProfile();
+        return userInfo.email;
+    }
+    catch (error) {
+        console.error('Произошла ошибка:', error);
+        throw error;
+    }
+}
+function logout() {
+    localStorage.clear();
+    console.log("jija");
+    window.location.href = "";
+}
+const loginButton = document.getElementById('logout');
+if (loginButton) {
+    loginButton.addEventListener('click', () => {
+        logout();
+    });
 }
 //# sourceMappingURL=navbarInfoHelper.js.map

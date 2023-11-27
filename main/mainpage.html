@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-3">
+        <div class="container d-flex">
+            <button type="button" class="btn btn-primary ml-auto">Написать пост</button>
+        </div> 
+        <div class="card mb-3">
+            <div class="card-header">
+                Фильтры
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <label for="inputWide">Поиск по имени автора</label>
+                        <input type="text" class="form-control" id="inputWide">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="d-flex flex-column align-items-start">
+                            <label for="filterSquare" class="form-label">Поиск по тэгам</label>
+                            <select class="form-select w-100 border p-1" id="filterSquare" multiple>
+                                <option value="male">Мужчина</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="row align-items-center">
+                    <div class="col-md-4">
+                        <label for="filterSingle" class="d-block">Сортировать</label>
+                        <select class="form-control w-100 border p-1" id="filterSingle">
+                            <option value="male" id="CreateDesc">По дате создания (сначала новые)</option>
+                            <option value="female" id="CreateAsc">По дате создания (сначала старые)</option>
+                            <option value="male" id="LikeAsc">По количеству лайков (сначала меньше)</option>
+                            <option value="female" id="LikeDesc">По количеству лайков (сначала больше)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="input2">Время чтения от</label>
+                        <input type="text" class="form-control" id="input2">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="input3">Время чтения до</label>
+                        <input type="text" class="form-control" id="input3">
+                    </div>
+                    <div class="col-md-4 d-flex flex-column justify-content-center">
+                        <div class="d-flex align-items-center">
+                            <input type="checkbox" id="only_my_groups" value="yes">
+                            <label for="only_my_groups" class="mb-0 ml-1">Только мои группы</label>
+                            <button class="btn btn-primary ml-auto">Применить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="card mb-3">
+            <div class="card-header">
+                Название контента
+            </div>
+            <div class="card-body">
+                <hr class="my-4"> 
+    
+                <p class="card-text">
+                    Ваш текст или изображение здесь.
+                </p>
+    
+                <div class="bg-light p-3 mt-3">
+                    <i class="bi bi-chat-dots">Комментарии</i> 
+                </div>
+            </div>
+        </div>
+    </div> 
+    <nav id="pagination">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="?page=1&pageSize=5">1</a></li>
+            <li class="page-item"><a class="page-link" href="?page=2&pageSize=5">2</a></li>
+            <li class="page-item"><a class="page-link" href="?page=3&pageSize=5">3</a></li>
+            <!-- Добавьте дополнительные li элементы в зависимости от количества страниц -->
+        </ul>
+    </nav>
+    <script type = "module" src = "../scriptsJS/mainPage/mainPage.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

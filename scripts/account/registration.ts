@@ -1,6 +1,6 @@
-import { formatDateForServer } from "./helpers/formatDateHelper.js";
-import { createDateFromInfo } from "./helpers/formatDateHelper.js";
-import { register_user_server } from "./api/registrationAPI.js";
+import { formatDateForServer } from "../helpers/formatDateHelper.js";
+import { createDateFromInfo } from "../helpers/formatDateHelper.js";
+import { register_user_server } from "../api/registrationAPI.js";
 
 class LoginData {
     email: string;
@@ -41,7 +41,7 @@ function registration_button_action(){
     register_user_server(requestData)
 }
 
-const registrationButton = document.getElementById('registration_button');
+const registrationButton = document.getElementById('registration_button') as HTMLButtonElement;
 
 registrationButton.addEventListener('click', registration_button_action);
 

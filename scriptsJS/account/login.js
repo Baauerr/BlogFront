@@ -1,4 +1,4 @@
-import { login_user_server } from "./api/loginAPI.js";
+import { login_user_server } from "../api/loginAPI.js";
 class LoginData {
     email;
     password;

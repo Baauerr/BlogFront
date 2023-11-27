@@ -1,6 +1,6 @@
-import { formatDateForServer } from "./helpers/formatDateHelper.js";
-import { createDateFromInfo } from "./helpers/formatDateHelper.js";
-import { register_user_server } from "./api/registrationAPI.js";
+import { formatDateForServer } from "../helpers/formatDateHelper.js";
+import { createDateFromInfo } from "../helpers/formatDateHelper.js";
+import { register_user_server } from "../api/registrationAPI.js";
 class LoginData {
     email;
     password;

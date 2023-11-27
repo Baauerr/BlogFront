@@ -2,7 +2,6 @@ export function formatDateForServer(usersDate) {
     if (usersDate === "") {
         return null;
     }
-    ;
     const [day, month, year] = usersDate.split("-");
     const correctDate = {
         year: parseInt(year, 10),

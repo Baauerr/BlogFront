@@ -1,4 +1,4 @@
-export async function takeErrorTextAsync(data, inputErrorMapping) {
+export async function takeErrorTextAsync(data: any, inputErrorMapping: Record<string, HTMLDivElement>) {
   await new Promise(resolve => setTimeout(resolve, 0));
 
   Object.keys(data.errors).forEach((fieldName: string) => {
@@ -13,24 +13,25 @@ export async function takeErrorTextAsync(data, inputErrorMapping) {
   });
 }
 
-export function createErrorElement(inputErrorMapping) {
+export function createErrorElement(inputErrorMapping: Record<string, HTMLDivElement>) {
+  const container = document.getElementById('loginbox');
 
-    const container = document.getElementById('loginbox');
+  const inputElements = container.querySelectorAll('input, #birthdate');
+  const inputIds: string[] = [];
+  inputElements.forEach(input => {
+      inputIds.push(input.id);
+  });
 
-        const inputElements = container.querySelectorAll('input, #birthdate');
-        const inputIds = [];
-        inputElements.forEach(input => {
-            inputIds.push(input.id);
-    });
-    inputIds.forEach(element => {
-            const errorElement = document.createElement('div');
-            errorElement.classList.add('error-message');
-            errorElement.id = `${element}Error`;
-            const inputElement = document.getElementById(element.toLowerCase());
-        
-            if (inputElement) {
-              inputElement.parentNode.insertBefore(errorElement, inputElement.nextSibling);
-          }
-          inputErrorMapping[element] = errorElement;
-        });
+  inputIds.forEach(element => {
+      const errorElement = document.createElement('div');
+      errorElement.classList.add('error-message');
+      errorElement.id = `${element}Error`;
+
+      const inputElement = document.getElementById(element.toLowerCase());
+
+      if (inputElement) {
+          inputElement.parentNode?.insertBefore(errorElement, inputElement.nextSibling);
+      }
+      inputErrorMapping[element] = errorElement;
+  });
 }

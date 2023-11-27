@@ -9,13 +9,12 @@ export function login_user_server(responseData){
         .then(response => response.json())
         .then(data => {
             if (data.errors){
-                localStorage.clear();
                     console.log('request:', data);
                 }
             else {
                 localStorage.setItem("token", data.token)
                 console.log(localStorage.getItem("token"))
-                window.location.hash = ""
+                window.location.href = ""
             }
     })
     .catch(error => {

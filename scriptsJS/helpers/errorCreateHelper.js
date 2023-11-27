@@ -23,7 +23,7 @@ export function createErrorElement(inputErrorMapping) {
         errorElement.id = `${element}Error`;
         const inputElement = document.getElementById(element.toLowerCase());
         if (inputElement) {
-            inputElement.parentNode.insertBefore(errorElement, inputElement.nextSibling);
+            inputElement.parentNode?.insertBefore(errorElement, inputElement.nextSibling);
         }
         inputErrorMapping[element] = errorElement;
     });

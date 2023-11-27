@@ -20,12 +20,18 @@
             </ul>
             <ul class="navbar-nav ml-auto" id = "user_info_area">
                     <a href="#/login" class="btn btn-primary btn-block" id ="loginButton">Войти</a>
-                    <div id="userMenu" style="display: none;">
-                        <a href="#/profile" id ="userEmail"></a>
-                        <button onclick="">Выход</button>
-                      </div>
+                    <div class="container mt-1" id="userMenu" style="display: none;">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" id = "logout">Выйти</a>
+                                <a class="dropdown-item" href="#/profile">Профиль</a>
+                            </div>
+                        </div>
+                    </div>
             </ul>
-            <ul class="navbar-nav">
+            <ul class="navbar-nav" id="postButton" style="display:none;">
                     <a class="nav-link" href="">Главная<span class="sr-only">(current)</span></a>
             </ul>
         </div>
@@ -37,6 +43,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
     <script src="./scriptsJS/routing/routing.js"></script>
-    <script src="./scriptsJS/helpers/navbarInfoHelper.js"></script>
+    <script type = "module" src="./scriptsJS/helpers/navbarInfoHelper.js"></script>
+    <script type = "module" src ="./scriptsJS/mainPage/mainPage.js"></script>
 </body>
 </html>

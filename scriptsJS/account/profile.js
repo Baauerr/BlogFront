@@ -1,7 +1,7 @@
-import { getProfile } from "./api/profileAPI.js";
-import { editProfile } from "./api/profileAPI.js";
-import { createDateFromInfo } from "./helpers/formatDateHelper.js";
-import { formatDateForServer } from "./helpers/formatDateHelper.js";
+import { getProfile } from "../api/profileAPI.js";
+import { editProfile } from "../api/profileAPI.js";
+import { createDateFromInfo } from "../helpers/formatDateHelper.js";
+import { formatDateForServer } from "../helpers/formatDateHelper.js";
 const registrationButton = document.getElementById('save_button');
 info();
 class UserData {
@@ -13,11 +13,11 @@ class UserData {
 }
 function edit_button_action() {
     console.log("jija");
-    const inputName = document.getElementById('fullname');
+    const inputName = document.getElementById('fullName');
     const inputEmail = document.getElementById('email');
-    const inputBirthDate = document.getElementById('birthdate');
+    const inputBirthDate = document.getElementById('birthDate');
     const inputGender = document.getElementById('gender');
-    const inputPhoneNumber = document.getElementById('phonenumber');
+    const inputPhoneNumber = document.getElementById('phoneNumber');
     let correctDateForBackEnd = formatDateForServer(inputBirthDate.value);
     const requestData = {
         email: inputEmail.value,
@@ -34,6 +34,8 @@ async function info() {
     const inputElements = container.querySelectorAll('input');
     inputElements.forEach(input => {
         const fieldName = input.id;
+        console.log(fieldName);
+        console.log(booba[fieldName]);
         input.value = booba[fieldName];
     });
 }
