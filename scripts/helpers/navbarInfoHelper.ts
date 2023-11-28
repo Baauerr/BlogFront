@@ -49,7 +49,6 @@ async function getUserEmail() {
 
 function logout() {
   localStorage.clear();
-  console.log("jija");
   window.location.href = "";
 }
 

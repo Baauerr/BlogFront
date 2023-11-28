@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
 <body>
     <div class="container mt-3">
         <div class="container d-flex">
@@ -59,23 +51,34 @@
                 </div>
             </div>
         </div>
-    
-        <div class="card mb-3">
-            <div class="card-header">
-                Название контента
-            </div>
-            <div class="card-body">
-                <hr class="my-4"> 
-    
-                <p class="card-text">
-                    Ваш текст или изображение здесь.
-                </p>
-    
-                <div class="bg-light p-3 mt-3">
-                    <i class="bi bi-chat-dots">Комментарии</i> 
+        <template id="postTemplate">
+            <div class="post_template">
+              <div class="card mb-3">
+                <div class="card-header">
+                  <span class="post-title"></span>
                 </div>
+                <div class="card-body">
+                  <p class="authors">
+                    Автор: <span class="post-author"></span>
+                  </p>
+                  <p class="name">
+                    Название: <span class="post-title"></span>
+                  </p>
+                  <hr class="my-4">
+                    <p class="post_info">
+                        <img class="post-image img-thumbnail" style="display: none;" alt="Post Image" />
+                        <span class="post-description"></span>
+                        <a class="show-more" onclick="readMore(this)" style="display: none;">Читать полностью</a>
+                    </p>
+                  <div class="bg-light p-3 mt-3">
+                    <i class="bi bi-chat-dots">Комментарии (<span class="post-comments"></span>)</i> 
+                  </div>
+                </div>
+              </div>
             </div>
-        </div>
+          </template>
+          
+          <div id="postsContainer"></div>
     </div> 
     <nav id="pagination">
         <ul class="pagination">
@@ -84,8 +87,5 @@
             <li class="page-item"><a class="page-link">3</a></li>
         </ul>
     </nav>
-    <script src = "../scriptsJS/routing/routing.js"></script>
     <script type = "module" src = "../scriptsJS/mainPage/mainPage.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <script type = "text/javascript" src = "../scriptsJS/mainPage/showMore.js"></script>

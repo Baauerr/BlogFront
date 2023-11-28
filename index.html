@@ -9,7 +9,7 @@
 <body>
     
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="">Блог</a>
+        <a class="navbar-brand" href="/">Блог</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -19,14 +19,14 @@
                     <button class="btn btn-secondary btn-block">Главная</button>
             </ul>
             <ul class="navbar-nav ml-auto" id = "user_info_area">
-                    <a href="#/login" class="btn btn-primary btn-block" id ="loginButton">Войти</a>
+                    <a href="#/account/login" class="btn btn-primary btn-block" id ="loginButton">Войти</a>
                     <div class="container mt-1" id="userMenu" style="display: none;">
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item" id = "logout">Выйти</a>
-                                <a class="dropdown-item" href="#/profile">Профиль</a>
+                                <a class="dropdown-item" href="#/account/profile">Профиль</a>
                             </div>
                         </div>
                     </div>
@@ -44,6 +44,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
     <script src="./scriptsJS/routing/routing.js"></script>
     <script type = "module" src="./scriptsJS/helpers/navbarInfoHelper.js"></script>
-    <script type = "module" src ="./scriptsJS/mainPage/mainPage.js"></script>
 </body>
 </html>

@@ -43,7 +43,6 @@ async function getUserEmail() {
 }
 function logout() {
     localStorage.clear();
-    console.log("jija");
     window.location.href = "";
 }
 const loginButton = document.getElementById('logout');

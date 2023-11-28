@@ -1,0 +1,1 @@
+{"version":3,"file":"showMore.js","sourceRoot":"","sources":["../../scripts/mainPage/showMore.ts"],"names":[],"mappings":"AAAA,QAAQ,CAAC,gBAAgB,CAAC,kBAAkB,EAAE;IAC1C,QAAQ,CAAC,cAAc,CAAC,MAAM,CAAC,CAAC,gBAAgB,CAAC,OAAO,EAAE;QACtD,IAAI,aAAa,GAAG,QAAQ,CAAC,cAAc,CAAC,gBAAgB,CAAC,CAAC;QAC9D,aAAa,CAAC,SAAS,CAAC,MAAM,CAAC,QAAQ,CAAC,CAAC;IAC7C,CAAC,CAAC,CAAC;AACP,CAAC,CAAC,CAAC"}

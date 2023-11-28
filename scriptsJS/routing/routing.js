@@ -12,9 +12,9 @@ const loadHTML = async (path) => {
         throw error;
     }
 };
-const index = {
+const main = {
     render: async () => {
-        const htmlCode = await loadHTML('../index.html');
+        const htmlCode = await loadHTML('../main/mainpage.html');
         return htmlCode;
     },
 };
@@ -47,10 +47,10 @@ const ErrorComponent = {
     },
 };
 const routes = [
-    { path: "/", component: index },
-    { path: "/login", component: login },
-    { path: "/registration", component: registration },
-    { path: "/profile", component: profile }
+    { path: "/", component: main },
+    { path: "/account/login", component: login },
+    { path: "/account/registration", component: registration },
+    { path: "/account/profile", component: profile }
 ];
 const runScripts = (htmlCode) => {
     const parser = new DOMParser();
@@ -70,7 +70,7 @@ const runScripts = (htmlCode) => {
 const parseLocation = () => location.hash.slice(1).toLowerCase() || "/";
 const findComponent = (path, routes) => routes.find((r) => r.path === path) || undefined;
 const router = async () => {
-    const path = parseLocation();
+    let path = parseLocation();
     const [local, params] = path.split("?");
     const { component = ErrorComponent } = findComponent(local, routes) || {};
     const htmlCode = await component.render(params);
