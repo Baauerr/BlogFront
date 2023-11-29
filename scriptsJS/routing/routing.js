@@ -48,9 +48,9 @@ const ErrorComponent = {
 };
 const routes = [
     { path: "/", component: main },
-    { path: "/account/login", component: login },
-    { path: "/account/registration", component: registration },
-    { path: "/account/profile", component: profile }
+    { path: "/login", component: login },
+    { path: "/registration", component: registration },
+    { path: "/profile", component: profile }
 ];
 const runScripts = (htmlCode) => {
     const parser = new DOMParser();
@@ -80,4 +80,5 @@ const router = async () => {
     runScripts(htmlCode);
 };
 window.addEventListener("hashchange", router);
+router();
 //# sourceMappingURL=routing.js.map

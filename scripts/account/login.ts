@@ -5,7 +5,7 @@ class LoginData {
     password: string;
 }
 
-function login_button_action(){
+function login_button_action() {
 
     const inputEMail = document.getElementById('email') as HTMLInputElement;
     const inputPassword = document.getElementById('password') as HTMLInputElement;

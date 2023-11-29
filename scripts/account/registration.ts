@@ -17,7 +17,7 @@ export class DateInfo {
     day: number;
 }
 
-function registration_button_action(){
+function registration_button_action() {
 
     console.log("jija")
 
@@ -27,7 +27,7 @@ function registration_button_action(){
     const inputBirthDate = document.getElementById('birthdate') as HTMLInputElement;
     const inputGender = document.getElementById('gender') as HTMLInputElement;
     const inputPhoneNumber = document.getElementById('phonenumber') as HTMLInputElement;
-    
+
     let correctDateForBackEnd: DateInfo = formatDateForServer(inputBirthDate.value)
 
     const requestData: LoginData = {

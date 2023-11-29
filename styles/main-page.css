@@ -1,0 +1,11 @@
+.post-title {
+    font-size: 35px; 
+}
+
+.post-tags{
+    color: rgb(187, 185, 185);
+}
+
+.post-like-button {
+    cursor: pointer; 
+  }

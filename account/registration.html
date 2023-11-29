@@ -1,46 +1,47 @@
-        <div class="container">
-        <div class="loginbox border rounded p-4 col-12 col-sm-10 col-md-8 col-lg-6 mx-auto" id="loginbox">
-            <div class="content">
-                <h1>Регистрация</h1>
-                <div class="form-group">
-                    <label for="email">ФИО</label>
-                    <input class="form-control" id="fullname" placeholder="Иванов Иван Иванович">
-                </div>
-                <div class="form-group">
-                    <label for="date">Дата рождения</label>
-                    <input type="date" class="form-control" id="birthdate" placeholder="дд.мм.гггг">
-                </div>
-                <script>
-                    $(document).ready(function(){
-                        $('#date').datepicker({
-                            format: 'dd.mm.yyyy',
-                            language: 'ru', 
-                            autoclose: true, 
-                            todayHighlight: true 
-                        });
-                    });
-                </script>
-                <div class="form-group">
-                    <label for="gender">Пол</label>
-                    <select class="form-control" id="gender">
-                        <option value="male">Мужчина</option>
-                        <option value="female">Женщина</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="email">Номер телефона</label>
-                    <input class="form-control" id="phonenumber" placeholder="+7 (xxx) xxx-xx-xx">
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="name@example.com">
-                </div>
-                <div class="form-group">
-                    <label for="password">Пароль</label>
-                    <input type="password" class="form-control" id="password">
-                </div>
-                <button class="btn btn-primary btn-block" id ="registration_button">Зарегистрироваться</button>
+<link rel="stylesheet" href="../styles/login.css">
+<div class="container">
+    <div class="loginbox border rounded p-4 col-12 col-sm-10 col-md-8 col-lg-6 mx-auto" id="loginbox">
+        <div class="content">
+            <h1>Регистрация</h1>
+            <div class="form-group">
+                <label for="email">ФИО</label>
+                <input class="form-control" id="fullname" placeholder="Иванов Иван Иванович">
             </div>
+            <div class="form-group">
+                <label for="date">Дата рождения</label>
+                <input type="date" class="form-control" id="birthdate" placeholder="дд.мм.гггг">
+            </div>
+            <script>
+                $(document).ready(function () {
+                    $('#date').datepicker({
+                        format: 'dd.mm.yyyy',
+                        language: 'ru',
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+                });
+            </script>
+            <div class="form-group">
+                <label for="gender">Пол</label>
+                <select class="form-control" id="gender">
+                    <option value="male">Мужчина</option>
+                    <option value="female">Женщина</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="email">Номер телефона</label>
+                <input class="form-control" id="phonenumber" placeholder="+7 (xxx) xxx-xx-xx">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="name@example.com">
+            </div>
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" class="form-control" id="password">
+            </div>
+            <button class="btn btn-primary btn-block" id="registration_button">Зарегистрироваться</button>
         </div>
     </div>
-    <script type="module" src="../scriptsJS/account/registration.js"></script>
+</div>
+<script type="module" src="../scriptsJS/account/registration.js"></script>

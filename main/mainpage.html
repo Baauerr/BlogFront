@@ -1,8 +1,10 @@
+<link rel="stylesheet" href="../styles/main-page.css">
+
 <body>
     <div class="container mt-3">
         <div class="container d-flex">
-            <button type="button" class="btn btn-primary ml-auto">Написать пост</button>
-        </div> 
+            <button type="button" class="btn btn-primary ml-auto" style="display: none;">Написать пост</button>
+        </div>
         <div class="card mb-3">
             <div class="card-header">
                 Фильтры
@@ -16,13 +18,13 @@
                     <div class="col-md-6 mb-2">
                         <div class="d-flex flex-column align-items-start">
                             <label for="filterSquare" class="form-label">Поиск по тэгам</label>
-                            <select class="form-select w-100 border p-1" id="filterSquare" multiple>
-                                <option value="male">Мужчина</option>
+                            <select class="form-select w-100 border p-1" id="tagsSquare" multiple>
+                                <option value="null">--</option>
                             </select>
                         </div>
                     </div>
                 </div>
-    
+
                 <div class="row align-items-center">
                     <div class="col-md-4">
                         <label for="filterSingle" class="d-block">Сортировать</label>
@@ -45,7 +47,7 @@
                         <div class="d-flex align-items-center">
                             <input type="checkbox" id="only_my_groups" value="yes">
                             <label for="only_my_groups" class="mb-0 ml-1">Только мои группы</label>
-                            <button class="btn btn-primary ml-auto" id ="apply_button">Применить</button>
+                            <button class="btn btn-primary ml-auto" id="apply_button">Применить</button>
                         </div>
                     </div>
                 </div>
@@ -53,33 +55,42 @@
         </div>
         <template id="postTemplate">
             <div class="post_template">
-              <div class="card mb-3">
-                <div class="card-header">
-                  <span class="post-title"></span>
+                <div class="card mb-3">
+
+                    <div class="card-body">
+                        <p class="authors">
+                            <span class="post-author"></span>
+                        </p>
+                        <p class="name">
+                            <b class="post-title"></b>
+                        </p>
+                        <hr class="my-4">
+                        <p class="post-info">
+                            <img class="post-image img-thumbnail" style="display: none;" alt="Post Image" />
+                            <span class="post-description"></span>
+                            <a class="show-more" style="display: none;">Читать полностью</a>
+                        </p>
+                        <p class="tags" style="color: darkgray;">
+                            <span class="post-tags"></span>
+                        </p>
+                        <p class="reading">
+                            <span class="reading-time"></span>
+                        </p>
+                        <div class="bg-light p-3 mt-3">
+                            <span class="post-comments"></span>
+                            <img width="22" height="22"
+                                src="https://img.icons8.com/fluency-systems-regular/48/comments--v2.png"
+                                alt="comments--v2" />
+                            <span class="post-likes"></span>
+                            <img width="27" height="27" src="../images/like.png" alt="hearts--v1" class = "post-like-button"/>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                  <p class="authors">
-                    Автор: <span class="post-author"></span>
-                  </p>
-                  <p class="name">
-                    Название: <span class="post-title"></span>
-                  </p>
-                  <hr class="my-4">
-                    <p class="post_info">
-                        <img class="post-image img-thumbnail" style="display: none;" alt="Post Image" />
-                        <span class="post-description"></span>
-                        <a class="show-more" onclick="readMore(this)" style="display: none;">Читать полностью</a>
-                    </p>
-                  <div class="bg-light p-3 mt-3">
-                    <i class="bi bi-chat-dots">Комментарии (<span class="post-comments"></span>)</i> 
-                  </div>
-                </div>
-              </div>
             </div>
-          </template>
-          
-          <div id="postsContainer"></div>
-    </div> 
+        </template>
+
+        <div id="postsContainer"></div>
+    </div>
     <nav id="pagination">
         <ul class="pagination">
             <li class="page-item"><a class="page-link">1</a></li>
@@ -87,5 +98,7 @@
             <li class="page-item"><a class="page-link">3</a></li>
         </ul>
     </nav>
-    <script type = "module" src = "../scriptsJS/mainPage/mainPage.js"></script>
-    <script type = "text/javascript" src = "../scriptsJS/mainPage/showMore.js"></script>
+
+    <script type="module" src="../scriptsJS/mainPage/showTags.js"></script>
+    <script type="module" src="../scriptsJS/mainPage/mainPage.js"></script>
+    <script type="text/javascript" src="../scriptsJS/mainPage/showMore.js"></script>
