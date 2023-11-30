@@ -67,7 +67,15 @@ const runScripts = (htmlCode) => {
         document.body.appendChild(newScript);
     });
 };
-const parseLocation = () => location.hash.slice(1).toLowerCase() || "/";
+function navigateTo(route) {
+    window.history.pushState(null, null, route);
+    router();
+}
+const parseLocation = () => {
+    const path = window.location.pathname.toLowerCase() || "/";
+    const params = new URLSearchParams(window.location.search).toString();
+    return params ? `${path}?${params}` : path;
+};
 const findComponent = (path, routes) => routes.find((r) => r.path === path) || undefined;
 const router = async () => {
     let path = parseLocation();
@@ -79,6 +87,6 @@ const router = async () => {
     appElement.innerHTML = htmlCode;
     runScripts(htmlCode);
 };
-window.addEventListener("hashchange", router);
+window.addEventListener("popstate", router);
 router();
 //# sourceMappingURL=routing.js.map

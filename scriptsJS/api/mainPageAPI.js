@@ -17,7 +17,6 @@ export async function getInfoOnPage(filterData) {
         }
     })
         .join('&');
-    console.log(queryString);
     try {
         const token = localStorage.getItem("token");
         const response = await fetch(`https://blog.kreosoft.space/api/post?${queryString}`, {
@@ -31,7 +30,6 @@ export async function getInfoOnPage(filterData) {
             throw new Error(`Ошибка HTTP: ${response.status} ${response.statusText}`);
         }
         const data = await response.json();
-        console.log(data);
         return data;
     }
     catch (error) {

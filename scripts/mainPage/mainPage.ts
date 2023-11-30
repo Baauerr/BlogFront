@@ -41,7 +41,7 @@ function collectFormData() {
     formData.max = parseFloat((document.getElementById('input3') as HTMLInputElement).value);
     formData.sorting = (document.getElementById('filterSingle') as HTMLSelectElement).value;
     formData.onlyMyCommunities = (document.getElementById('only_my_groups') as HTMLInputElement).checked;
-    
+
 
     const activePage = document.querySelector('#pagination .page-item.active a') as HTMLElement;
     formData.page = activePage ? parseInt(activePage.textContent) : 1;
@@ -50,21 +50,21 @@ function collectFormData() {
     return formData;
 }
 
-// function applyFormDataToClass() {
-//     const formData = collectFormData();
-//     getInfoOnPage(formData);
-//     const updateHash = () => {
-//         const queryString = Object.entries(formData)
-//           .filter(([key, value]) => value !== null && value !== "" && !(Array.isArray(value) && value.length === 0) &&  !Number.isNaN(value))
-//           .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-//           .join('&');
+function applyHash() {
+    const formData = collectFormData();
+    getInfoOnPage(formData);
+    const updateHash = () => {
+        const queryString = Object.entries(formData)
+            .filter(([key, value]) => value !== null && value !== "" && !(Array.isArray(value) && value.length === 0) && !Number.isNaN(value))
+            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+            .join('&');
 
-//  location.hash = "?" + queryString;
-//       };
+        window.location.search = queryString;
+    };
 
-//  updateHash();
-//     console.log(formData);
-// }
+
+    console.log(formData);
+}
 
 async function applyFormDataToClass() {
     const formData = collectFormData();
@@ -85,10 +85,10 @@ async function applyFormDataToClass() {
             const readingTime = postClone.querySelector(".reading-time") as HTMLElement;
             const postComments = postClone.querySelector(".post-comments") as HTMLElement;
 
-
             const showMoreButton = postClone.querySelector(".show-more") as HTMLElement;
             const likeButton = postClone.querySelector(".post-like-button") as HTMLElement;
 
+            postLikeView(likeButton, post.hasLike);
             postTitle.textContent = post.title;
             postAuthor.textContent = getPostAuthor(post);
             postTags.textContent = getPostTags(post);
@@ -124,6 +124,18 @@ function getPostAuthor(post) {
         return `${post.author} - ${formatDateForPostInfo(post.createTime)}`;
     } else {
         return `${post.author} - ${formatDateForPostInfo(post.createTime)} в сообществе "${post.communityName}"`;
+    }
+}
+
+function postLikeView(likePicture, hasLike: boolean) {
+    const token = localStorage.getItem("token")
+    if (token) {
+        if (hasLike) {
+            likePicture.src = "../images/liked.png"
+        }
+        else {
+            likePicture.src = "../images/like.png"
+        }
     }
 }
 
@@ -171,6 +183,6 @@ window.addEventListener('load', async () => {
     await showTags();
 });
 
-document.getElementById('apply_button').addEventListener('click', applyFormDataToClass);
+document.getElementById('apply_button').addEventListener('click', applyHash);
 
 

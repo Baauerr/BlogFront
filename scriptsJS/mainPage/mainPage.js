@@ -38,19 +38,18 @@ function collectFormData() {
     formData.size = 5;
     return formData;
 }
-// function applyFormDataToClass() {
-//     const formData = collectFormData();
-//     getInfoOnPage(formData);
-//     const updateHash = () => {
-//         const queryString = Object.entries(formData)
-//           .filter(([key, value]) => value !== null && value !== "" && !(Array.isArray(value) && value.length === 0) &&  !Number.isNaN(value))
-//           .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-//           .join('&');
-//  location.hash = "?" + queryString;
-//       };
-//  updateHash();
-//     console.log(formData);
-// }
+function applyHash() {
+    const formData = collectFormData();
+    getInfoOnPage(formData);
+    const updateHash = () => {
+        const queryString = Object.entries(formData)
+            .filter(([key, value]) => value !== null && value !== "" && !(Array.isArray(value) && value.length === 0) && !Number.isNaN(value))
+            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+            .join('&');
+        window.location.search = queryString;
+    };
+    console.log(formData);
+}
 async function applyFormDataToClass() {
     const formData = collectFormData();
     document.getElementById("postsContainer").innerHTML = '';
@@ -69,6 +68,7 @@ async function applyFormDataToClass() {
             const postComments = postClone.querySelector(".post-comments");
             const showMoreButton = postClone.querySelector(".show-more");
             const likeButton = postClone.querySelector(".post-like-button");
+            postLikeView(likeButton, post.hasLike);
             postTitle.textContent = post.title;
             postAuthor.textContent = getPostAuthor(post);
             postTags.textContent = getPostTags(post);
@@ -99,6 +99,17 @@ function getPostAuthor(post) {
     }
     else {
         return `${post.author} - ${formatDateForPostInfo(post.createTime)} в сообществе "${post.communityName}"`;
+    }
+}
+function postLikeView(likePicture, hasLike) {
+    const token = localStorage.getItem("token");
+    if (token) {
+        if (hasLike) {
+            likePicture.src = "../images/liked.png";
+        }
+        else {
+            likePicture.src = "../images/like.png";
+        }
     }
 }
 function getPostTags(post) {
@@ -138,5 +149,5 @@ window.addEventListener('load', async () => {
     await applyFormDataToClass();
     await showTags();
 });
-document.getElementById('apply_button').addEventListener('click', applyFormDataToClass);
+document.getElementById('apply_button').addEventListener('click', applyHash);
 //# sourceMappingURL=mainPage.js.map

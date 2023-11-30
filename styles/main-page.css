@@ -6,6 +6,10 @@
     color: rgb(187, 185, 185);
 }
 
-.post-like-button {
+.post-like-button, .post-comments-button {
     cursor: pointer; 
   }
+
+.post-comments-button{
+    cursor: pointer;
+}
