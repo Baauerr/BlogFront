@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="../styles/main-page.css">
+
 <body>
     <div class="container mt-3">
         <div class="container d-flex">
@@ -78,7 +79,7 @@
                             <span class="post-comments"></span>
                             <img width="22" height="22"
                                 src="https://img.icons8.com/fluency-systems-regular/48/comments--v2.png"
-                                alt="comments--v2" class = "post-comments-button"/>
+                                alt="comments--v2" class="post-comments-button" />
                             <span class="post-likes"></span>
                             <img width="27" height="27" src="../images/like.png" alt="hearts--v1"
                                 class="post-like-button" />
@@ -87,17 +88,17 @@
                 </div>
             </div>
         </template>
-
         <div id="postsContainer"></div>
-    </div>
-    <nav id="pagination">
-        <ul class="pagination">
-            <li class="page-item"><a class="page-link">1</a></li>
-            <li class="page-item"><a class="page-link">2</a></li>
-            <li class="page-item"><a class="page-link">3</a></li>
-        </ul>
-    </nav>
+        <div>
+            <nav id="pagination">
+                <ul class="pagination"></ul>
+            </nav>
+        </div>
+            <label for="filterSingle" class="d-block">Количество постов на странице</label>
+            <input type = "number" id = "post-amount">
 
-    <script type="module" src="../scriptsJS/mainPage/showTags.js"></script>
-    <script type="module" src="../scriptsJS/mainPage/mainPage.js"></script>
-    <script type="text/javascript" src="../scriptsJS/mainPage/showMore.js"></script>
+
+
+        <script type="module" src="../scriptsJS/mainPage/showTags.js"></script>
+        <script type="module" src="../scriptsJS/mainPage/mainPage.js"></script>
+        <script type="text/javascript" src="../scriptsJS/mainPage/showMore.js"></script>

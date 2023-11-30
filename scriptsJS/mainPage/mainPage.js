@@ -11,18 +11,31 @@ export class mainPageData {
     onlyMyCommunities;
     page;
     size;
+    constructor() {
+        this.tags = null;
+        this.author = null;
+        this.min = null;
+        this.max = null;
+        this.sorting = null;
+        this.onlyMyCommunities = null;
+        this.page = 0;
+        this.size = 0;
+    }
 }
-const formData = {
-    tags: null,
-    author: null,
-    min: null,
-    max: null,
-    sorting: "LikeAsc",
-    onlyMyCommunities: false,
-    page: 1,
-    size: 5,
-};
-getInfoOnPage(formData);
+function parseUrlParams() {
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    const data = new mainPageData();
+    data.tags = params.has('tags') ? params.get('tags').split(',') : null;
+    data.author = params.get('author') || null;
+    data.min = params.has('min') ? parseInt(params.get('min'), 10) : null;
+    data.max = params.has('max') ? parseInt(params.get('max'), 10) : null;
+    data.sorting = params.get('sorting') || null;
+    data.onlyMyCommunities = params.has('onlyMyCommunities') ? params.get('onlyMyCommunities') === 'true' : null;
+    data.page = params.has('page') ? parseInt(params.get('page'), 10) : 1;
+    data.size = params.has('size') ? parseInt(params.get('size'), 10) : 5;
+    return data;
+}
 function collectFormData() {
     const formData = new mainPageData();
     formData.tags = Array.from(document.querySelectorAll('#tagsSquare option:checked'))
@@ -35,23 +48,24 @@ function collectFormData() {
     formData.onlyMyCommunities = document.getElementById('only_my_groups').checked;
     const activePage = document.querySelector('#pagination .page-item.active a');
     formData.page = activePage ? parseInt(activePage.textContent) : 1;
-    formData.size = 5;
+    const numberOfPosts = parseInt(document.getElementById('post-amount').value, 10);
+    formData.size = numberOfPosts !== 0 ? numberOfPosts : 5;
+    console.log(formData.size);
     return formData;
 }
-function applyHash() {
-    const formData = collectFormData();
-    getInfoOnPage(formData);
-    const updateHash = () => {
-        const queryString = Object.entries(formData)
-            .filter(([key, value]) => value !== null && value !== "" && !(Array.isArray(value) && value.length === 0) && !Number.isNaN(value))
-            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-            .join('&');
-        window.location.search = queryString;
-    };
-    console.log(formData);
+const url = parseUrlParams();
+updateHash(url);
+showTags();
+function updateHash(formData) {
+    const queryString = Object.entries(formData)
+        .filter(([key, value]) => value !== null && value !== "" && !(Array.isArray(value) && value.length === 0) && !Number.isNaN(value))
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+        .join('&');
+    window.history.pushState(null, null, `?${queryString}`);
 }
 async function applyFormDataToClass() {
-    const formData = collectFormData();
+    const formData = parseUrlParams();
+    updateHash(formData);
     document.getElementById("postsContainer").innerHTML = '';
     try {
         const postTemplate = document.getElementById("postTemplate");
@@ -88,6 +102,7 @@ async function applyFormDataToClass() {
         };
         const data = await getInfoOnPage(formData);
         data.posts.forEach(addPostToContainer);
+        viewPagination(data.pagination.count);
     }
     catch (error) {
         console.error("Ошибка при загрузке данных:", error);
@@ -111,6 +126,31 @@ function postLikeView(likePicture, hasLike) {
             likePicture.src = "../images/like.png";
         }
     }
+}
+function viewPagination(numberOfPages) {
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = '';
+    const ul = document.createElement('ul');
+    ul.classList.add('pagination');
+    for (let i = 1; i <= numberOfPages; i++) {
+        const pageButton = document.createElement('li');
+        pageButton.classList.add('page-item');
+        const link = document.createElement('a');
+        link.classList.add('page-link');
+        link.textContent = i.toString();
+        link.addEventListener('click', function () {
+            updatePageQueryParam(i);
+        });
+        pageButton.appendChild(link);
+        ul.appendChild(pageButton);
+    }
+    pagination.appendChild(ul);
+}
+function updatePageQueryParam(pageNumber) {
+    const newUrl = new URL(window.location.href);
+    newUrl.searchParams.set('page', pageNumber);
+    history.pushState(null, null, newUrl.toString());
+    applyFormDataToClass();
 }
 function getPostTags(post) {
     return post.tags.map(tag => `#${tag.name}`).join(' ');
@@ -145,9 +185,14 @@ function readMore(postDescription, showMoreButton) {
         showMoreButton.textContent = "Читать полностью";
     }
 }
-window.addEventListener('load', async () => {
+window.onload = async () => {
     await applyFormDataToClass();
     await showTags();
+};
+document.getElementById('apply_button').addEventListener('click', function (event) {
+    event.preventDefault();
+    const formData = collectFormData();
+    updateHash(formData);
+    applyFormDataToClass();
 });
-document.getElementById('apply_button').addEventListener('click', applyHash);
 //# sourceMappingURL=mainPage.js.map

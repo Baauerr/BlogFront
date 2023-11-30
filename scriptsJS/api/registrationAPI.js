@@ -18,7 +18,7 @@ export function register_user_server(responseData) {
         }
         else {
             localStorage.setItem("token", data);
-            console.log('request:', data);
+            window.location.pathname = "";
         }
     })
         .catch((error) => {

@@ -57,7 +57,7 @@ const routes = [
   { path: "/", component: main },
   { path: "/login", component: login },
   { path: "/registration", component: registration },
-  { path: "/profile", component: profile }
+  { path: "/profile", component: profile },
 ];
 
 const runScripts = (htmlCode) => {
@@ -80,32 +80,41 @@ const runScripts = (htmlCode) => {
   });
 };
 
-function navigateTo(route) {
-  window.history.pushState(null, null, route);
+const navigateTo = (route, params = "") => {
+  window.history.pushState({ path: route, params }, null, route + params);
   router();
-}
+};
 
 const parseLocation = () => {
   const path = window.location.pathname.toLowerCase() || "/";
   const params = new URLSearchParams(window.location.search).toString();
   return params ? `${path}?${params}` : path;
 };
+
 const findComponent = (path, routes) =>
-  routes.find((r) => r.path === path) || undefined
-const router = async () => {
-  let path = parseLocation();
-  const [local, params] = path.split("?");
-  const { component = ErrorComponent } = findComponent(local, routes) || {};
+  routes.find((r) => r.path === path) || undefined;
 
-  const htmlCode = await component.render(params);
+  const router = async () => {
+    const currentState = window.history.state;
+    let path = currentState ? currentState.path : parseLocation();
+    const [local, params] = path.split("?");
+    const { component = ErrorComponent } = findComponent(local, routes) || {};
+    const htmlCode = await component.render(params);
+    const appElement = document.getElementById("app");
+    appElement.innerHTML = htmlCode;
+  
+    runScripts(htmlCode);
+  };
 
-  const appElement = document.getElementById("app");
-  appElement.innerHTML = '';
-  appElement.innerHTML = htmlCode;
+document.addEventListener("click", (event: MouseEvent) => {
+  const target = event.target as HTMLAnchorElement;
 
-  runScripts(htmlCode);
-}
-
+  if (target.tagName === "A" && target.getAttribute("href")) {
+    event.preventDefault();
+    const params = new URLSearchParams(window.location.search).toString();
+    navigateTo(target.getAttribute("href")!, params);
+  }
+});
 
 window.addEventListener("popstate", router);
 router();

@@ -22,7 +22,7 @@ export function register_user_server(responseData) {
                 await takeErrorTextAsync(data, inputErrorMapping);
             } else {
                 localStorage.setItem("token", data)
-                console.log('request:', data);
+                window.location.pathname = ""
             }
         })
         .catch((error) => {

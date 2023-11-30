@@ -14,7 +14,7 @@ export function login_user_server(responseData) {
         else {
             localStorage.setItem("token", data.token);
             console.log(localStorage.getItem("token"));
-            window.location.href = "";
+            window.location.pathname = "";
         }
     })
         .catch(error => {
