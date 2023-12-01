@@ -1,3 +1,5 @@
+import { prevent } from "./prevent.js";
+
 const loadHTML = async (path) => {
   try {
     const response = await fetch(path);
@@ -17,6 +19,13 @@ const loadHTML = async (path) => {
 const main = {
   render: async () => {
     const htmlCode = await loadHTML('../main/mainpage.html');
+    return htmlCode;
+  },
+};
+
+const post = {
+  render: async () => {
+    const htmlCode = await loadHTML('../posts/post.html');
     return htmlCode;
   },
 };
@@ -47,7 +56,7 @@ const ErrorComponent = {
     return `
       <section>
         <h1>Error</h1>
-        <p>This is just a test</p>
+        <p>Такой страницы нет. Увы</p>
       </section>
     `;
   },
@@ -58,6 +67,7 @@ const routes = [
   { path: "/login", component: login },
   { path: "/registration", component: registration },
   { path: "/profile", component: profile },
+  { path : "/post", component: post}
 ];
 
 const runScripts = (htmlCode) => {
@@ -81,7 +91,7 @@ const runScripts = (htmlCode) => {
 };
 
 const navigateTo = (route, params = "") => {
-  window.history.pushState({ path: route, params }, null, route + params);
+  window.history.pushState({ path: route, params }, null, route);
   router();
 };
 
@@ -98,11 +108,14 @@ const findComponent = (path, routes) =>
     const currentState = window.history.state;
     let path = currentState ? currentState.path : parseLocation();
     const [local, params] = path.split("?");
-    const { component = ErrorComponent } = findComponent(local, routes) || {};
+    const parts = local.split("/"); 
+    const result = "/" + parts[1];
+    const { component = ErrorComponent } = findComponent(result, routes) || {};
     const htmlCode = await component.render(params);
     const appElement = document.getElementById("app");
     appElement.innerHTML = htmlCode;
-  
+    
+    prevent(local);
     runScripts(htmlCode);
   };
 

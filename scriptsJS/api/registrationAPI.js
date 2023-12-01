@@ -17,7 +17,7 @@ export function register_user_server(responseData) {
             await takeErrorTextAsync(data, inputErrorMapping);
         }
         else {
-            localStorage.setItem("token", data);
+            localStorage.setItem("token", data.token);
             window.location.pathname = "";
         }
     })

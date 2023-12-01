@@ -13,3 +13,8 @@
 .post-comments-button{
     cursor: pointer;
 }
+
+a.post-title {
+    font-weight: bold;
+    color: black;
+  }

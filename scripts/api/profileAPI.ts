@@ -25,7 +25,7 @@ export async function editProfile(editData){
     await fetch('https://blog.kreosoft.space/api/account/profile', {
         method: 'PUT',
         headers: {
-        'Authorization': 'Bearer ${token}',
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
     },
     body: JSON.stringify(editData),

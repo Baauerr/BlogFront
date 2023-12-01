@@ -1,5 +1,3 @@
-import { formatDateForServer } from "../helpers/formatDateHelper.js";
-import { createDateFromInfo } from "../helpers/formatDateHelper.js";
 import { register_user_server } from "../api/registrationAPI.js";
 class LoginData {
     email;
@@ -22,14 +20,15 @@ function registration_button_action() {
     const inputBirthDate = document.getElementById('birthdate');
     const inputGender = document.getElementById('gender');
     const inputPhoneNumber = document.getElementById('phonenumber');
-    let correctDateForBackEnd = formatDateForServer(inputBirthDate.value);
+    const isoDateString = new Date(inputBirthDate.value);
+    const serverDate = isoDateString.toISOString();
     const requestData = {
         email: inputEmail.value,
         password: inputPassword.value,
         phoneNumber: inputPhoneNumber.value,
         gender: inputGender.value,
         fullName: inputName.value,
-        birthDate: createDateFromInfo(correctDateForBackEnd),
+        birthDate: serverDate,
     };
     register_user_server(requestData);
 }

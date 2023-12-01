@@ -1,6 +1,6 @@
-import { mainPageData } from "../mainPage/mainPage.js";
+import { MainPageData } from "../mainPage/mainPage.js";
 
-export async function getInfoOnPage(filterData: mainPageData): Promise<any> {
+export async function getInfoOnPage(filterData: MainPageData): Promise<any> {
   const queryString = Object.entries(filterData)
     .filter(([key, value]) => {
         if (Array.isArray(value)) {

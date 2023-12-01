@@ -1,8 +1,5 @@
 import { getProfile } from "../api/profileAPI.js";
 import { editProfile } from "../api/profileAPI.js";
-import { createDateFromInfo } from "../helpers/formatDateHelper.js";
-import { formatDateForServer } from "../helpers/formatDateHelper.js";
-import { DateInfo } from "./registration.js";
 
 const registrationButton = document.getElementById('save_button') as HTMLButtonElement;
 
@@ -13,7 +10,7 @@ class UserData {
     fullName: string;
     gender: string;
     phoneNumber: string;
-    birthDate: Date;
+    birthDate: string;
 }
 
 function edit_button_action() {
@@ -25,14 +22,15 @@ function edit_button_action() {
     const inputGender = document.getElementById('gender') as HTMLInputElement;
     const inputPhoneNumber = document.getElementById('phoneNumber') as HTMLInputElement;
 
-    let correctDateForBackEnd: DateInfo = formatDateForServer(inputBirthDate.value);
+    const isoDateString = new Date(inputBirthDate.value)
+    const serverDate = isoDateString.toISOString();
 
     const requestData: UserData = {
         email: inputEmail.value,
         phoneNumber: inputPhoneNumber.value,
         gender: inputGender.value,
         fullName: inputName.value,
-        birthDate: createDateFromInfo(correctDateForBackEnd),
+        birthDate: serverDate,
     };
     editProfile(requestData);
 }
@@ -42,15 +40,21 @@ interface ProfileData {
 }
 
 async function info() {
-    const booba: ProfileData = await getProfile();
+    const profileInfo: ProfileData = await getProfile();
+    profileInfo.birthDate = profileInfo.birthDate.slice(0, 10);
+    console.log(profileInfo[3])
     const container = document.getElementById('profilebox');
     const inputElements = container.querySelectorAll<HTMLInputElement>('input');
+    console.log(inputElements);
     inputElements.forEach(input => {
         const fieldName = input.id;
-        console.log(fieldName);
-        console.log(booba[fieldName]);
-        input.value = booba[fieldName];
+        console.log(fieldName + "g");
+        console.log(profileInfo[fieldName] + "f");
+        input.value = profileInfo[fieldName];
+        input.value = fieldName === 'birthDate' ? profileInfo.birthDate : profileInfo[fieldName];
     });
 }
+
+
 
 registrationButton.addEventListener('click', edit_button_action);

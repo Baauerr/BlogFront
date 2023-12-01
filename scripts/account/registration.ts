@@ -1,4 +1,3 @@
-import { formatDateForServer } from "../helpers/formatDateHelper.js";
 import { createDateFromInfo } from "../helpers/formatDateHelper.js";
 import { register_user_server } from "../api/registrationAPI.js";
 
@@ -8,7 +7,7 @@ class LoginData {
     fullName: string;
     gender: string;
     phoneNumber: string;
-    birthDate: Date;
+    birthDate: string;
 }
 
 export class DateInfo {
@@ -26,9 +25,10 @@ function registration_button_action() {
     const inputEmail = document.getElementById('email') as HTMLInputElement;
     const inputBirthDate = document.getElementById('birthdate') as HTMLInputElement;
     const inputGender = document.getElementById('gender') as HTMLInputElement;
-    const inputPhoneNumber = document.getElementById('phonenumber') as HTMLInputElement;
+    const inputPhoneNumber = document.getElementById('phonenumber') as HTMLInputElement; 
 
-    let correctDateForBackEnd: DateInfo = formatDateForServer(inputBirthDate.value)
+    const isoDateString = new Date(inputBirthDate.value)
+    const serverDate = isoDateString.toISOString();
 
     const requestData: LoginData = {
         email: inputEmail.value,
@@ -36,7 +36,7 @@ function registration_button_action() {
         phoneNumber: inputPhoneNumber.value,
         gender: inputGender.value,
         fullName: inputName.value,
-        birthDate: createDateFromInfo(correctDateForBackEnd),
+        birthDate: serverDate,
     };
     register_user_server(requestData)
 }
@@ -44,7 +44,4 @@ function registration_button_action() {
 const registrationButton = document.getElementById('registration_button') as HTMLButtonElement;
 
 registrationButton.addEventListener('click', registration_button_action);
-
-
-
 
