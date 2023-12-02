@@ -18,3 +18,59 @@ a.post-title {
     font-weight: bold;
     color: black;
   }
+
+  .input-stretch {
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+
+
+
+.reply-box {
+    display: flex;
+}
+
+.sub-comment-input {
+    flex-grow: 1;
+    width: 90%;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.send-reply-button{
+    padding: 10px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding-bottom: 5px;
+}
+
+.comment-edit-box {
+    display: flex;
+}
+
+.edit-comment-input {
+    flex-grow: 1;
+    width: 85%;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.apply-edit-button{
+    padding: 10px;
+    background-color: #ff9500;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

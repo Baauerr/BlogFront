@@ -6,6 +6,8 @@ import { toggleShowMoreButton } from "../mainPage/buttonsOnMainPage.js";
 import { attachEventListeners } from "../mainPage/buttonsOnMainPage.js";
 import { getConcrettePost } from "../api/concrettePostAPI.js";
 import { commentView } from "./commentFunction.js";
+import { sendComment } from "../api/commentAPI.js";
+import { createComment } from "./commentFunction.js";
 function parsePostId() {
     const url = new URL(window.location.href);
     const pathNameParts = url.pathname.split('/');
@@ -17,11 +19,18 @@ function parsePostId() {
         return null;
     }
 }
+export async function showPostPage() {
+    const postId = parsePostId();
+    const post = await getConcrettePost(postId);
+    const sendCommentButton = document.getElementById("send-comment");
+    const commentInputText = document.getElementById('comment-input-area');
+    await showSinglePost();
+    await commentViewLogic(post, sendCommentButton, commentInputText);
+}
 export async function showSinglePost() {
     const postId = parsePostId();
     const post = await getConcrettePost(postId);
     const postContainer = document.getElementById("post-container");
-    console.log(postContainer);
     const postDescription = postContainer.querySelector(".post-description");
     const postImage = postContainer.querySelector(".post-image");
     const postLikes = postContainer.querySelector(".post-likes");
@@ -33,8 +42,6 @@ export async function showSinglePost() {
     const showMoreButton = postContainer.querySelector(".show-more");
     const likeButton = postContainer.querySelector(".post-like-button");
     postLikeView(likeButton, post.hasLike);
-    console.log(post);
-    console.log(post.title);
     postTitle.textContent = post.title;
     postAuthor.textContent = getPostAuthor(post);
     postTags.textContent = getPostTags(post);
@@ -50,7 +57,21 @@ export async function showSinglePost() {
     }
     toggleShowMoreButton(showMoreButton, post.description);
     attachEventListeners(post, postDescription, showMoreButton, likeButton, postLikes);
-    //   console.log(post.comments)
-    commentView(post.comments);
+    commentView(post.comments, post.id);
+}
+async function commentViewLogic(post, sendCommentButton, commentInputText) {
+    commentView(post.comments, post.id);
+    sendCommentButton.addEventListener("click", async function () {
+        const newComment = createComment(commentInputText.value);
+        if (newComment !== null) {
+            commentInputText.value = "";
+            await sendComment(newComment, post.id);
+            await showSinglePost();
+        }
+    });
+    const newCommentBlock = document.getElementById("new-comment");
+    if (localStorage.getItem("token") !== null) {
+        newCommentBlock.style.display = "block";
+    }
 }
 //# sourceMappingURL=posts.js.map

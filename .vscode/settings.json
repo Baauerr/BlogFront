@@ -1,4 +1,5 @@
 {
     "compile-hero.disable-compile-files-on-did-save-code": true,
-    "liveServer.settings.port": "801"
+    "liveServer.settings.port": "801",
+    "cmake.configureOnOpen": true
 }

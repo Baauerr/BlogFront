@@ -46,16 +46,25 @@
                     <p class="name">
                         <span class="comment-author"></span>
                     </p>
-                    <p class="post-info">
-                        <span class="post-description"></span>
+                    <div style = "display: none;" class = "comment-edit-box">
+                        <input class="edit-comment-input" type="text">
+                        <button class="apply-edit-button">Редактировать</button>
+                    </div>
+                    <p class="comment-info">
+                        <span class="comment-description"></span>
                     </p>
                     <p class="d-flex">
                         <span class="comment-time"></span>
                         <span>&nbsp;</span>
-                        <a class="give-answer">Ответить</a>
+                        <a class="give-reply-button">Ответить</a>
                     </p>
+
+                    <div style = "display: none;" class = "reply-box">
+                        <input class="sub-comment-input" type="text">
+                        <button class="send-reply-button">Отправить</button>
+                    </div>
                     <div>
-                        <div class = "sub-comments" style = "display: none"></div>
+                        <div class="sub-comments" style="display: none"></div>
                         <a class="show-replies" style="display: none;">Показать ответы</a>
                     </div>
                 </div>
@@ -72,17 +81,18 @@
                 </div>
             </div>
         </div>
-        <div id="new-comment">
+
+        <div id="new-comment" style="display: none">
             <div class="card mb-3">
                 <div class="card-body">
-                    <div>
+                    <div class="mb-3">
                         <span>Оставьте комментарий</span>
                     </div>
-                    <div>
-                        <input type="text">
+                    <div class="mb-3">
+                        <textarea class="form-control input-stretch" id="comment-input-area"></textarea>
                     </div>
                     <div>
-                        <button class="btn btn-primary">Отправить</button>
+                        <button class="btn btn-primary" id="send-comment">Отправить</button>
                     </div>
                 </div>
             </div>

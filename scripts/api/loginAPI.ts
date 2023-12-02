@@ -12,6 +12,7 @@ export function login_user_server(responseData) {
                 console.log('request:', data);
             }
             else {
+                localStorage.clear();
                 localStorage.setItem("token", data.token)
                 console.log(localStorage.getItem("token"))
                 window.location.pathname = ""
