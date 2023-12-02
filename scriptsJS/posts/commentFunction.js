@@ -1,7 +1,8 @@
 import { formatDateForPostInfo } from "../helpers/formatDateHelper.js";
 import { getCommentTree } from "../api/commentAPI.js";
-import { showPostPage } from "./posts.js";
+import { showSinglePost } from "./posts.js";
 import { sendComment } from "../api/commentAPI.js";
+import { getProfile } from "../api/profileAPI.js";
 export class CommentData {
     content;
     parentId;
@@ -16,16 +17,31 @@ export function commentView(comments, postId) {
     commentBlock.innerHTML = '';
     comments.forEach(comment => {
         const commentClone = document.importNode(commentTemplate.content, true);
-        const elements = getCommentElements(commentClone);
-        elements.commentAuthor.textContent = comment.author;
-        elements.commentContent.textContent = comment.content;
-        elements.commentTime.textContent = formatDateForPostInfo(comment.createTime);
-        addReplyFullFunctional(elements.addReplyButton, elements.replyBox, elements.replyInput, comment, elements.sendReply, postId);
+        const commentAuthor = commentClone.querySelector(".comment-author");
+        const commentContent = commentClone.querySelector(".comment-description");
+        const commentTime = commentClone.querySelector(".comment-time");
+        const subCommentBlock = commentClone.querySelector(".sub-comments");
+        const showRepliesButton = commentClone.querySelector(".show-replies");
+        const replyBox = commentClone.querySelector(".reply-box");
+        const addReplyButton = commentClone.querySelector(".give-reply-button");
+        const replyInput = commentClone.querySelector(".sub-comment-input");
+        const sendReply = commentClone.querySelector(".send-reply-button");
+        const commentIsEdited = commentClone.querySelector(".comment-modified-date");
+        commentAuthor.textContent = comment.deleteDate !== null ? "[Комментарий удалён]" : comment.author;
+        commentContent.textContent = comment.deleteDate !== null ? "[Комментарий удалён]" : comment.content;
+        commentTime.textContent = formatDateForPostInfo(comment.createTime);
+        addReplyFullFunctional(addReplyButton, replyBox, replyInput, comment, sendReply, postId);
         if (comment.subComments !== 0) {
-            elements.showRepliesButton.style.display = "block";
-            subCommentsView(comment.id, elements.subCommentBlock, postId);
+            showRepliesButton.style.display = "block";
+            subCommentsView(comment.id, subCommentBlock, postId);
         }
-        elements.showRepliesButton.addEventListener("click", () => showReplies(elements.subCommentBlock, elements.showRepliesButton));
+        showRepliesButton.addEventListener("click", function () {
+            showReplies(subCommentBlock, showRepliesButton);
+        });
+        if (comment.modifiedDate !== null) {
+            commentIsEdited.style.display = "block";
+            commentIsEdited.title = formatDateForPostInfo(comment.modifiedDate);
+        }
         commentBlock.appendChild(commentClone);
     });
 }
@@ -34,48 +50,72 @@ async function subCommentsView(commentId, subCommentBlock, postId) {
     const subCommentsTree = await getCommentTree(commentId);
     subCommentsTree.forEach(subCommentData => {
         const subCommentClone = document.importNode(subCommentTemplate.content, true);
-        const subElements = getCommentElements(subCommentClone);
-        subElements.commentAuthor.textContent = subCommentData.author;
-        subElements.commentContent.textContent = subCommentData.content;
-        subElements.commentTime.textContent = formatDateForPostInfo(subCommentData.createTime);
-        addReplyFullFunctional(subElements.addReplyButton, subElements.replyBox, subElements.replyInput, subCommentData, subElements.sendReply, postId);
+        const subCommentAuthor = subCommentClone.querySelector(".comment-author");
+        const subCommentContent = subCommentClone.querySelector(".comment-description");
+        const subCommentTime = subCommentClone.querySelector(".comment-time");
+        const subCommentIsEdited = subCommentClone.querySelector(".comment-modified-date");
+        const replyBox = subCommentClone.querySelector(".reply-box");
+        const addReplyButton = subCommentClone.querySelector(".give-reply-button");
+        const replyInput = subCommentClone.querySelector(".sub-comment-input");
+        const sendReply = subCommentClone.querySelector(".send-reply-button");
+        const editCommentButton = subCommentClone.querySelector(".start-edit-button");
+        const deleteCommentButton = subCommentClone.querySelector(".delete-button");
+        subCommentAuthor.textContent = subCommentData.deleteDate !== null ? "[Комментарий удалён]" : subCommentData.author;
+        subCommentContent.textContent = subCommentData.deleteDate !== null ? "[Комментарий удалён]" : subCommentData.content;
+        subCommentTime.textContent = formatDateForPostInfo(subCommentData.createTime);
+        if (subCommentData.modifiedDate !== null && subCommentData.deleteDate === null) {
+            subCommentIsEdited.style.display = "block";
+            subCommentIsEdited.title = formatDateForPostInfo(subCommentData.modifiedDate);
+        }
+        addReplyFullFunctional(addReplyButton, replyBox, replyInput, subCommentData, sendReply, postId);
         subCommentBlock.appendChild(subCommentClone);
     });
 }
-function getCommentElements(commentClone) {
-    return {
-        commentAuthor: commentClone.querySelector(".comment-author"),
-        commentContent: commentClone.querySelector(".comment-description"),
-        commentTime: commentClone.querySelector(".comment-time"),
-        subCommentBlock: commentClone.querySelector(".sub-comments"),
-        showRepliesButton: commentClone.querySelector(".show-replies"),
-        replyBox: commentClone.querySelector(".reply-box"),
-        addReplyButton: commentClone.querySelector(".give-reply-button"),
-        replyInput: commentClone.querySelector(".sub-comment-input"),
-        sendReply: commentClone.querySelector(".send-reply-button")
-    };
-}
-function addReply(replyBox) {
-    replyBox.style.display = (replyBox.style.display === "block") ? "none" : "block";
+function showHiddenInput(replyBox) {
+    if (replyBox.style.display === "block") {
+        replyBox.style.display = "none";
+    }
+    else {
+        replyBox.style.display = "block";
+    }
 }
 function showReplies(replies, showRepliesButton) {
-    replies.style.display = (replies.style.display === "block") ? "none" : "block";
-    showRepliesButton.textContent = (replies.style.display === "block") ? "Скрыть" : "Показать ответы";
+    if (replies.style.display === "block") {
+        replies.style.display = "none";
+        showRepliesButton.textContent = "Показать ответы";
+    }
+    else {
+        replies.style.display = "block";
+        showRepliesButton.textContent = "Скрыть";
+    }
+}
+export function createComment(content, parentId) {
+    if (parentId) {
+        const newComment = content === "" ? null : new CommentData(content, parentId);
+        return newComment;
+    }
+    else {
+        const newComment = content === "" ? null : new CommentData(content);
+        return newComment;
+    }
 }
 function addReplyFullFunctional(addReplyButton, replyBox, replyInput, commentData, sendReply, postId) {
     if (localStorage.getItem("token") !== null) {
-        addReplyButton.addEventListener("click", () => addReply(replyBox));
+        addReplyButton.addEventListener("click", function () {
+            showHiddenInput(replyBox);
+        });
     }
-    sendReply.addEventListener("click", async () => {
+    sendReply.addEventListener("click", async function () {
         const newComment = createComment(replyInput.value, commentData.id);
         if (newComment !== null) {
             replyInput.value = "";
             await sendComment(newComment, postId);
-            await showPostPage();
+            await showSinglePost();
         }
     });
 }
-export function createComment(content, parentId) {
-    return content === "" ? null : (parentId ? new CommentData(content, parentId) : new CommentData(content));
+async function isUserComment(comment) {
+    const user = localStorage.getItem("token") === null ? null : await getProfile();
+    return (comment.author === user.fullName);
 }
 //# sourceMappingURL=commentFunction.js.map

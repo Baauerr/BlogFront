@@ -45,21 +45,26 @@
                 <div class="card-body d-flex flex-column">
                     <p class="name">
                         <span class="comment-author"></span>
+                        <img width="20" height="20" src="https://img.icons8.com/material/24/000000/pencil--v2.png"
+                            alt="pencil--v2" class = "start-edit-button"/>
+                        <img width="22" height="22" src="https://img.icons8.com/sf-ultralight-filled/25/delete.png"
+                            alt="delete" class = "delete-button"/>
                     </p>
-                    <div style = "display: none;" class = "comment-edit-box">
+                    <div style="display: none;" class="comment-edit-box">
                         <input class="edit-comment-input" type="text">
                         <button class="apply-edit-button">Редактировать</button>
                     </div>
-                    <p class="comment-info">
+                    <p class="comment-info d-flex">
                         <span class="comment-description"></span>
+                        <span>&nbsp;</span>
+                        <a title="" class="comment-modified-date" style="display: none;"> (изменен) </a>
                     </p>
                     <p class="d-flex">
                         <span class="comment-time"></span>
                         <span>&nbsp;</span>
                         <a class="give-reply-button">Ответить</a>
                     </p>
-
-                    <div style = "display: none;" class = "reply-box">
+                    <div style="display: none;" class="reply-box">
                         <input class="sub-comment-input" type="text">
                         <button class="send-reply-button">Отправить</button>
                     </div>
