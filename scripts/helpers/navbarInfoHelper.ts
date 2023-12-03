@@ -1,16 +1,22 @@
 import { getProfile } from "../api/profileAPI.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+export async function updateNavBar(){
+  console.log("booba")
   const token = localStorage.getItem("token");
   if (token !== null) {
-    showLoggedInMenu();
+    await showLoggedInMenu();
   } else {
-    console.log(token)
     showDefaultMenu();
   }
+}
+
+document.addEventListener('DOMContentLoaded', (event) => {
+  updateNavBar();
 });
 
+
 async function showLoggedInMenu() {
+  console.log("logged")
   const loginButtonElement = document.getElementById("loginButton");
   const userMenuElement = document.getElementById("userMenu");
   const createPostElement = document.getElementById("create-post-container");
@@ -19,6 +25,8 @@ async function showLoggedInMenu() {
     loginButtonElement.style.display = "none";
     userMenuElement.style.display = "block";
     createPostElement.style.display = "block"
+
+
 
     const userEmail = await getUserEmail();
     const dropdownMenuButton = document.getElementById("dropdownMenuButton");

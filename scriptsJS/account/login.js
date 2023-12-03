@@ -1,4 +1,5 @@
 import { login_user_server } from "../api/loginAPI.js";
+import { router } from "../routing/routing.js";
 class LoginData {
     email;
     password;
@@ -13,7 +14,9 @@ function login_button_action() {
     login_user_server(requestData);
 }
 const loginButton = document.getElementById('login_button');
-loginButton.addEventListener('click', () => {
-    login_button_action();
+loginButton.addEventListener('click', async () => {
+    await login_button_action();
+    window.history.pushState({}, null, '/');
+    router();
 });
 //# sourceMappingURL=login.js.map

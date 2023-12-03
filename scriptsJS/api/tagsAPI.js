@@ -7,7 +7,7 @@ export async function getTags() {
             },
         });
         if (!response.ok) {
-            throw new Error(`Ошибка HTTP: ${response.status} ${response.statusText}`);
+            return null;
         }
         const data = await response.json();
         return data;

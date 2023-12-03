@@ -81,13 +81,15 @@ const navigateTo = (route, params = "") => {
 };
 const parseLocation = () => {
     const path = window.location.pathname.toLowerCase() || "/";
+    console.log(path);
     const params = new URLSearchParams(window.location.search).toString();
+    console.log(params);
     return params ? `${path}?${params}` : path;
 };
 const findComponent = (path, routes) => routes.find((r) => r.path === path) || undefined;
-const router = async () => {
+export async function router() {
     const currentState = window.history.state;
-    let path = currentState ? currentState.path : parseLocation();
+    const path = currentState && currentState.path ? currentState.path : parseLocation();
     const [local, params] = path.split("?");
     const parts = local.split("/");
     const result = "/" + parts[1];
@@ -97,7 +99,8 @@ const router = async () => {
     appElement.innerHTML = htmlCode;
     prevent(local);
     runScripts(htmlCode);
-};
+}
+;
 document.addEventListener("click", (event) => {
     const target = event.target;
     if (target.tagName === "A" && target.getAttribute("href")) {

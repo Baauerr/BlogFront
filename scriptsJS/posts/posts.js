@@ -8,6 +8,8 @@ import { getConcrettePost } from "../api/concrettePostAPI.js";
 import { commentView } from "./commentFunction.js";
 import { sendComment } from "../api/commentAPI.js";
 import { createComment } from "./commentFunction.js";
+import { getProfile } from "../api/profileAPI.js";
+import { getAddressChain } from "../api/addressAPI.js";
 function parsePostId() {
     const url = new URL(window.location.href);
     const pathNameParts = url.pathname.split('/');
@@ -39,6 +41,7 @@ export async function showSinglePost() {
     const postTags = postContainer.querySelector(".post-tags");
     const readingTime = postContainer.querySelector(".reading-time");
     const postComments = postContainer.querySelector(".post-comments");
+    const postAddress = document.getElementById("post-address");
     const showMoreButton = postContainer.querySelector(".show-more");
     const likeButton = postContainer.querySelector(".post-like-button");
     postLikeView(likeButton, post.hasLike);
@@ -55,12 +58,16 @@ export async function showSinglePost() {
     if (postDescription) {
         postDescription.dataset.fullDescription = post.description;
     }
+    if (post.addressId !== null) {
+        console.log(postAddress);
+        postAddress.textContent = await showAddress(post.addressId);
+    }
     toggleShowMoreButton(showMoreButton, post.description);
     attachEventListeners(post, postDescription, showMoreButton, likeButton, postLikes);
-    commentView(post.comments, post.id);
 }
 async function commentViewLogic(post, sendCommentButton, commentInputText) {
-    commentView(post.comments, post.id);
+    const userFullName = await getUserFullName();
+    commentView(post.comments, post.id, userFullName);
     sendCommentButton.addEventListener("click", async function () {
         const newComment = createComment(commentInputText.value);
         if (newComment !== null) {
@@ -73,5 +80,17 @@ async function commentViewLogic(post, sendCommentButton, commentInputText) {
     if (localStorage.getItem("token") !== null) {
         newCommentBlock.style.display = "block";
     }
+}
+async function getUserFullName() {
+    const user = localStorage.getItem("token") !== null ? await getProfile() : null;
+    return user === null ? null : user.fullName;
+}
+async function showAddress(addressId) {
+    const addressChain = await getAddressChain(addressId);
+    let addressString = "";
+    addressChain.forEach(addressElement => {
+        addressString = addressString + addressElement.text + " ";
+    });
+    return addressString;
 }
 //# sourceMappingURL=posts.js.map

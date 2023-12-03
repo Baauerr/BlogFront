@@ -75,3 +75,7 @@ a.post-title {
 .comment-modified-date{
     color: rgb(187, 185, 185)
 }
+
+.comment-author{
+    font-size: 14px;
+}

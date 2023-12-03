@@ -1,5 +1,5 @@
-const token = localStorage.getItem('token');
 export async function getProfile() {
+  const token = localStorage.getItem('token');
   try {
     const response = await fetch('https://blog.kreosoft.space/api/account/profile', {
       method: 'GET',
@@ -22,6 +22,7 @@ export async function getProfile() {
 }
 
 export async function editProfile(editData){
+  const token = localStorage.getItem('token');
     await fetch('https://blog.kreosoft.space/api/account/profile', {
         method: 'PUT',
         headers: {

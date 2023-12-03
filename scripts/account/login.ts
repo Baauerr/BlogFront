@@ -1,4 +1,6 @@
 import { login_user_server } from "../api/loginAPI.js";
+import { router } from "../routing/routing.js";
+import { updateNavBar } from "../helpers/navbarInfoHelper.js";
 
 class LoginData {
     email: string;
@@ -20,8 +22,10 @@ function login_button_action() {
 
 const loginButton = document.getElementById('login_button') as HTMLButtonElement;
 
-loginButton.addEventListener('click', () => {
-    login_button_action()
+loginButton.addEventListener('click', async () => {
+    await login_button_action()
+    window.history.pushState({}, null, '/');
+    router();
 });
 
 

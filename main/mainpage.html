@@ -15,12 +15,14 @@
                         <label for="inputWide">Поиск по имени автора</label>
                         <input type="text" class="form-control" id="inputWide">
                     </div>
-                    <div class="col-md-6 mb-2">
+                    <div class="col-md-6 mb-2 d-flex flex-row">
                         <div class="d-flex flex-column align-items-start">
-                            <label for="filterSquare" class="form-label">Поиск по тэгам</label>
-                            <select class="form-select w-100 border p-1" id="tagsSquare" multiple>
+                            <label for="tagsSquare" class="form-label">Поиск по тэгам</label>
+                            <select class="form-select w-50 border p-1" id="tagsSquare" multiple>
                                 <option value="null">--</option>
                             </select>
+                            <label for="post-amount" class="d-block">Количество постов на странице</label>
+                            <input type="number" id="post-amount" class="form-control w-50">
                         </div>
                     </div>
                 </div>
@@ -89,13 +91,20 @@
             </div>
         </template>
         <div id="postsContainer"></div>
-        <div>
-            <nav id="pagination">
-                <ul class="pagination"></ul>
-            </nav>
-        </div>
-            <label for="filterSingle" class="d-block">Количество постов на странице</label>
-            <input type = "number" id = "post-amount">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination" id="pagination">
+              <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next" data-page="2">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+        </nav>
 
 
 

@@ -67,7 +67,7 @@ const routes = [
   { path: "/login", component: login },
   { path: "/registration", component: registration },
   { path: "/profile", component: profile },
-  { path : "/post", component: post}
+  { path: "/post", component: post }
 ];
 
 const runScripts = (htmlCode) => {
@@ -97,24 +97,26 @@ const navigateTo = (route, params = "") => {
 
 const parseLocation = () => {
   const path = window.location.pathname.toLowerCase() || "/";
+  console.log(path)
   const params = new URLSearchParams(window.location.search).toString();
+  console.log(params)
   return params ? `${path}?${params}` : path;
 };
 
 const findComponent = (path, routes) =>
   routes.find((r) => r.path === path) || undefined;
 
-  const router = async () => {
+  export async function router() {
     const currentState = window.history.state;
-    let path = currentState ? currentState.path : parseLocation();
+    const path = currentState && currentState.path ? currentState.path : parseLocation();
     const [local, params] = path.split("?");
-    const parts = local.split("/"); 
+    const parts = local.split("/");
     const result = "/" + parts[1];
     const { component = ErrorComponent } = findComponent(result, routes) || {};
     const htmlCode = await component.render(params);
     const appElement = document.getElementById("app");
     appElement.innerHTML = htmlCode;
-    
+  
     prevent(local);
     runScripts(htmlCode);
   };
