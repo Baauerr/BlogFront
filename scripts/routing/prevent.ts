@@ -5,6 +5,9 @@ import { showPostPage } from "../posts/posts.js";
 
 export function prevent(path: string) {
     switch (true) {
+        case path.includes("/post/create"):
+          //  showPostPage();
+            break;
         case path.includes("/post/"):
             showPostPage();
             break;

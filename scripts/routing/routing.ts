@@ -25,7 +25,7 @@ const main = {
 
 const post = {
   render: async () => {
-    const htmlCode = await loadHTML('../posts/post.html');
+    const htmlCode = await loadHTML('../../posts/post.html');
     return htmlCode;
   },
 };
@@ -51,6 +51,13 @@ const profile = {
   },
 };
 
+const createPost = {
+  render: async () => {
+    const htmlCode = await loadHTML('../../posts/createPost.html');
+    return htmlCode;
+  },
+};
+
 const ErrorComponent = {
   render: () => {
     return `
@@ -67,7 +74,8 @@ const routes = [
   { path: "/login", component: login },
   { path: "/registration", component: registration },
   { path: "/profile", component: profile },
-  { path: "/post", component: post }
+  { path: '/post/:id', component: post },
+  { path: "/post/create", component: createPost },
 ];
 
 const runScripts = (htmlCode) => {
@@ -97,29 +105,73 @@ const navigateTo = (route, params = "") => {
 
 const parseLocation = () => {
   const path = window.location.pathname.toLowerCase() || "/";
-  console.log(path)
   const params = new URLSearchParams(window.location.search).toString();
-  console.log(params)
   return params ? `${path}?${params}` : path;
 };
 
-const findComponent = (path, routes) =>
-  routes.find((r) => r.path === path) || undefined;
+function matchPath(urlElements, route) {
+  console.log("aga")
+  const routeElements = route.path.split('/').filter(element => element !== '');
+  if (route.path.endsWith('/')) {
+    routeElements.push('/');
+  }
 
-  export async function router() {
-    const currentState = window.history.state;
-    const path = currentState && currentState.path ? currentState.path : parseLocation();
-    const [local, params] = path.split("?");
-    const parts = local.split("/");
-    const result = "/" + parts[1];
-    const { component = ErrorComponent } = findComponent(result, routes) || {};
-    const htmlCode = await component.render(params);
-    const appElement = document.getElementById("app");
-    appElement.innerHTML = htmlCode;
-  
-    prevent(local);
-    runScripts(htmlCode);
-  };
+  for (let i = 0; i < urlElements.length; i++) {
+
+    const urlElement = urlElements[i];
+    const routeElement = routeElements[i];
+
+    if (routeElement.startsWith(':')) {
+
+      const paramType = routeElement.substring(1);
+      if (!validateDynamicParam(urlElement, paramType)) {
+
+        return false;
+      }
+    } else if (urlElement !== routeElement) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function validateDynamicParam(param, type) {
+  if (type === 'id') {
+    const guidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+    return guidRegex.test(param);
+  }
+
+  return false;
+}
+
+function findComponentByUrlElements(urlElements, routes) {
+  for (const route of routes) {
+    if (matchPath(urlElements, route)) {
+      return route;
+    }
+  }
+  return undefined;
+}
+
+export async function router() {
+  const currentState = window.history.state;
+  const path = currentState && currentState.path ? currentState.path : parseLocation();
+  const [local, params] = path.split("?");
+  const parts = local.split("/");
+  if (parts.length > 1 && parts[1] === "") {
+    parts[1] = "/";
+  }
+  parts.shift();
+  const { component = ErrorComponent } = findComponentByUrlElements(parts, routes) || {};
+
+  const htmlCode = await component.render(params);
+  const appElement = document.getElementById("app");
+  appElement.innerHTML = htmlCode;
+
+  prevent(local);
+  runScripts(htmlCode);
+};
 
 document.addEventListener("click", (event: MouseEvent) => {
   const target = event.target as HTMLAnchorElement;

@@ -17,4 +17,19 @@ html, body {
     text-align: center;
   }
 
+  .nav-wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.nav-element {
+    color: black;
+    margin-right: 15px; 
+    transition: color 0.3s ease;
+}
+.nav-element:hover {
+    text-decoration: none;
+    color: rgb(125, 125, 125);
+}
+
 

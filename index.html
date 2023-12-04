@@ -11,18 +11,12 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light" id="navigation-bar">
-        <a class="navbar-brand">Блог</a>
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="/">Главная</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="communities" href="/">Группы</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="authors-list" href="/">Авторы</a>
-            </li>
-        </ul>
+        <b class="navbar-brand" href="/">Блог 635</b>
+        <a class="nav-element" href="/">Главная</a>
+        <div class="nav-wrapper" style = "display: none" id = "authors-community-navigation">
+            <a class = "nav-element" href="/">Группы</a>
+            <a class = "nav-element" href="/">Авторы</a>
+        </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -34,14 +28,14 @@
                 <div class="container mt-1" id="userMenu" style="display: none;">
                     <div id="create-post-container" class="d-flex flex-row justify-content-end mt-2 mb-2 "
                         style="display: none;">
-                        <button id="create-post" class="btn btn-primary">Написать пост</button>
-                    </div>
+                        <a id="create-post" class="btn btn-primary" href = "/post/create" >Написать пост</a>
+                    </div> 
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href = "/" id="logout">Выйти</a>
+                            <a class="dropdown-item" href="/" id="logout">Выйти</a>
                             <a class="dropdown-item" href="/profile">Профиль</a>
                         </div>
                     </div>
