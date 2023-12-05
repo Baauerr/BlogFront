@@ -1,4 +1,4 @@
-import { getProfile } from "../api/profileAPI.js";
+import { getProfileAPI } from "../api/profileAPI.js";
 
 export async function updateNavBar(){
   const token = localStorage.getItem("token");
@@ -52,7 +52,7 @@ function showDefaultMenu() {
 
 async function getUserEmail() {
   try {
-    const userInfo = await getProfile();
+    const userInfo = await getProfileAPI();
     return userInfo.email;
   } catch (error) {
     console.error('Произошла ошибка:', error);

@@ -1,5 +1,5 @@
-import { getProfile } from "../api/profileAPI.js";
-import { editProfile } from "../api/profileAPI.js";
+import { getProfileAPI } from "../api/profileAPI.js";
+import { editProfileAPI } from "../api/profileAPI.js";
 
 const registrationButton = document.getElementById('save_button') as HTMLButtonElement;
 
@@ -32,7 +32,7 @@ function edit_button_action() {
         fullName: inputName.value,
         birthDate: serverDate,
     };
-    editProfile(requestData);
+    editProfileAPI(requestData);
 }
 
 interface ProfileData {
@@ -40,7 +40,7 @@ interface ProfileData {
 }
 
 async function info() {
-    const profileInfo: ProfileData = await getProfile();
+    const profileInfo: ProfileData = await getProfileAPI();
     profileInfo.birthDate = profileInfo.birthDate.slice(0, 10);
     console.log(profileInfo[3])
     const container = document.getElementById('profilebox');

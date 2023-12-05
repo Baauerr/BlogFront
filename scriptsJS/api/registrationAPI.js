@@ -1,9 +1,5 @@
 import { takeErrorTextAsync } from "../helpers/errorCreateHelper.js";
-import { createErrorElement } from "../helpers/errorCreateHelper.js";
-const inputErrorMapping = {};
-createErrorElement(inputErrorMapping);
-export function register_user_server(responseData) {
-    Object.values(inputErrorMapping).forEach(errorElement => errorElement.textContent = '');
+export function registerUserAPI(responseData) {
     fetch('https://blog.kreosoft.space/api/account/register', {
         method: 'POST',
         headers: {
@@ -14,7 +10,9 @@ export function register_user_server(responseData) {
         .then(async (response) => {
         const data = await response.json();
         if (data.errors) {
-            await takeErrorTextAsync(data, inputErrorMapping);
+            const container = document.getElementById('loginbox');
+            const inputElements = container.querySelectorAll('input, #birthdate');
+            await takeErrorTextAsync(data, container, inputElements);
         }
         else {
             localStorage.setItem("token", data.token);

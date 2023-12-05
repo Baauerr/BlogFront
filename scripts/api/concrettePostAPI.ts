@@ -1,4 +1,4 @@
-export async function getConcrettePost(postId): Promise<any> {
+export async function getConcretePostAPI(postId): Promise<any> {
   try {
     const token = localStorage.getItem("token")
     const response = await fetch(`https://blog.kreosoft.space/api/post/${postId}`, {

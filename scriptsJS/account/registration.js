@@ -1,4 +1,4 @@
-import { register_user_server } from "../api/registrationAPI.js";
+import { registerUserAPI } from "../api/registrationAPI.js";
 class LoginData {
     email;
     password;
@@ -13,15 +13,17 @@ export class DateInfo {
     day;
 }
 function registration_button_action() {
-    console.log("jija");
     const inputName = document.getElementById('fullname');
     const inputPassword = document.getElementById('password');
     const inputEmail = document.getElementById('email');
     const inputBirthDate = document.getElementById('birthdate');
     const inputGender = document.getElementById('gender');
     const inputPhoneNumber = document.getElementById('phonenumber');
-    const isoDateString = new Date(inputBirthDate.value);
-    const serverDate = isoDateString.toISOString();
+    let serverDate;
+    if (inputBirthDate.value) {
+        const isoDateString = new Date(inputBirthDate.value);
+        serverDate = isoDateString.toISOString();
+    }
     const requestData = {
         email: inputEmail.value,
         password: inputPassword.value,
@@ -30,7 +32,7 @@ function registration_button_action() {
         fullName: inputName.value,
         birthDate: serverDate,
     };
-    register_user_server(requestData);
+    registerUserAPI(requestData);
 }
 const registrationButton = document.getElementById('registration_button');
 registrationButton.addEventListener('click', registration_button_action);

@@ -1,4 +1,4 @@
-export async function getTags() {
+export async function getTagsAPI() {
   try {
     const response = await fetch('https://blog.kreosoft.space/api/tag', {
       method: 'GET',

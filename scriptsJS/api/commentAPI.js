@@ -1,4 +1,4 @@
-export async function getCommentTree(commentId) {
+export async function getCommentTreeAPI(commentId) {
     try {
         const response = await fetch(`https://blog.kreosoft.space/api/comment/${commentId}/tree`, {
             method: 'GET',

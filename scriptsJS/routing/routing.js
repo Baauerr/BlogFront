@@ -92,7 +92,6 @@ const parseLocation = () => {
     return params ? `${path}?${params}` : path;
 };
 function matchPath(urlElements, route) {
-    console.log("aga");
     const routeElements = route.path.split('/').filter(element => element !== '');
     if (route.path.endsWith('/')) {
         routeElements.push('/');
@@ -140,6 +139,7 @@ export async function router() {
     const htmlCode = await component.render(params);
     const appElement = document.getElementById("app");
     appElement.innerHTML = htmlCode;
+    document.title = document.querySelector(".title-of-page").getAttribute("content");
     prevent(local);
     runScripts(htmlCode);
 }

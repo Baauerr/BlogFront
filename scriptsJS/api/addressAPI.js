@@ -1,4 +1,4 @@
-export async function getAddressChain(addressGuid) {
+export async function getAddressChainAPI(addressGuid) {
     try {
         const response = await fetch(`https://blog.kreosoft.space/api/address/chain?objectGuid=${addressGuid}`, {
             method: 'GET',

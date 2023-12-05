@@ -1,6 +1,6 @@
 export async function setLike(responseData) {
     try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItemAPI("token");
         const response = await fetch(`https://blog.kreosoft.space/api/post/${responseData}/like`, {
             method: 'POST',
             headers: {
@@ -17,7 +17,7 @@ export async function setLike(responseData) {
         throw error;
     }
 }
-export async function deleteLike(responseData) {
+export async function deleteLikeAPI(responseData) {
     try {
         const token = localStorage.getItem("token");
         const response = await fetch(`https://blog.kreosoft.space/api/post/${responseData}/like`, {

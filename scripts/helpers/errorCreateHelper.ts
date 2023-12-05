@@ -1,7 +1,13 @@
-export async function takeErrorTextAsync(data: any, inputErrorMapping: Record<string, HTMLDivElement>) {
+export async function takeErrorTextAsync(data: any, container, inputElements) {
     await new Promise(resolve => setTimeout(resolve, 0));
 
+    const inputErrorMapping: Record<string, HTMLDivElement> = {};
+    Object.values(inputErrorMapping).forEach(errorElement => errorElement.textContent = '');
+
+    createErrorElement(inputErrorMapping, container, inputElements)
+
     Object.keys(data.errors).forEach((fieldName: string) => {
+        console.log(data.errors);
         const errorMessages: string[] = data.errors[fieldName];
         const errorElement: HTMLDivElement | undefined = inputErrorMapping[fieldName.toLowerCase()];
         console.log(errorElement);
@@ -13,10 +19,11 @@ export async function takeErrorTextAsync(data: any, inputErrorMapping: Record<st
     });
 }
 
-export function createErrorElement(inputErrorMapping: Record<string, HTMLDivElement>) {
-    const container = document.getElementById('loginbox');
+export function createErrorElement(inputErrorMapping: Record<string, HTMLDivElement>, container, inputElements) {
 
-    const inputElements = container.querySelectorAll('input, #birthdate');
+    container.querySelectorAll('.error-message').forEach(element => element.remove());
+
+    
     const inputIds: string[] = [];
     inputElements.forEach(input => {
         inputIds.push(input.id);

@@ -1,6 +1,6 @@
 import { formatDateForPostInfo } from "../helpers/formatDateHelper.js";
-import { getCommentTree } from "../api/commentAPI.js";
-import { showPostPage, showSinglePost } from "./posts.js";
+import { getCommentTreeAPI } from "../api/commentAPI.js";
+import { showPostPage } from "./posts.js";
 import { sendComment } from "../api/commentAPI.js";
 import { editComment } from "../api/commentAPI.js";
 import { deleteComment } from "../api/commentAPI.js";
@@ -60,7 +60,7 @@ export async function commentView(comments, postId, userFullName) {
 }
 async function subCommentsView(commentId, subCommentBlock, postId, userFullName) {
     const subCommentTemplate = document.getElementById("comment-template");
-    const subCommentsTree = await getCommentTree(commentId);
+    const subCommentsTree = await getCommentTreeAPI(commentId);
     for (const subCommentData of subCommentsTree) {
         const subCommentClone = document.importNode(subCommentTemplate.content, true);
         const subCommentAuthor = subCommentClone.querySelector(".comment-author");
@@ -89,7 +89,7 @@ async function subCommentsView(commentId, subCommentBlock, postId, userFullName)
             subCommentIsEdited.style.display = "block";
             subCommentIsEdited.title = formatDateForPostInfo(subCommentData.modifiedDate);
         }
-        addReplyFullFunctional(addReplyButton, replyBox, replyInput, subCommentData, sendReply, postId);
+        await addReplyFullFunctional(addReplyButton, replyBox, replyInput, subCommentData, sendReply, postId);
         subCommentBlock.appendChild(subCommentClone);
     }
     ;
@@ -122,7 +122,7 @@ export function createComment(content, parentId) {
         return newComment;
     }
 }
-function addReplyFullFunctional(addReplyButton, replyBox, replyInput, commentData, sendReply, postId) {
+async function addReplyFullFunctional(addReplyButton, replyBox, replyInput, commentData, sendReply, postId) {
     if (localStorage.getItem("token") !== null) {
         addReplyButton.addEventListener("click", function () {
             showHiddenInput(replyBox);
@@ -133,7 +133,7 @@ function addReplyFullFunctional(addReplyButton, replyBox, replyInput, commentDat
         if (newComment !== null) {
             replyInput.value = "";
             await sendComment(newComment, postId);
-            await showSinglePost();
+            await showPostPage();
         }
     });
 }

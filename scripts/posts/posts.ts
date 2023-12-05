@@ -4,12 +4,12 @@ import { getPostTags } from "../mainPage/getInfo.js";
 import { setPostImage } from "../mainPage/getInfo.js";
 import { toggleShowMoreButton } from "../mainPage/buttonsOnMainPage.js";
 import { attachEventListeners } from "../mainPage/buttonsOnMainPage.js";
-import { getConcrettePost } from "../api/concrettePostAPI.js";
+import { getConcretePostAPI } from "../api/concrettePostAPI.js";
 import { commentView } from "./commentFunction.js";
 import { sendComment } from "../api/commentAPI.js";
 import { createComment } from "./commentFunction.js";
-import { getProfile } from "../api/profileAPI.js";
-import { getAddressChain } from "../api/addressAPI.js";
+import { getProfileAPI } from "../api/profileAPI.js";
+import { getAddressChainAPI } from "../api/addressAPI.js";
 
 function parsePostId() {
     const url = new URL(window.location.href);
@@ -26,7 +26,7 @@ function parsePostId() {
 export async function showPostPage() {
 
     const postId = parsePostId();
-    const post = await getConcrettePost(postId);
+    const post = await getConcretePostAPI(postId);
 
     const sendCommentButton = document.getElementById("send-comment") as HTMLButtonElement;
     const commentInputText = document.getElementById('comment-input-area') as HTMLTextAreaElement;
@@ -38,7 +38,7 @@ export async function showPostPage() {
 
 export async function showSinglePost() {
     const postId = parsePostId();
-    const post = await getConcrettePost(postId);
+    const post = await getConcretePostAPI(postId);
     const postContainer = document.getElementById("post-container") as HTMLDivElement;
 
     const postDescription = postContainer.querySelector(".post-description") as HTMLElement;
@@ -91,7 +91,7 @@ async function commentViewLogic(post, sendCommentButton, commentInputText) {
         if (newComment !== null) {
             commentInputText.value = ""
             await sendComment(newComment, post.id);
-            await showSinglePost();
+            await showPostPage();
         }
     });
 
@@ -102,12 +102,12 @@ async function commentViewLogic(post, sendCommentButton, commentInputText) {
 }
 
 async function getUserFullName(){
-    const user = localStorage.getItem("token") !== null ? await getProfile() : null;
+    const user = localStorage.getItem("token") !== null ? await getProfileAPI() : null;
     return user === null ? null : user.fullName;
 }
 
 async function showAddress(addressId){
-    const addressChain = await getAddressChain(addressId);
+    const addressChain = await getAddressChainAPI(addressId);
     let addressString = "";
     addressChain.forEach(addressElement => {
         addressString = addressString + addressElement.text + " "

@@ -23,7 +23,7 @@ export function parseUrlParams(): MainPageData {
 export function collectFormData() {
     const formData = new MainPageData();
 
-    formData.tags = Array.from((document.querySelectorAll('#tagsSquare option:checked') as NodeListOf<HTMLOptionElement>))
+    formData.tags = Array.from((document.querySelectorAll('#tags-square option:checked') as NodeListOf<HTMLOptionElement>))
         .map(option => option.value)
         .filter(tag => tag !== "null");
     formData.author = (document.getElementById('inputWide') as HTMLInputElement).value;

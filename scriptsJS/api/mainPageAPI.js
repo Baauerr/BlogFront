@@ -1,4 +1,4 @@
-export async function getInfoOnPage(filterData) {
+export async function getInfoOnPageAPI(filterData) {
     const queryString = Object.entries(filterData)
         .filter(([key, value]) => {
         if (Array.isArray(value)) {

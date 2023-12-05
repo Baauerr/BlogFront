@@ -1,6 +1,6 @@
 import { formatDateForPostInfo } from "../helpers/formatDateHelper.js";
-import { getCommentTree } from "../api/commentAPI.js";
-import { showPostPage, showSinglePost } from "./posts.js";
+import { getCommentTreeAPI } from "../api/commentAPI.js";
+import { showPostPage } from "./posts.js";
 import { sendComment } from "../api/commentAPI.js";
 import { editComment } from "../api/commentAPI.js";
 import { deleteComment } from "../api/commentAPI.js";
@@ -81,7 +81,7 @@ async function subCommentsView(commentId, subCommentBlock, postId, userFullName)
     const subCommentTemplate = document.getElementById("comment-template") as HTMLTemplateElement;
 
 
-    const subCommentsTree = await getCommentTree(commentId);
+    const subCommentsTree = await getCommentTreeAPI(commentId);
 
     for (const subCommentData of subCommentsTree) {
 
@@ -119,7 +119,7 @@ async function subCommentsView(commentId, subCommentBlock, postId, userFullName)
             subCommentIsEdited.title = formatDateForPostInfo(subCommentData.modifiedDate);
         }
 
-        addReplyFullFunctional(addReplyButton, replyBox, replyInput, subCommentData, sendReply, postId);
+        await addReplyFullFunctional(addReplyButton, replyBox, replyInput, subCommentData, sendReply, postId);
 
         subCommentBlock.appendChild(subCommentClone);
 
@@ -155,7 +155,7 @@ export function createComment(content: string, parentId?: string): CommentData {
     }
 }
 
-function addReplyFullFunctional(addReplyButton, replyBox, replyInput, commentData, sendReply, postId) {
+async function addReplyFullFunctional(addReplyButton, replyBox, replyInput, commentData, sendReply, postId) {
     if (localStorage.getItem("token") !== null) {
         addReplyButton.addEventListener("click", function () {
             showHiddenInput(replyBox);
@@ -167,7 +167,7 @@ function addReplyFullFunctional(addReplyButton, replyBox, replyInput, commentDat
         if (newComment !== null) {
             replyInput.value = ""
             await sendComment(newComment, postId);
-            await showSinglePost();
+            await showPostPage();
         }
     });
 }

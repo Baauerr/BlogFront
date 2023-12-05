@@ -1,7 +1,7 @@
-import { getTags } from "../api/tagsAPI.js";
+import { getTagsAPI } from "../api/tagsAPI.js";
 export async function showTags() {
-    const tagsBlock = document.getElementById('tagsSquare');
-    const tags = await getTags();
+    const tagsBlock = document.getElementById('tags');
+    const tags = await getTagsAPI();
     tags.forEach(element => {
         var option = document.createElement("option");
         option.value = element.id;

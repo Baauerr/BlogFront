@@ -1,5 +1,5 @@
 import { updateNavBar } from "../helpers/navbarInfoHelper.js";
-export async function login_user_server(responseData) {
+export async function loginUserOnServerAPI(responseData) {
     try {
         const response = await fetch('https://blog.kreosoft.space/api/account/login', {
             method: 'POST',

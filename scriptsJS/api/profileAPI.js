@@ -1,4 +1,4 @@
-export async function getProfile() {
+export async function getProfileAPI() {
     const token = localStorage.getItem('token');
     try {
         const response = await fetch('https://blog.kreosoft.space/api/account/profile', {
@@ -19,7 +19,7 @@ export async function getProfile() {
         throw error;
     }
 }
-export async function editProfile(editData) {
+export async function editProfileAPI(editData) {
     const token = localStorage.getItem('token');
     await fetch('https://blog.kreosoft.space/api/account/profile', {
         method: 'PUT',

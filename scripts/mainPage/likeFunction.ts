@@ -1,15 +1,15 @@
 import { setLike } from "../api/likeAPI.js";
-import { deleteLike } from "../api/likeAPI.js";
-import { getConcrettePost } from "../api/concrettePostAPI.js";
+import { deleteLikeAPI } from "../api/likeAPI.js";
+import { getConcretePostAPI } from "../api/concrettePostAPI.js";
 
 export async function clickOnLikeButton(likeButton, postData, likesAmount) {
     if (localStorage.getItem("token") !== null) {
-        const postInfo = await getConcrettePost(postData.id)
+        const postInfo = await getConcretePostAPI(postData.id)
         if (!postInfo.hasLike) {
             setLike(postData.id);
         }
         else {
-            deleteLike(postData.id);    
+            deleteLikeAPI(postData.id);    
         }
         updatePostInfo(likeButton, likesAmount, postInfo.hasLike)
     }

@@ -5,7 +5,7 @@ import { postLikeView } from "./buttonsOnMainPage.js";
 import { getPostAuthor } from "./getInfo.js";
 import { setPostImage } from "./getInfo.js";
 import { getPostTags } from "./getInfo.js";
-import { getInfoOnPage } from "../api/mainPageAPI.js";
+import { getInfoOnPageAPI } from "../api/mainPageAPI.js";
 import { viewPagination } from "./pagination.js";
 
 export async function applyFormDataToClass() {
@@ -16,7 +16,7 @@ export async function applyFormDataToClass() {
         const postTemplate = document.getElementById("postTemplate") as HTMLTemplateElement;
         const postsContainer = document.getElementById("postsContainer") as HTMLDivElement;
         
-        const data = await getInfoOnPage(formData);
+        const data = await getInfoOnPageAPI(formData);
         data.posts.forEach(post => addPostToContainer(post, postTemplate, postsContainer));
 
         viewPagination(data.pagination.count, data.pagination.current);

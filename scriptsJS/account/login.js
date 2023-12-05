@@ -1,4 +1,4 @@
-import { login_user_server } from "../api/loginAPI.js";
+import { loginUserOnServerAPI } from "../api/loginAPI.js";
 import { router } from "../routing/routing.js";
 class LoginData {
     email;
@@ -11,7 +11,7 @@ function login_button_action() {
         email: inputEMail.value,
         password: inputPassword.value,
     };
-    login_user_server(requestData);
+    loginUserOnServerAPI(requestData);
 }
 const loginButton = document.getElementById('login_button');
 loginButton.addEventListener('click', async () => {
