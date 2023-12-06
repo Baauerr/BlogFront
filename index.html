@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/index.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="/images/siteicon.png" />
     <title>Глаjjвная</title>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light" id="navigation-bar">
-        <b class="navbar-brand" href="/">Блог 635</b>
-        <a class="nav-element" href="/">Главная</a>
-        <div class="nav-wrapper" style = "display: none" id = "authors-community-navigation">
-            <a class = "nav-element" href="/">Группы</a>
-            <a class = "nav-element" href="/">Авторы</a>
+        <b class="navbar-brand" href="/">Блог 607</b>
+        <a class="nav-element m-2" href="/">Главная</a>
+        <div class="nav-wrapper m-2" style="display: none; margin: 0; padding: 0;" id="authors-community-navigation">
+            <a class="nav-element m-2" href="/communities">Группы</a>
+            <a class="nav-element m-2" href="/">Авторы</a>
         </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,17 +27,19 @@
             <ul class="navbar-nav ml-auto" id="user_info_area">
                 <a href="/login" class="btn btn-primary btn-block" id="loginButton">Войти</a>
                 <div class="container mt-1" id="userMenu" style="display: none;">
-                    <div id="create-post-container" class="d-flex flex-row justify-content-end mt-2 mb-2 "
-                        style="display: none;">
-                        <a id="create-post" class="btn btn-primary" href = "/post/create" >Написать пост</a>
-                    </div> 
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="/" id="logout">Выйти</a>
-                            <a class="dropdown-item" href="/profile">Профиль</a>
+                    <div class="d-flex flex-row">
+                        <div id="create-post-container" class="d-flex flex-row justify-content-end"
+                            style="display: none;">
+                            <a id="create-post" class="btn btn-primary mr-2" href="/post/create">Написать пост</a>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="/" id="logout">Выйти</a>
+                                <a class="dropdown-item" href="/profile">Профиль</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -47,7 +51,7 @@
     </nav>
     <div id="app"></div>
     <footer class="sticky-footer">
-        <p class="mb-0">Блог 415</p>
+        <p class="mb-0">© 2023 - Блог 607</p>
     </footer>
     <meta class="title-of-page" name="hidden" content="Главная">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

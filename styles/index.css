@@ -15,6 +15,7 @@ html, body {
     background-color: #f8f9fa; 
     padding: 1rem;
     text-align: center;
+    color: rgb(143, 143, 143)
   }
 
   .nav-wrapper {
@@ -24,7 +25,6 @@ html, body {
 
 .nav-element {
     color: black;
-    margin-right: 15px; 
     transition: color 0.3s ease;
 }
 .nav-element:hover {

@@ -22,28 +22,28 @@ export function collectDataForPosrCreating() {
 
     const formData = new PostInfo("", [], "");
 
-    const tagsInput = document.querySelectorAll('#tags option:checked') as NodeListOf<HTMLOptionElement>;
+    const tagsInput: NodeListOf<HTMLOptionElement> = document.querySelectorAll('#tags option:checked') as NodeListOf<HTMLOptionElement>;
     formData.tags = tagsInput.length > 0 ? Array.from(tagsInput).map(option => option.value).filter(tag => tag !== "null") : undefined;
 
-    const readingTimeInput = document.getElementById('reading-time-input') as HTMLInputElement;
+    const readingTimeInput: HTMLInputElement = document.getElementById('reading-time-input') as HTMLInputElement;
     formData.readingTime = readingTimeInput.value ? parseInt(readingTimeInput.value, 10) : undefined;
 
-    const titleInput = document.getElementById('title') as HTMLInputElement;
+    const titleInput: HTMLInputElement = document.getElementById('title') as HTMLInputElement;
     formData.title = titleInput.value || undefined;
 
-    const descriptionInput = document.getElementById('description') as HTMLInputElement;
+    const descriptionInput: HTMLInputElement = document.getElementById('description') as HTMLInputElement;
     formData.description = descriptionInput.value || undefined;
 
-    const imageInput = document.getElementById('image') as HTMLInputElement;
+    const imageInput: HTMLInputElement = document.getElementById('image') as HTMLInputElement;
     formData.image = imageInput.value || undefined;
 
-    const addressInput = document.getElementById('address-input') as HTMLSelectElement;
+    const addressInput: HTMLSelectElement = document.getElementById('address-input') as HTMLSelectElement;
     formData.addressId = addressInput.value || undefined;
 
     return formData;
 }
 
-const createPostButton = document.getElementById("apply_button") as HTMLButtonElement
+const createPostButton: HTMLButtonElement = document.getElementById("apply_button") as HTMLButtonElement
 
 if (createPostButton) {
     createPostButton.addEventListener('click', async () => {
@@ -54,7 +54,7 @@ if (createPostButton) {
 async function publishPost(){
     const dataFromPage = collectDataForPosrCreating();
 
-    const postSource = document.getElementById("user-communities") as HTMLSelectElement
+    const postSource: HTMLSelectElement = document.getElementById("user-communities") as HTMLSelectElement
         if (postSource.value !== null && postSource.value !== "user"){
            await createPostInCommunityAPI(dataFromPage, postSource.value);
         }
@@ -66,7 +66,7 @@ async function publishPost(){
 
 export async function loadAvailableCommunities() {
     const userCommunities = await getUsersCommunitiesAPI();
-    const userCommunitySelect = document.getElementById("user-communities") as HTMLSelectElement;
+    const userCommunitySelect: HTMLSelectElement = document.getElementById("user-communities") as HTMLSelectElement;
 
     for (const community of userCommunities) {
         if (community.role === "Administrator") {

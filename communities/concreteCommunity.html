@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="../styles/index.css"> -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="/images/siteicon.png" />
+    <link rel="stylesheet" href="../styles/main-page.css">
+    <link rel="stylesheet" href="../styles/communities.css">
+    <meta class="title-of-page" name="hidden" content="Сообщество">
+    <title>Глаjjвная</title>
+</head>
+
+<body>
+    <div class="container mt-3">
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between flex-wrap mb-4">
+                    <p class="text-break my-auto" id="community-title">878978979877987</p>
+                    <button class="btn btn-primary my-auto" id="subscribe-button">Подписаться</button>
+                </div>
+                <div>
+                    <p id = "subscribers-icon">Тут будет иконка</p>
+                    <p id = "subscribers-amount">Количество подписчиков:</p>
+                    <p id = "community-type">Тип сообщества: закрытое</p>
+                    <p id = "administrators-amount">Администраторы</p>
+                </div>
+
+                <div id="administrators-place">
+                    <!-- <div id="administrators-template">
+                        <img src="../images/girlAvatar.svg" alt="SVG Image" class="avatar-image">
+                        <a href="" class="administrator-nickname">Xexi</a>
+                        <hr class="my-4">
+                    </div> -->
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card mb-3">
+            <div class="card-header">
+                Фильтры
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6">
+                        <div class="form-group">
+                            <label for="tags" class="form-label">Поиск по тэгам</label>
+                            <select class="form-select w-100 border p-1" id="tags" multiple>
+                                <option value="null">--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="form-group">
+                            <label for="filterSingle" class="d-block">Сортировать</label>
+                            <select class="form-control w-100 border p-1" id="filterSingle">
+                                <option value="CreateDesc" id="CreateDesc">По дате создания (сначала новые)</option>
+                                <option value="CreateAsc" id="CreateAsc">По дате создания (сначала старые)</option>
+                                <option value="LikeAsc" id="LikeAsc">По количеству лайков (сначала меньше)</option>
+                                <option value="LikeDesc" id="LikeDesc">По количеству лайков (сначала больше)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group">
+                            <label for="post-amount" class="d-block">Количество постов на странице</label>
+                            <input type="number" id="post-amount" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12 ml-auto">
+                        <button class="btn btn-primary w-100" id="apply_button">Применить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <template id="administrators-template">
+            <div id="administrators-template">
+                <img src="../images/girlAvatar.svg" alt="SVG Image" class="avatar-image">
+                <a href="" class="administrator-nickname">Xexi</a>
+                <hr class="my-4">
+            </div>
+        </template>
+
+        <template id="postTemplate">
+            <div class="post_template">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p class="authors">
+                            <span class="post-author"></span>
+                        </p>
+                        <p class="name">
+                            <a href="" class="post-title"></a>
+                        </p>
+                        <hr class="my-4">
+                        <p class="post-info">
+                            <img class="post-image img-thumbnail" style="display: none;" alt="Post Image" />
+                            <span class="post-description"></span>
+                            <a class="show-more" style="display: none;">Читать полностью</a>
+                        </p>
+                        <p class="tags" style="color: darkgray;">
+                            <span class="post-tags"></span>
+                        </p>
+                        <p class="reading">
+                            <span class="reading-time"></span>
+                        </p>
+                        <div class="bg-light p-3 mt-3">
+                            <span class="post-comments"></span>
+                            <img width="22" height="22"
+                                src="https://img.icons8.com/fluency-systems-regular/48/comments--v2.png"
+                                alt="comments--v2" class="post-comments-button" />
+                            <span class="post-likes"></span>
+                            <img width="27" height="27" src="../images/like.png" alt="hearts--v1"
+                                class="post-like-button" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <div id="postsContainer"></div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination" id="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next" data-page="2">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ru.min.js"></script>
+
+    <script src="../scriptsJS/mainPage/showMore.js"></script>

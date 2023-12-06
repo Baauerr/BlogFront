@@ -1,6 +1,6 @@
 import { loginUserOnServerAPI } from "../api/loginAPI.js";
 import { router } from "../routing/routing.js";
-class LoginData {
+export class LoginData {
     email;
     password;
 }

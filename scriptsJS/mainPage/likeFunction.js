@@ -1,7 +1,7 @@
 import { setLike } from "../api/likeAPI.js";
 import { deleteLikeAPI } from "../api/likeAPI.js";
 import { getConcretePostAPI } from "../api/concrettePostAPI.js";
-export async function clickOnLikeButton(likeButton, postData, likesAmount) {
+export async function clickOnLikeButton(likeButton, postData, likesAmountElement) {
     if (localStorage.getItem("token") !== null) {
         const postInfo = await getConcretePostAPI(postData.id);
         if (!postInfo.hasLike) {
@@ -10,11 +10,11 @@ export async function clickOnLikeButton(likeButton, postData, likesAmount) {
         else {
             deleteLikeAPI(postData.id);
         }
-        updatePostInfo(likeButton, likesAmount, postInfo.hasLike);
+        updatePostInfo(likeButton, likesAmountElement, postInfo.hasLike);
     }
 }
-async function updatePostInfo(likeButton, likesAmount, hasLike) {
+async function updatePostInfo(likeButton, likesAmountElement, hasLike) {
     likeButton.src = hasLike ? '../images/like.png' : '../images/liked.png';
-    likesAmount.textContent = hasLike ? parseInt(likesAmount.textContent) - 1 : parseInt(likesAmount.textContent) + 1;
+    likesAmountElement.textContent = hasLike ? (parseInt(likesAmountElement.textContent) - 1).toString() : (parseInt(likesAmountElement.textContent) + 1).toString();
 }
 //# sourceMappingURL=likeFunction.js.map

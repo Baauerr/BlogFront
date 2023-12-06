@@ -1,13 +1,13 @@
-import { applyFormDataToClass } from "./mainPagePostView.js";
+import { showMainPagePosts } from "./mainPagePostView.js";
 import { updateUrl } from "./getDataFromPage.js";
 import { collectFormData } from "./getDataFromPage.js";
 import { clickOnLikeButton } from "./likeFunction.js";
-export function attachEventListeners(post, postDescription, showMoreButton, likeButton, postLikes) {
+export function attachEventListeners(post, postDescription, showMoreButton, likeButton, postLikesCountElement) {
     showMoreButton.addEventListener("click", function () {
         readMore(postDescription, showMoreButton);
     });
     likeButton.addEventListener("click", async function () {
-        await clickOnLikeButton(likeButton, post, postLikes);
+        await clickOnLikeButton(likeButton, post, postLikesCountElement);
     });
 }
 export function toggleShowMoreButton(showMoreButton, description) {
@@ -15,7 +15,7 @@ export function toggleShowMoreButton(showMoreButton, description) {
         showMoreButton.style.display = "block";
     }
 }
-function readMore(postDescription, showMoreButton) {
+export function readMore(postDescription, showMoreButton) {
     const fullDescription = postDescription.dataset.fullDescription;
     const shortDescription = fullDescription.substring(0, 200);
     if (postDescription.textContent === shortDescription) {
@@ -46,11 +46,11 @@ export function setupApplyButton() {
             event.preventDefault();
             const formData = collectFormData();
             updateUrl(formData);
-            applyFormDataToClass();
+            showMainPagePosts();
         });
     }
     else {
-        console.log("booooooob");
+        console.log("Reply button doesn't exist");
     }
 }
 //# sourceMappingURL=buttonsOnMainPage.js.map

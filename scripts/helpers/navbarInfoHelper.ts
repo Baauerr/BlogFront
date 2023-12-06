@@ -1,11 +1,15 @@
-import { getProfileAPI } from "../api/profileAPI.js";
-
 export async function updateNavBar(){
-  const token = localStorage.getItem("token");
+
+  const loginButtonElement: HTMLAnchorElement = document.getElementById("loginButton") as HTMLAnchorElement;
+  const userMenuElement: HTMLDivElement = document.getElementById("userMenu") as HTMLDivElement;
+  const createPostElement: HTMLDivElement = document.getElementById("create-post-container") as HTMLDivElement;
+  const authorsCommunitiesLinks: HTMLDivElement = document.getElementById("authors-community-navigation") as HTMLDivElement;
+
+  const token: string = localStorage.getItem("token");
   if (token !== null) {
-    await showLoggedInMenu();
+    await showLoggedInMenu(loginButtonElement, userMenuElement, createPostElement, authorsCommunitiesLinks);
   } else {
-    showDefaultMenu();
+    showDefaultMenu(loginButtonElement, userMenuElement, createPostElement, authorsCommunitiesLinks);
   }
 }
 
@@ -14,11 +18,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 
-async function showLoggedInMenu() {
-  const loginButtonElement = document.getElementById("loginButton");
-  const userMenuElement = document.getElementById("userMenu");
-  const createPostElement = document.getElementById("create-post-container");
-  const authorsCommunitiesLinks = document.getElementById("authors-community-navigation");
+async function showLoggedInMenu(loginButtonElement: HTMLAnchorElement, userMenuElement: HTMLDivElement, createPostElement: HTMLDivElement, authorsCommunitiesLinks: HTMLDivElement) {
 
   if (loginButtonElement && userMenuElement) {
     loginButtonElement.style.display = "none";
@@ -26,21 +26,15 @@ async function showLoggedInMenu() {
     createPostElement.style.display = "inline"
     authorsCommunitiesLinks.style.display = "inline"
 
-
-
-    const userEmail = await getUserEmail();
-    const dropdownMenuButton = document.getElementById("dropdownMenuButton");
+    const dropdownMenuButton:HTMLButtonElement = document.getElementById("dropdownMenuButton") as HTMLButtonElement;
     if (dropdownMenuButton) {
-      dropdownMenuButton.innerText = userEmail;
+      const email: string = localStorage.getItem('email')
+      dropdownMenuButton.innerText = email;
     }
   }
 }
 
-function showDefaultMenu() {
-  const loginButtonElement = document.getElementById("loginButton");
-  const userMenuElement = document.getElementById("userMenu");
-  const createPostElement = document.getElementById("create-post-container");
-  const authorsCommunitiesLinks = document.getElementById("authors-community-navigation");
+function showDefaultMenu(loginButtonElement: HTMLAnchorElement, userMenuElement: HTMLDivElement, createPostElement: HTMLDivElement, authorsCommunitiesLinks: HTMLDivElement) {
 
   if (loginButtonElement && userMenuElement) {
     loginButtonElement.style.display = "block";
@@ -50,23 +44,13 @@ function showDefaultMenu() {
   }
 }
 
-async function getUserEmail() {
-  try {
-    const userInfo = await getProfileAPI();
-    return userInfo.email;
-  } catch (error) {
-    console.error('Произошла ошибка:', error);
-    throw error;
-  }
-}
-
 function logout() {
   localStorage.clear();
   window.history.pushState({}, null, '/');
   updateNavBar();
 }
 
-const logoutButton = document.getElementById('logout');
+const logoutButton: HTMLAnchorElement = document.getElementById('logout') as HTMLAnchorElement;
 
 if (logoutButton) {
   logoutButton.addEventListener('click', () => {

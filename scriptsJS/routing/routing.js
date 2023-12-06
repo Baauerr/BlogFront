@@ -13,72 +13,30 @@ const loadHTML = async (path) => {
         throw error;
     }
 };
-const main = {
-    render: async () => {
-        const htmlCode = await loadHTML('../main/mainpage.html');
-        return htmlCode;
-    },
-};
-const post = {
-    render: async () => {
-        const htmlCode = await loadHTML('../../posts/post.html');
-        return htmlCode;
-    },
-};
-const login = {
-    render: async () => {
-        const htmlCode = await loadHTML('../../account/login.html');
-        return htmlCode;
-    },
-};
-const registration = {
-    render: async () => {
-        const htmlCode = await loadHTML('../../account/registration.html');
-        return htmlCode;
-    },
-};
-const profile = {
-    render: async () => {
-        const htmlCode = await loadHTML('../../account/profile.html');
-        return htmlCode;
-    },
-};
-const createPost = {
-    render: async () => {
-        const htmlCode = await loadHTML('../../posts/createPost.html');
-        return htmlCode;
-    },
-};
-const ErrorComponent = {
-    render: () => {
-        return `
-      <section>
-        <h1>Error</h1>
-        <p>Такой страницы нет. Увы</p>
-      </section>
-    `;
-    },
-};
 const routes = [
-    { path: "/", component: main },
-    { path: "/login", component: login },
-    { path: "/registration", component: registration },
-    { path: "/profile", component: profile },
-    { path: '/post/:id', component: post },
-    { path: "/post/create", component: createPost },
+    { path: "/", component: '/main/mainpage.html' },
+    { path: "/login", component: '/account/login.html' },
+    { path: "/registration", component: '/account/registration.html' },
+    { path: "/profile", component: '/account/profile.html' },
+    { path: '/post/:id', component: '/posts/post.html' },
+    { path: "/post/create", component: "/posts/createPost.html" },
+    { path: "/communities", component: '/communities/communitiesList.html' },
+    { path: "/communities/:id", component: '/communities/concreteCommunity.html' }
 ];
 const runScripts = (htmlCode) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlCode, 'text/html');
     const scriptElements = doc.querySelectorAll('script[type="module"]');
     scriptElements.forEach((script) => {
-        const existingScript = document.querySelector(`script[src="${script.src}"][type="module"]`);
-        if (existingScript) {
-            existingScript.parentNode.removeChild(existingScript);
-        }
+        const existingScripts = document.querySelectorAll(`script[type="module"][data-src="${script.src}"]`);
+        existingScripts.forEach((existingScript) => {
+            existingScript.parentNode?.removeChild(existingScript);
+        });
         const newScript = document.createElement('script');
-        newScript.src = `${script.src}?random=${Math.random()}`;
+        const randomValue = Math.random();
+        newScript.src = `${script.src}?random=${randomValue}`;
         newScript.type = "module";
+        newScript.setAttribute('data-src', script.src);
         document.body.appendChild(newScript);
     });
 };
@@ -96,10 +54,10 @@ function matchPath(urlElements, route) {
     if (route.path.endsWith('/')) {
         routeElements.push('/');
     }
-    for (let i = 0; i < urlElements.length; i++) {
+    for (let i = 0; i < Math.max(urlElements.length, routeElements.length); i++) {
         const urlElement = urlElements[i];
         const routeElement = routeElements[i];
-        if (routeElement.startsWith(':')) {
+        if (routeElement && routeElement.startsWith(':')) {
             const paramType = routeElement.substring(1);
             if (!validateDynamicParam(urlElement, paramType)) {
                 return false;
@@ -135,8 +93,9 @@ export async function router() {
         parts[1] = "/";
     }
     parts.shift();
-    const { component = ErrorComponent } = findComponentByUrlElements(parts, routes) || {};
-    const htmlCode = await component.render(params);
+    const errorComponent = "/error/error.html";
+    const { component = errorComponent } = findComponentByUrlElements(parts, routes) || {};
+    const htmlCode = await loadHTML(component);
     const appElement = document.getElementById("app");
     appElement.innerHTML = htmlCode;
     document.title = document.querySelector(".title-of-page").getAttribute("content");

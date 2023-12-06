@@ -3,8 +3,8 @@ import { takeErrorTextAsync } from "../helpers/errorCreateHelper.js";
 
 export async function publicPostAPI(responseData: PostInfo) {
   try {
-    const token = localStorage.getItem("token");
-    const response = await fetch(`https://blog.kreosoft.space/api/post`, {
+    const token: string = localStorage.getItem("token");
+    await fetch(`https://blog.kreosoft.space/api/post`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

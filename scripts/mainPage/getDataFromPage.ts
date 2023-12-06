@@ -2,7 +2,7 @@ import { MainPageData } from "./mainPage.js";
 
 export function parseUrlParams(): MainPageData {
 
-    const queryString = window.location.search;
+    const queryString: string = window.location.search;
     const params = new URLSearchParams(queryString);
 
     const data = new MainPageData();
@@ -21,9 +21,9 @@ export function parseUrlParams(): MainPageData {
 
 
 export function collectFormData() {
-    const formData = new MainPageData();
+    const formData: MainPageData = new MainPageData();
 
-    formData.tags = Array.from((document.querySelectorAll('#tags-square option:checked') as NodeListOf<HTMLOptionElement>))
+    formData.tags = Array.from((document.querySelectorAll('#tags option:checked') as NodeListOf<HTMLOptionElement>))
         .map(option => option.value)
         .filter(tag => tag !== "null");
     formData.author = (document.getElementById('inputWide') as HTMLInputElement).value;
@@ -32,16 +32,16 @@ export function collectFormData() {
     formData.sorting = (document.getElementById('filterSingle') as HTMLSelectElement).value;
     formData.onlyMyCommunities = (document.getElementById('only_my_groups') as HTMLInputElement).checked;
 
-    const activePage = document.querySelector('#pagination .page-item.active a') as HTMLElement;
+    const activePage: HTMLElement = document.querySelector('#pagination .page-item.active a') as HTMLElement;
     formData.page = activePage ? parseInt(activePage.textContent) : 1;
-    const numberOfPosts = parseInt((document.getElementById('post-amount') as HTMLInputElement).value, 10)
+    const numberOfPosts: number = parseInt((document.getElementById('post-amount') as HTMLInputElement).value, 10)
     formData.size = numberOfPosts !==0 ? numberOfPosts : 5;
     console.log(formData.size)
     return formData;
 }
 
 export function updateUrl(formData: MainPageData) {
-    const queryString = Object.entries(formData)
+    const queryString: string = Object.entries(formData)
         .filter(([key, value]) => value !== null && value !== "" && !(Array.isArray(value) && value.length === 0) && !Number.isNaN(value))
         .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
         .join('&');

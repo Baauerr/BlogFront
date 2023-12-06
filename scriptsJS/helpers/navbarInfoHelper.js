@@ -1,53 +1,38 @@
-import { getProfileAPI } from "../api/profileAPI.js";
 export async function updateNavBar() {
+    const loginButtonElement = document.getElementById("loginButton");
+    const userMenuElement = document.getElementById("userMenu");
+    const createPostElement = document.getElementById("create-post-container");
+    const authorsCommunitiesLinks = document.getElementById("authors-community-navigation");
     const token = localStorage.getItem("token");
     if (token !== null) {
-        await showLoggedInMenu();
+        await showLoggedInMenu(loginButtonElement, userMenuElement, createPostElement, authorsCommunitiesLinks);
     }
     else {
-        showDefaultMenu();
+        showDefaultMenu(loginButtonElement, userMenuElement, createPostElement, authorsCommunitiesLinks);
     }
 }
 document.addEventListener('DOMContentLoaded', (event) => {
     updateNavBar();
 });
-async function showLoggedInMenu() {
-    const loginButtonElement = document.getElementById("loginButton");
-    const userMenuElement = document.getElementById("userMenu");
-    const createPostElement = document.getElementById("create-post-container");
-    const authorsCommunitiesLinks = document.getElementById("authors-community-navigation");
+async function showLoggedInMenu(loginButtonElement, userMenuElement, createPostElement, authorsCommunitiesLinks) {
     if (loginButtonElement && userMenuElement) {
         loginButtonElement.style.display = "none";
         userMenuElement.style.display = "block";
         createPostElement.style.display = "inline";
         authorsCommunitiesLinks.style.display = "inline";
-        const userEmail = await getUserEmail();
         const dropdownMenuButton = document.getElementById("dropdownMenuButton");
         if (dropdownMenuButton) {
-            dropdownMenuButton.innerText = userEmail;
+            const email = localStorage.getItem('email');
+            dropdownMenuButton.innerText = email;
         }
     }
 }
-function showDefaultMenu() {
-    const loginButtonElement = document.getElementById("loginButton");
-    const userMenuElement = document.getElementById("userMenu");
-    const createPostElement = document.getElementById("create-post-container");
-    const authorsCommunitiesLinks = document.getElementById("authors-community-navigation");
+function showDefaultMenu(loginButtonElement, userMenuElement, createPostElement, authorsCommunitiesLinks) {
     if (loginButtonElement && userMenuElement) {
         loginButtonElement.style.display = "block";
         userMenuElement.style.display = "none";
         createPostElement.style.display = "none";
         authorsCommunitiesLinks.style.display = "none";
-    }
-}
-async function getUserEmail() {
-    try {
-        const userInfo = await getProfileAPI();
-        return userInfo.email;
-    }
-    catch (error) {
-        console.error('Произошла ошибка:', error);
-        throw error;
     }
 }
 function logout() {

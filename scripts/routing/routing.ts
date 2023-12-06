@@ -1,6 +1,6 @@
 import { prevent } from "./prevent.js";
 
-const loadHTML = async (path) => {
+const loadHTML = async (path: string) => {
   try {
     const response = await fetch(path);
 
@@ -16,84 +16,41 @@ const loadHTML = async (path) => {
   }
 };
 
-const main = {
-  render: async () => {
-    const htmlCode = await loadHTML('../main/mainpage.html');
-    return htmlCode;
-  },
-};
 
-const post = {
-  render: async () => {
-    const htmlCode = await loadHTML('../../posts/post.html');
-    return htmlCode;
-  },
-};
+interface Route {
+  path: string;
+  component: string;
+}
 
-const login = {
-  render: async () => {
-    const htmlCode = await loadHTML('../../account/login.html');
-    return htmlCode;
-  },
-};
-
-const registration = {
-  render: async () => {
-    const htmlCode = await loadHTML('../../account/registration.html');
-    return htmlCode;
-  },
-};
-
-const profile = {
-  render: async () => {
-    const htmlCode = await loadHTML('../../account/profile.html');
-    return htmlCode;
-  },
-};
-
-const createPost = {
-  render: async () => {
-    const htmlCode = await loadHTML('../../posts/createPost.html');
-    return htmlCode;
-  },
-};
-
-const ErrorComponent = {
-  render: () => {
-    return `
-      <section>
-        <h1>Error</h1>
-        <p>Такой страницы нет. Увы</p>
-      </section>
-    `;
-  },
-};
-
-const routes = [
-  { path: "/", component: main },
-  { path: "/login", component: login },
-  { path: "/registration", component: registration },
-  { path: "/profile", component: profile },
-  { path: '/post/:id', component: post },
-  { path: "/post/create", component: createPost },
+const routes: Route[] = [
+  { path: "/", component: '/main/mainpage.html' },
+  { path: "/login", component: '/account/login.html' },
+  { path: "/registration", component: '/account/registration.html' },
+  { path: "/profile", component: '/account/profile.html' },
+  { path: '/post/:id', component: '/posts/post.html' },
+  { path: "/post/create", component: "/posts/createPost.html" },
+  { path: "/communities", component: '/communities/communitiesList.html' },
+  { path: "/communities/:id", component: '/communities/concreteCommunity.html' }
 ];
 
-const runScripts = (htmlCode) => {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(htmlCode, 'text/html');
+const runScripts = (htmlCode: string) => {
+  const parser: DOMParser = new DOMParser();
+  const doc: Document = parser.parseFromString(htmlCode, 'text/html');
 
-  const scriptElements = doc.querySelectorAll('script[type="module"]');
+  const scriptElements: NodeListOf<HTMLScriptElement> = doc.querySelectorAll<HTMLScriptElement>('script[type="module"]');
 
   scriptElements.forEach((script) => {
-    const existingScript = document.querySelector(`script[src="${(script as HTMLScriptElement).src}"][type="module"]`);
+    const existingScripts: NodeListOf<HTMLScriptElement> = document.querySelectorAll<HTMLScriptElement>(`script[type="module"][data-src="${script.src}"]`);
 
-    if (existingScript) {
-      existingScript.parentNode.removeChild(existingScript);
-    }
+    existingScripts.forEach((existingScript) => {
+      existingScript.parentNode?.removeChild(existingScript);
+    });
 
-    const newScript = document.createElement('script');
-    newScript.src = `${(script as HTMLScriptElement).src}?random=${Math.random()}`;
+    const newScript: HTMLScriptElement = document.createElement('script');
+    const randomValue: number = Math.random();
+    newScript.src = `${script.src}?random=${randomValue}`;
     newScript.type = "module";
+    newScript.setAttribute('data-src', script.src);
     document.body.appendChild(newScript);
   });
 };
@@ -104,8 +61,8 @@ const navigateTo = (route, params = "") => {
 };
 
 const parseLocation = () => {
-  const path = window.location.pathname.toLowerCase() || "/";
-  const params = new URLSearchParams(window.location.search).toString();
+  const path: string = window.location.pathname.toLowerCase() || "/";
+  const params: string = new URLSearchParams(window.location.search).toString();
   return params ? `${path}?${params}` : path;
 };
 
@@ -115,14 +72,14 @@ function matchPath(urlElements, route) {
     routeElements.push('/');
   }
 
-  for (let i = 0; i < urlElements.length; i++) {
+  for (let i = 0; i < Math.max(urlElements.length, routeElements.length); i++) {
 
-    const urlElement = urlElements[i];
-    const routeElement = routeElements[i];
+    const urlElement: string = urlElements[i];
+    const routeElement: string = routeElements[i];
 
-    if (routeElement.startsWith(':')) {
+    if (routeElement && routeElement.startsWith(':')) {
 
-      const paramType = routeElement.substring(1);
+      const paramType: string = routeElement.substring(1);
       if (!validateDynamicParam(urlElement, paramType)) {
 
         return false;
@@ -135,7 +92,7 @@ function matchPath(urlElements, route) {
   return true;
 }
 
-function validateDynamicParam(param, type) {
+function validateDynamicParam(param: string, type: string) {
   if (type === 'id') {
     const guidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
     return guidRegex.test(param);
@@ -155,17 +112,20 @@ function findComponentByUrlElements(urlElements, routes) {
 
 export async function router() {
   const currentState = window.history.state;
-  const path = currentState && currentState.path ? currentState.path : parseLocation();
+  const path: string = currentState && currentState.path ? currentState.path : parseLocation();
   const [local, params] = path.split("?");
   const parts = local.split("/");
   if (parts.length > 1 && parts[1] === "") {
     parts[1] = "/";
   }
   parts.shift();
-  const { component = ErrorComponent } = findComponentByUrlElements(parts, routes) || {};
 
-  const htmlCode = await component.render(params);
-  const appElement = document.getElementById("app");
+  const errorComponent: string = "/error/error.html";
+
+  const { component = errorComponent } = findComponentByUrlElements(parts, routes) || {};
+
+  const htmlCode: string = await loadHTML(component);
+  const appElement: HTMLDivElement = document.getElementById("app") as HTMLDivElement;
   appElement.innerHTML = htmlCode;
   document.title = document.querySelector(".title-of-page").getAttribute("content");
   prevent(local);
@@ -173,11 +133,11 @@ export async function router() {
 };
 
 document.addEventListener("click", (event: MouseEvent) => {
-  const target = event.target as HTMLAnchorElement;
+  const target: HTMLAnchorElement = event.target as HTMLAnchorElement;
 
   if (target.tagName === "A" && target.getAttribute("href")) {
     event.preventDefault();
-    const params = new URLSearchParams(window.location.search).toString();
+    const params: string = new URLSearchParams(window.location.search).toString();
     navigateTo(target.getAttribute("href")!, params);
   }
 });

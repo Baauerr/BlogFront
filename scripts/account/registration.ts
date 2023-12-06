@@ -1,6 +1,6 @@
 import { registerUserAPI } from "../api/registrationAPI.js";
 
-class LoginData {
+export class RegistrationData {
     email: string;
     password: string;
     fullName: string;
@@ -17,20 +17,20 @@ export class DateInfo {
 
 function registration_button_action() {
 
-    const inputName = document.getElementById('fullname') as HTMLInputElement;
-    const inputPassword = document.getElementById('password') as HTMLInputElement;
-    const inputEmail = document.getElementById('email') as HTMLInputElement;
-    const inputBirthDate = document.getElementById('birthdate') as HTMLInputElement;
-    const inputGender = document.getElementById('gender') as HTMLInputElement;
-    const inputPhoneNumber = document.getElementById('phonenumber') as HTMLInputElement;
+    const inputName: HTMLInputElement = document.getElementById('fullname') as HTMLInputElement;
+    const inputPassword: HTMLInputElement = document.getElementById('password') as HTMLInputElement;
+    const inputEmail: HTMLInputElement = document.getElementById('email') as HTMLInputElement;
+    const inputBirthDate: HTMLInputElement = document.getElementById('birthdate') as HTMLInputElement;
+    const inputGender: HTMLInputElement = document.getElementById('gender') as HTMLInputElement;
+    const inputPhoneNumber: HTMLInputElement = document.getElementById('phonenumber') as HTMLInputElement;
 
     let serverDate: string;
     if (inputBirthDate.value) {
-        const isoDateString = new Date(inputBirthDate.value)
+        const isoDateString: Date = new Date(inputBirthDate.value)
         serverDate = isoDateString.toISOString();
     }
 
-    const requestData: LoginData = {
+    const requestData: RegistrationData = {
         email: inputEmail.value,
         password: inputPassword.value,
         phoneNumber: inputPhoneNumber.value,
@@ -41,7 +41,7 @@ function registration_button_action() {
     registerUserAPI(requestData)
 }
 
-const registrationButton = document.getElementById('registration_button') as HTMLButtonElement;
+const registrationButton: HTMLButtonElement = document.getElementById('registration_button') as HTMLButtonElement;
 
 registrationButton.addEventListener('click', registration_button_action);
 

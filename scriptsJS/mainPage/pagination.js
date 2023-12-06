@@ -1,4 +1,4 @@
-import { applyFormDataToClass } from "./mainPagePostView.js";
+import { router } from "../routing/routing.js";
 export function viewPagination(totalPages, currentPage) {
     const pagination = document.getElementById('pagination');
     pagination.innerHTML = '';
@@ -38,6 +38,6 @@ function updatePageQueryParam(pageNumber) {
     const newUrl = new URL(window.location.href);
     newUrl.searchParams.set('page', pageNumber);
     history.pushState(null, null, newUrl.toString());
-    applyFormDataToClass();
+    router();
 }
 //# sourceMappingURL=pagination.js.map

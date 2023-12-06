@@ -1,17 +1,17 @@
-import { applyFormDataToClass } from "./mainPagePostView.js";
+import { router } from "../routing/routing.js";
 
-export function viewPagination(totalPages, currentPage) {
-    const pagination = document.getElementById('pagination');
+export function viewPagination(totalPages: number, currentPage: number) {
+    const pagination: HTMLUListElement = document.getElementById('pagination') as HTMLUListElement;
     pagination.innerHTML = '';
 
-    const ul = document.createElement('ul');
+    const ul: HTMLUListElement = document.createElement('ul');
     ul.classList.add('pagination');
 
-    const maxButtonsToShow = 10;
-    const halfMaxButtonsToShow = Math.floor(maxButtonsToShow / 2);
+    const maxButtonsToShow: number = 10;
+    const halfMaxButtonsToShow: number = Math.floor(maxButtonsToShow / 2);
     
-    let startPage = 1;
-    let endPage = totalPages;
+    let startPage: number = 1;
+    let endPage:number = totalPages;
 
     if (totalPages > maxButtonsToShow) {
         if (currentPage > halfMaxButtonsToShow) {
@@ -26,7 +26,7 @@ export function viewPagination(totalPages, currentPage) {
         const pageButton = document.createElement('li');
         pageButton.classList.add('page-item');
 
-        const link = document.createElement('a');
+        const link: HTMLAnchorElement = document.createElement('a');
         link.classList.add('page-link');
         link.textContent = i.toString();
 
@@ -46,8 +46,8 @@ export function viewPagination(totalPages, currentPage) {
 }
 
 function updatePageQueryParam(pageNumber) {
-    const newUrl = new URL(window.location.href);
+    const newUrl: URL = new URL(window.location.href);
     newUrl.searchParams.set('page', pageNumber);
     history.pushState(null, null, newUrl.toString());
-    applyFormDataToClass();
+    router();
 }

@@ -7,7 +7,7 @@ import { setPostImage } from "./getInfo.js";
 import { getPostTags } from "./getInfo.js";
 import { getInfoOnPageAPI } from "../api/mainPageAPI.js";
 import { viewPagination } from "./pagination.js";
-export async function applyFormDataToClass() {
+export async function showMainPagePosts() {
     const formData = parseUrlParams();
     updateUrl(formData);
     document.getElementById("postsContainer").innerHTML = '';

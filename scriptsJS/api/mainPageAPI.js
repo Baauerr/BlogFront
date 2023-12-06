@@ -1,22 +1,5 @@
 export async function getInfoOnPageAPI(filterData) {
-    const queryString = Object.entries(filterData)
-        .filter(([key, value]) => {
-        if (Array.isArray(value)) {
-            return value.length > 0;
-        }
-        else {
-            return value !== null && value !== "" && !Number.isNaN(value);
-        }
-    })
-        .flatMap(([key, value]) => {
-        if (Array.isArray(value)) {
-            return value.map(tag => `${encodeURIComponent(key)}=${encodeURIComponent(tag)}`);
-        }
-        else {
-            return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-        }
-    })
-        .join('&');
+    const queryString = filtersToUrl(filterData);
     try {
         const token = localStorage.getItem("token");
         const response = await fetch(`https://blog.kreosoft.space/api/post?${queryString}`, {
@@ -36,5 +19,25 @@ export async function getInfoOnPageAPI(filterData) {
         console.error('Произошла ошибка:', error);
         throw error;
     }
+}
+export function filtersToUrl(filterData) {
+    return (Object.entries(filterData)
+        .filter(([key, value]) => {
+        if (Array.isArray(value)) {
+            return value.length > 0;
+        }
+        else {
+            return value !== null && value !== "" && !Number.isNaN(value);
+        }
+    })
+        .flatMap(([key, value]) => {
+        if (Array.isArray(value)) {
+            return value.map(tag => `${encodeURIComponent(key)}=${encodeURIComponent(tag)}`);
+        }
+        else {
+            return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+        }
+    })
+        .join('&'));
 }
 //# sourceMappingURL=mainPageAPI.js.map

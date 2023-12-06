@@ -15,6 +15,7 @@ export async function loginUserOnServerAPI(responseData) {
         else {
             localStorage.clear();
             localStorage.setItem("token", data.token);
+            localStorage.setItem("email", responseData.email);
             await updateNavBar();
         }
     }

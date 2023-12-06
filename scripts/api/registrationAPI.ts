@@ -1,7 +1,8 @@
+import { RegistrationData } from "../account/registration.js";
 import { takeErrorTextAsync } from "../helpers/errorCreateHelper.js";
 
 
-export function registerUserAPI(responseData) {
+export function registerUserAPI(responseData: RegistrationData) {
 
     fetch('https://blog.kreosoft.space/api/account/register', {
         method: 'POST',
@@ -13,8 +14,8 @@ export function registerUserAPI(responseData) {
         .then(async (response) => {
             const data = await response.json();
             if (data.errors) {
-                const container = document.getElementById('loginbox');
-                const inputElements = container.querySelectorAll('input, #birthdate');
+                const container: HTMLDivElement = document.getElementById('loginbox') as HTMLDivElement;
+                const inputElements: NodeListOf<HTMLElement> = container.querySelectorAll('input, #birthdate');
                 await takeErrorTextAsync(data, container, inputElements);
             } else {
                 localStorage.setItem("token", data.token)

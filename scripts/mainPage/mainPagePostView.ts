@@ -8,7 +8,7 @@ import { getPostTags } from "./getInfo.js";
 import { getInfoOnPageAPI } from "../api/mainPageAPI.js";
 import { viewPagination } from "./pagination.js";
 
-export async function applyFormDataToClass() {
+export async function showMainPagePosts() {
     const formData = parseUrlParams();
     updateUrl(formData);
     document.getElementById("postsContainer").innerHTML = '';
@@ -27,18 +27,18 @@ export async function applyFormDataToClass() {
 }
 
 export function addPostToContainer (post: any, postTemplate, postsContainer) {
-    const postClone = document.importNode(postTemplate.content, true);
-    const postDescription = postClone.querySelector(".post-description") as HTMLElement;
-    const postImage = postClone.querySelector(".post-image") as HTMLImageElement;
-    const postLikes = postClone.querySelector(".post-likes") as HTMLElement;
-    const postTitle = postClone.querySelector(".post-title") as HTMLAnchorElement;
-    const postAuthor = postClone.querySelector(".post-author") as HTMLElement;
-    const postTags = postClone.querySelector(".post-tags") as HTMLElement;
-    const readingTime = postClone.querySelector(".reading-time") as HTMLElement;
-    const postComments = postClone.querySelector(".post-comments") as HTMLElement;
+    const postClone: DocumentFragment = document.importNode(postTemplate.content, true);
+    const postDescription: HTMLSpanElement = postClone.querySelector(".post-description") as HTMLSpanElement;
+    const postImage: HTMLImageElement = postClone.querySelector(".post-image") as HTMLImageElement;
+    const postLikes: HTMLSpanElement = postClone.querySelector(".post-likes") as HTMLSpanElement;
+    const postTitle: HTMLAnchorElement = postClone.querySelector(".post-title") as HTMLAnchorElement;
+    const postAuthor: HTMLSpanElement = postClone.querySelector(".post-author") as HTMLSpanElement;
+    const postTags: HTMLSpanElement = postClone.querySelector(".post-tags") as HTMLSpanElement;
+    const readingTime: HTMLSpanElement = postClone.querySelector(".reading-time") as HTMLSpanElement;
+    const postComments: HTMLSpanElement = postClone.querySelector(".post-comments") as HTMLSpanElement;
 
-    const showMoreButton = postClone.querySelector(".show-more") as HTMLElement;
-    const likeButton = postClone.querySelector(".post-like-button") as HTMLElement;
+    const showMoreButton: HTMLAnchorElement = postClone.querySelector(".show-more") as HTMLAnchorElement;
+    const likeButton: HTMLImageElement = postClone.querySelector(".post-like-button") as HTMLImageElement;
 
     postLikeView(likeButton, post.hasLike);
     postTitle.textContent = post.title;

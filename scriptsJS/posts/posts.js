@@ -8,7 +8,6 @@ import { getConcretePostAPI } from "../api/concrettePostAPI.js";
 import { commentView } from "./commentFunction.js";
 import { sendComment } from "../api/commentAPI.js";
 import { createComment } from "./commentFunction.js";
-import { getProfileAPI } from "../api/profileAPI.js";
 import { getAddressChainAPI } from "../api/addressAPI.js";
 function parsePostId() {
     const url = new URL(window.location.href);
@@ -40,7 +39,7 @@ export async function showSinglePost() {
     const postAuthor = postContainer.querySelector(".post-author");
     const postTags = postContainer.querySelector(".post-tags");
     const readingTime = postContainer.querySelector(".reading-time");
-    const postComments = postContainer.querySelector(".post-comments");
+    const postCommentsAmount = postContainer.querySelector(".post-comments");
     const postAddress = document.getElementById("post-address");
     const showMoreButton = postContainer.querySelector(".show-more");
     const likeButton = postContainer.querySelector(".post-like-button");
@@ -51,7 +50,7 @@ export async function showSinglePost() {
     readingTime.textContent = `Время чтения: ${post.readingTime} мин.`;
     postLikes.textContent = post.likes;
     postDescription.textContent = post.description.substring(0, 200);
-    postComments.textContent = post.commentsCount;
+    postCommentsAmount.textContent = post.commentsCount;
     if (post.image) {
         setPostImage(postImage, post.image);
     }
@@ -82,8 +81,9 @@ async function commentViewLogic(post, sendCommentButton, commentInputText) {
     }
 }
 async function getUserFullName() {
-    const user = localStorage.getItem("token") !== null ? await getProfileAPI() : null;
-    return user === null ? null : user.fullName;
+    const userEmail = localStorage.getItem("email");
+    const user = userEmail !== null ? userEmail : null;
+    return user === null ? null : userEmail;
 }
 async function showAddress(addressId) {
     const addressChain = await getAddressChainAPI(addressId);

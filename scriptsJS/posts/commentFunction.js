@@ -4,6 +4,8 @@ import { showPostPage } from "./posts.js";
 import { sendComment } from "../api/commentAPI.js";
 import { editComment } from "../api/commentAPI.js";
 import { deleteComment } from "../api/commentAPI.js";
+import { toggleShowMoreButton } from "../mainPage/buttonsOnMainPage.js";
+import { readMore } from "../mainPage/buttonsOnMainPage.js";
 export class CommentData {
     content;
     parentId;
@@ -24,23 +26,34 @@ export async function commentView(comments, postId, userFullName) {
         const subCommentBlock = commentClone.querySelector(".sub-comments");
         const showRepliesButton = commentClone.querySelector(".show-replies");
         const replyBox = commentClone.querySelector(".reply-box");
-        const addReplyButton = commentClone.querySelector(".give-reply-button");
-        const replyInput = commentClone.querySelector(".sub-comment-input");
-        const sendReply = commentClone.querySelector(".send-reply-button");
         const commentIsEdited = commentClone.querySelector(".comment-modified-date");
         const editCommentButton = commentClone.querySelector(".start-edit-button");
         const deleteCommentButton = commentClone.querySelector(".delete-button");
         const applyChangeButton = commentClone.querySelector(".apply-edit-button");
         const editBox = commentClone.querySelector(".comment-edit-box");
         const inputBox = commentClone.querySelector(".edit-comment-input");
+        const showMoreButton = commentClone.querySelector(".show-more-comment");
         if (isUserComment(comment, userFullName) && comment.deleteDate === null) {
             showHiddenInput(editCommentButton);
             showHiddenInput(deleteCommentButton);
         }
+        if (localStorage.getItem("token") !== null) {
+            const addReplyButton = commentClone.querySelector(".give-reply-button");
+            addReplyButton.style.display = "block";
+            const replyInput = commentClone.querySelector(".sub-comment-input");
+            const sendReply = commentClone.querySelector(".send-reply-button");
+            await addReplyFullFunctional(addReplyButton, replyBox, replyInput, comment, sendReply, postId);
+        }
         commentAuthor.textContent = comment.deleteDate !== null ? "[Комментарий удалён]" : comment.author;
-        commentContent.textContent = comment.deleteDate !== null ? "[Комментарий удалён]" : comment.content;
+        commentContent.textContent = comment.deleteDate !== null ? "[Комментарий удалён]" : comment.content.substring(0, 200);
+        if (commentContent) {
+            commentContent.dataset.fullDescription = comment.content;
+        }
+        toggleShowMoreButton(showMoreButton, comment.content);
+        showMoreButton.addEventListener("click", function () {
+            readMore(commentContent, showMoreButton);
+        });
         commentTime.textContent = formatDateForPostInfo(comment.createTime);
-        addReplyFullFunctional(addReplyButton, replyBox, replyInput, comment, sendReply, postId);
         addEventsOnEditButton(editCommentButton, applyChangeButton, commentContent, editBox, inputBox, comment.id, comment.content);
         addEventsOnDeleteButton(deleteCommentButton, comment.id);
         if (comment.subComments !== 0) {
@@ -68,9 +81,13 @@ async function subCommentsView(commentId, subCommentBlock, postId, userFullName)
         const subCommentTime = subCommentClone.querySelector(".comment-time");
         const subCommentIsEdited = subCommentClone.querySelector(".comment-modified-date");
         const replyBox = subCommentClone.querySelector(".reply-box");
-        const addReplyButton = subCommentClone.querySelector(".give-reply-button");
-        const replyInput = subCommentClone.querySelector(".sub-comment-input");
-        const sendReply = subCommentClone.querySelector(".send-reply-button");
+        if (localStorage.getItem("token") !== null) {
+            const addReplyButton = subCommentClone.querySelector(".give-reply-button");
+            addReplyButton.style.display = "block";
+            const replyInput = subCommentClone.querySelector(".sub-comment-input");
+            const sendReply = subCommentClone.querySelector(".send-reply-button");
+            await addReplyFullFunctional(addReplyButton, replyBox, replyInput, subCommentData, sendReply, postId);
+        }
         const editCommentButton = subCommentClone.querySelector(".start-edit-button");
         const deleteCommentButton = subCommentClone.querySelector(".delete-button");
         const applyChangeButton = subCommentClone.querySelector(".apply-edit-button");
@@ -89,7 +106,6 @@ async function subCommentsView(commentId, subCommentBlock, postId, userFullName)
             subCommentIsEdited.style.display = "block";
             subCommentIsEdited.title = formatDateForPostInfo(subCommentData.modifiedDate);
         }
-        await addReplyFullFunctional(addReplyButton, replyBox, replyInput, subCommentData, sendReply, postId);
         subCommentBlock.appendChild(subCommentClone);
     }
     ;
@@ -123,11 +139,9 @@ export function createComment(content, parentId) {
     }
 }
 async function addReplyFullFunctional(addReplyButton, replyBox, replyInput, commentData, sendReply, postId) {
-    if (localStorage.getItem("token") !== null) {
-        addReplyButton.addEventListener("click", function () {
-            showHiddenInput(replyBox);
-        });
-    }
+    addReplyButton.addEventListener("click", function () {
+        showHiddenInput(replyBox);
+    });
     sendReply.addEventListener("click", async function () {
         const newComment = createComment(replyInput.value, commentData.id);
         if (newComment !== null) {

@@ -2,12 +2,11 @@ import { CommentData } from "../posts/commentFunction.js";
 import { CommentEditData } from "../posts/commentFunction.js";
 
 
-export async function getCommentTreeAPI(commentId): Promise<any> {
+export async function getCommentTreeAPI(commentId: string): Promise<any> {
   try {
     const response = await fetch(`https://blog.kreosoft.space/api/comment/${commentId}/tree`, {
       method: 'GET',
       headers: {
-        //  'Authorization': `Bearer ${token}`, 
         'Content-Type': 'application/json',
       },
     });
@@ -19,10 +18,10 @@ export async function getCommentTreeAPI(commentId): Promise<any> {
   }
 }
 
-export async function sendComment(commentInfo: CommentData, id): Promise<any> {
+export async function sendComment(commentInfo: CommentData, id: string): Promise<any> {
   try {
     console.log(id);
-    const token = localStorage.getItem("token")
+    const token:string = localStorage.getItem("token")
     console.log(commentInfo)
     await fetch(`https://blog.kreosoft.space/api/post/${id}/comment`, {
       method: 'POST',
@@ -39,9 +38,9 @@ export async function sendComment(commentInfo: CommentData, id): Promise<any> {
 }
 
 
-export async function editComment(content: CommentEditData, commentId) {
+export async function editComment(content: CommentEditData, commentId: string) {
   try {
-    const token = localStorage.getItem("token")
+    const token: string = localStorage.getItem("token")
     console.log(content)
     await fetch(`https://blog.kreosoft.space/api/comment/${commentId}`, {
       method: 'PUT',
@@ -57,9 +56,9 @@ export async function editComment(content: CommentEditData, commentId) {
   }
 }
 
-export async function deleteComment(commentId) {
+export async function deleteComment(commentId: string) {
   try {
-      const token = localStorage.getItem("token");
+      const token: string = localStorage.getItem("token");
       await fetch(`https://blog.kreosoft.space/api/comment/${commentId}`, {
           method: 'DELETE',
           headers: {

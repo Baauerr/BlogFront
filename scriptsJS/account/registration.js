@@ -1,5 +1,5 @@
 import { registerUserAPI } from "../api/registrationAPI.js";
-class LoginData {
+export class RegistrationData {
     email;
     password;
     fullName;

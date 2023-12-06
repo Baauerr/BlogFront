@@ -1,17 +1,56 @@
-import { getListOfCommunitiesAPI } from "../api/communityAPI";
+import { getListOfCommunitiesAPI } from "../api/communityAPI.js";
+import { getGreatestRoleInCommunityAPI } from "../api/communityAPI.js";
+import { subscribeAPI } from "../api/communityAPI.js";
+import { unsubscribeAPI } from "../api/communityAPI.js";
+var UserRoles;
+(function (UserRoles) {
+    UserRoles["Administrator"] = "Administrator";
+    UserRoles["Subscriber"] = "Subscriber";
+})(UserRoles || (UserRoles = {}));
 export async function communityListView() {
-    document.getElementById("postsContainer").innerHTML = '';
-    const postTemplate = document.getElementById("postTemplate");
-    const postsContainer = document.getElementById("postsContainer");
+    document.getElementById("community-plates-place").innerHTML = '';
+    const communityTemplate = document.getElementById("communities-template");
+    const communitiesContainer = document.getElementById("community-plates-place");
     const data = await getListOfCommunitiesAPI();
-    data.posts.forEach(post => addCommunityToContainer(post, postTemplate, postsContainer));
+    if (data.length > 0 && Array.isArray(data)) {
+        data.forEach(plate => addCommunityToContainer(plate, communityTemplate, communitiesContainer));
+    }
 }
-function addCommunityToContainer(post, postTemplate, postsContainer) {
-    const postClone = document.importNode(postTemplate.content, true);
-    const postTitle = postClone.querySelector(".title");
-    const subscribe = postClone.querySelector(".show-more");
-    const unsubscribe = postClone.querySelector(".post-like-button");
+function addCommunityToContainer(plate, communityTemplate, communitiesContainer) {
+    const communityPlate = document.importNode(communityTemplate.content, true);
+    const communityTitle = communityPlate.querySelector(".community-title");
+    communityTitle.textContent = plate.name;
+    communityTitle.href = `/communities/${plate.id}`;
+    const subscribeButton = communityPlate.querySelector(".subscribe");
+    const unsubscribeButton = communityPlate.querySelector(".unsubscribe");
+    correctButtons(subscribeButton, unsubscribeButton, plate.id);
+    subscribeAction(subscribeButton, unsubscribeButton, plate.id);
+    unsubscribeAction(subscribeButton, unsubscribeButton, plate.id);
+    communitiesContainer.appendChild(communityPlate);
 }
-function correctButtons() {
+async function correctButtons(subscribe, unsubscribe, id) {
+    const userRole = await getGreatestRoleInCommunityAPI(id);
+    console.log(userRole);
+    console.log(UserRoles.Subscriber);
+    if (userRole === UserRoles.Subscriber) {
+        unsubscribe.style.display = "block";
+    }
+    else if (userRole === null) {
+        subscribe.style.display = "block";
+    }
+}
+async function subscribeAction(subscribeButton, unsubscribeButton, id) {
+    subscribeButton.addEventListener("click", function () {
+        subscribeAPI(id);
+        subscribeButton.style.display = "none";
+        unsubscribeButton.style.display = "block";
+    });
+}
+async function unsubscribeAction(subscribeButton, unsubscribeButton, id) {
+    unsubscribeButton.addEventListener("click", function () {
+        unsubscribeAPI(id);
+        subscribeButton.style.display = "block";
+        unsubscribeButton.style.display = "none";
+    });
 }
 //# sourceMappingURL=communityList.js.map

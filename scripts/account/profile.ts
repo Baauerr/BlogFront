@@ -14,8 +14,6 @@ class UserData {
 }
 
 function edit_button_action() {
-    console.log("jija");
-
     const inputName = document.getElementById('fullName') as HTMLInputElement;
     const inputEmail = document.getElementById('email') as HTMLInputElement;
     const inputBirthDate = document.getElementById('birthDate') as HTMLInputElement;
@@ -23,7 +21,7 @@ function edit_button_action() {
     const inputPhoneNumber = document.getElementById('phoneNumber') as HTMLInputElement;
 
     const isoDateString = new Date(inputBirthDate.value)
-    const serverDate = isoDateString.toISOString();
+    const serverDate: string = isoDateString.toISOString();
 
     const requestData: UserData = {
         email: inputEmail.value,
@@ -42,14 +40,10 @@ interface ProfileData {
 async function info() {
     const profileInfo: ProfileData = await getProfileAPI();
     profileInfo.birthDate = profileInfo.birthDate.slice(0, 10);
-    console.log(profileInfo[3])
-    const container = document.getElementById('profilebox');
+    const container = document.getElementById('profilebox') as HTMLDivElement;
     const inputElements = container.querySelectorAll<HTMLInputElement>('input');
-    console.log(inputElements);
     inputElements.forEach(input => {
-        const fieldName = input.id;
-        console.log(fieldName + "g");
-        console.log(profileInfo[fieldName] + "f");
+        const fieldName: string = input.id;
         input.value = profileInfo[fieldName];
         input.value = fieldName === 'birthDate' ? profileInfo.birthDate : profileInfo[fieldName];
     });

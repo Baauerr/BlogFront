@@ -30,11 +30,11 @@ export function createErrorElement(inputErrorMapping: Record<string, HTMLDivElem
     });
 
     inputIds.forEach(element => {
-        const errorElement = document.createElement('div');
+        const errorElement: HTMLDivElement = document.createElement('div');
         errorElement.classList.add('error-message');
         errorElement.id = `${element}Error`;
 
-        const inputElement = document.getElementById(element.toLowerCase());
+        const inputElement: HTMLElement = document.getElementById(element.toLowerCase());
 
         if (inputElement) {
             inputElement.parentNode?.insertBefore(errorElement, inputElement.nextSibling);

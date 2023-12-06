@@ -1,15 +1,15 @@
-import { applyFormDataToClass } from "./mainPagePostView.js";
+import { showMainPagePosts } from "./mainPagePostView.js";
 import { updateUrl } from "./getDataFromPage.js";
 import { collectFormData } from "./getDataFromPage.js";
 import { clickOnLikeButton } from "./likeFunction.js";
 
-export function attachEventListeners(post, postDescription, showMoreButton, likeButton, postLikes) {
+export function attachEventListeners(post, postDescription, showMoreButton: HTMLAnchorElement, likeButton: HTMLImageElement, postLikesCountElement: HTMLSpanElement) {
     showMoreButton.addEventListener("click", function () {
         readMore(postDescription, showMoreButton);
     });
 
     likeButton.addEventListener("click", async function () {
-        await clickOnLikeButton(likeButton, post, postLikes);
+        await clickOnLikeButton(likeButton, post, postLikesCountElement);
     });
 }
 
@@ -19,7 +19,7 @@ export function toggleShowMoreButton(showMoreButton, description) {
     }
 }
 
-function readMore(postDescription, showMoreButton) {
+export function readMore(postDescription, showMoreButton) {
     const fullDescription = postDescription.dataset.fullDescription;
     const shortDescription = fullDescription.substring(0, 200);
 
@@ -32,7 +32,7 @@ function readMore(postDescription, showMoreButton) {
     }
 }
 
-export function postLikeView(likePicture, hasLike: boolean) {
+export function postLikeView(likePicture: HTMLImageElement, hasLike: boolean) {
     const token = localStorage.getItem("token")
     if (token) {
         if (hasLike) {
@@ -45,7 +45,7 @@ export function postLikeView(likePicture, hasLike: boolean) {
 }
 
 export function setupApplyButton() {
-    const applyButton = document.getElementById('apply_button');
+    const applyButton: HTMLButtonElement = document.getElementById('apply_button') as HTMLButtonElement;
 
     if (applyButton) {
         applyButton.addEventListener('click', function (event) {
@@ -53,9 +53,9 @@ export function setupApplyButton() {
             event.preventDefault();
             const formData = collectFormData();
             updateUrl(formData);
-            applyFormDataToClass();
+            showMainPagePosts();
         });
     } else {
-        console.log("booooooob");
+        console.log("Reply button doesn't exist");
     }
 }

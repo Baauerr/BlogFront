@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="../styles/main-page.css">
 <meta class="title-of-page" name="hidden" content="Пост">
+
 <body>
     <div class="container mt-3">
         <div id="post-container">
@@ -41,36 +42,39 @@
             </div>
         </div>
         <template id="comment-template">
-            <div class="card mb-3">
-                <div class="card-body d-flex flex-column">
-                    <p class="name">
-                        <span class="comment-author"></span>
-                        <img width="20" height="20" src="https://img.icons8.com/material/24/000000/pencil--v2.png"
-                            alt="pencil--v2" class = "start-edit-button" style = "display: none;"/>
-                        <img width="22" height="22" src="https://img.icons8.com/sf-ultralight-filled/25/delete.png"
-                            alt="delete" class = "delete-button" style = "display: none;"/>
-                    </p>
-                    <div style="display: none;" class="comment-edit-box">
-                        <input class="edit-comment-input" type="text">
-                        <button class="apply-edit-button">Редактировать</button>
-                    </div>
-                    <p class="comment-info d-flex">
-                        <span class="comment-description"></span>
-                        <span>&nbsp;</span>
-                        <a title="" class="comment-modified-date" style="display: none;"> (изменен) </a>
-                    </p>
-                    <p class="d-flex">
-                        <span class="comment-time"></span>
-                        <span>&nbsp;</span>
-                        <a class="give-reply-button">Ответить</a>
-                    </p>
-                    <div style="display: none;" class="reply-box">
-                        <input class="sub-comment-input" type="text">
-                        <button class="send-reply-button">Отправить</button>
-                    </div>
-                    <div>
-                        <div class="sub-comments" style="display: none"></div>
-                        <a class="show-replies" style="display: none;">Показать ответы</a>
+            <div class="commentTemplate">
+                <div class="card mb-3">
+                    <div class="card-body d-flex flex-column">
+                        <p class="name">
+                            <span class="comment-author"></span>
+                            <img width="20" height="20" src="https://img.icons8.com/material/24/000000/pencil--v2.png"
+                                alt="pencil--v2" class="start-edit-button" style="display: none;" />
+                            <img width="22" height="22" src="https://img.icons8.com/sf-ultralight-filled/25/delete.png"
+                                alt="delete" class="delete-button" style="display: none;" />
+                        </p>
+                        <div style="display: none;" class="comment-edit-box">
+                            <input class="edit-comment-input" type="text">
+                            <button class="apply-edit-button">Редактировать</button>
+                        </div>
+                        <p class="comment-info">
+                            <span class="comment-description"></span>
+                            <a class="show-more-comment" style="display: none;">Читать полностью</a>
+                            <span>&nbsp;</span>
+                            <a title="" class="comment-modified-date" style="display: none;"> (изменен) </a>
+                        </p>
+                        <p>
+                            <span class="comment-time"></span>
+                            <span>&nbsp;</span>
+                            <a class="give-reply-button" style="display: none;">Ответить</a>
+                        </p>
+                        <div style="display: none;" class="reply-box">
+                            <input class="sub-comment-input" type="text">
+                            <button class="send-reply-button">Отправить</button>
+                        </div>
+                        <div>
+                            <div class="sub-comments" style="display: none"></div>
+                            <a class="show-replies" style="display: none;">Показать ответы</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -86,7 +90,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="new-comment" style="display: none">
             <div class="card mb-3">
                 <div class="card-body">
@@ -94,7 +98,8 @@
                         <span>Оставьте комментарий</span>
                     </div>
                     <div class="mb-3">
-                        <textarea class="form-control input-stretch" id="comment-input-area" style="min-height: 40px;"></textarea>
+                        <textarea class="form-control input-stretch" id="comment-input-area"
+                            style="min-height: 40px;"></textarea>
                     </div>
                     <div>
                         <button class="btn btn-primary" id="send-comment">Отправить</button>

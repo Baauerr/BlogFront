@@ -5,7 +5,7 @@ import { setPostImage } from "../mainPage/getInfo.js";
 import { toggleShowMoreButton } from "../mainPage/buttonsOnMainPage.js";
 import { attachEventListeners } from "../mainPage/buttonsOnMainPage.js";
 import { getConcretePostAPI } from "../api/concrettePostAPI.js";
-import { commentView } from "./commentFunction.js";
+import { CommentData, commentView } from "./commentFunction.js";
 import { sendComment } from "../api/commentAPI.js";
 import { createComment } from "./commentFunction.js";
 import { getProfileAPI } from "../api/profileAPI.js";
@@ -41,18 +41,18 @@ export async function showSinglePost() {
     const post = await getConcretePostAPI(postId);
     const postContainer = document.getElementById("post-container") as HTMLDivElement;
 
-    const postDescription = postContainer.querySelector(".post-description") as HTMLElement;
+    const postDescription = postContainer.querySelector(".post-description") as HTMLSpanElement;
     const postImage = postContainer.querySelector(".post-image") as HTMLImageElement;
-    const postLikes = postContainer.querySelector(".post-likes") as HTMLElement;
-    const postTitle = postContainer.querySelector(".post-title") as HTMLElement;
-    const postAuthor = postContainer.querySelector(".post-author") as HTMLElement;
-    const postTags = postContainer.querySelector(".post-tags") as HTMLElement;
-    const readingTime = postContainer.querySelector(".reading-time") as HTMLElement;
-    const postComments = postContainer.querySelector(".post-comments") as HTMLElement;
+    const postLikes = postContainer.querySelector(".post-likes") as HTMLSpanElement;
+    const postTitle = postContainer.querySelector(".post-title") as HTMLSpanElement;
+    const postAuthor = postContainer.querySelector(".post-author") as HTMLSpanElement;
+    const postTags = postContainer.querySelector(".post-tags") as HTMLSpanElement;
+    const readingTime = postContainer.querySelector(".reading-time") as HTMLSpanElement;
+    const postCommentsAmount = postContainer.querySelector(".post-comments") as HTMLSpanElement;
     const postAddress = document.getElementById("post-address") as HTMLSpanElement;
 
-    const showMoreButton = postContainer.querySelector(".show-more") as HTMLElement;
-    const likeButton = postContainer.querySelector(".post-like-button") as HTMLElement;
+    const showMoreButton: HTMLAnchorElement = postContainer.querySelector(".show-more") as HTMLAnchorElement;
+    const likeButton: HTMLImageElement = postContainer.querySelector(".post-like-button") as HTMLImageElement;
 
     postLikeView(likeButton, post.hasLike);
     postTitle.textContent = post.title;
@@ -61,7 +61,7 @@ export async function showSinglePost() {
     readingTime.textContent = `Время чтения: ${post.readingTime} мин.`;
     postLikes.textContent = post.likes;
     postDescription.textContent = post.description.substring(0, 200);
-    postComments.textContent = post.commentsCount;
+    postCommentsAmount.textContent = post.commentsCount;
 
     if (post.image) {
         setPostImage(postImage, post.image);
@@ -87,7 +87,7 @@ async function commentViewLogic(post, sendCommentButton, commentInputText) {
     commentView(post.comments, post.id, userFullName);
 
     sendCommentButton.addEventListener("click", async function () {
-        const newComment = createComment(commentInputText.value);
+        const newComment: CommentData = createComment(commentInputText.value);
         if (newComment !== null) {
             commentInputText.value = ""
             await sendComment(newComment, post.id);
@@ -102,13 +102,16 @@ async function commentViewLogic(post, sendCommentButton, commentInputText) {
 }
 
 async function getUserFullName(){
-    const user = localStorage.getItem("token") !== null ? await getProfileAPI() : null;
-    return user === null ? null : user.fullName;
+
+    const userEmail: string = localStorage.getItem("email")
+
+    const user = userEmail !== null ? userEmail : null;
+    return user === null ? null : userEmail;
 }
 
 async function showAddress(addressId){
     const addressChain = await getAddressChainAPI(addressId);
-    let addressString = "";
+    let addressString: string = "";
     addressChain.forEach(addressElement => {
         addressString = addressString + addressElement.text + " "
     });

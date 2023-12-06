@@ -10,7 +10,6 @@ class UserData {
     birthDate;
 }
 function edit_button_action() {
-    console.log("jija");
     const inputName = document.getElementById('fullName');
     const inputEmail = document.getElementById('email');
     const inputBirthDate = document.getElementById('birthDate');
@@ -30,14 +29,10 @@ function edit_button_action() {
 async function info() {
     const profileInfo = await getProfileAPI();
     profileInfo.birthDate = profileInfo.birthDate.slice(0, 10);
-    console.log(profileInfo[3]);
     const container = document.getElementById('profilebox');
     const inputElements = container.querySelectorAll('input');
-    console.log(inputElements);
     inputElements.forEach(input => {
         const fieldName = input.id;
-        console.log(fieldName + "g");
-        console.log(profileInfo[fieldName] + "f");
         input.value = profileInfo[fieldName];
         input.value = fieldName === 'birthDate' ? profileInfo.birthDate : profileInfo[fieldName];
     });
