@@ -1,3 +1,6 @@
+import { loadCommunitiesToCreatePost } from "../posts/createPost.js";
+import { router } from "../routing/routing.js";
+
 export async function updateNavBar(){
 
   const loginButtonElement: HTMLAnchorElement = document.getElementById("loginButton") as HTMLAnchorElement;
@@ -55,5 +58,15 @@ const logoutButton: HTMLAnchorElement = document.getElementById('logout') as HTM
 if (logoutButton) {
   logoutButton.addEventListener('click', () => {
     logout();
+  });
+}
+
+const createPostButton: HTMLButtonElement = document.getElementById("create-post-button") as HTMLButtonElement;
+
+if (createPostButton){
+  createPostButton.addEventListener('click', () => {
+    window.history.pushState({}, null, "/post/create");
+    router();
+    loadCommunitiesToCreatePost();
   });
 }

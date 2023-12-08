@@ -23,8 +23,6 @@ const loginButton: HTMLButtonElement = document.getElementById('login_button') a
 
 loginButton.addEventListener('click', async () => {
     await login_button_action()
-    window.history.pushState({}, null, '/');
-    router();
 });
 
 

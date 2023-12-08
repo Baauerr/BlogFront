@@ -1,6 +1,7 @@
+import { PostDTO } from "../DTO/postDTO/postDTO.js";
 import { formatDateForPostInfo } from "../helpers/formatDateHelper.js";
 
-export function getPostAuthor(post): string {
+export function getPostAuthor(post: PostDTO): string {
     if (post.communityName === null) {
         return `${post.author} - ${formatDateForPostInfo(post.createTime)}`;
     } else {
@@ -8,7 +9,7 @@ export function getPostAuthor(post): string {
     }
 }
 
-export function getPostTags(post) {
+export function getPostTags(post: PostDTO) {
     return post.tags.map(tag => `#${tag.name}`).join(' ');
 }
 

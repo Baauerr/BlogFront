@@ -1,4 +1,6 @@
-export async function getProfileAPI() {
+import { ProfileInfoDTO } from "../DTO/users/userDTO.js";
+
+export async function getProfileAPI(): Promise<ProfileInfoDTO> {
   const token: string = localStorage.getItem('token');
     const response = await fetch('https://blog.kreosoft.space/api/account/profile', {
       method: 'GET',

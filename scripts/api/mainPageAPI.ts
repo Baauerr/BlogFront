@@ -1,6 +1,7 @@
-import { MainPageData } from "../mainPage/mainPage.js";
+import { PostsDTO } from "../DTO/postDTO/postDTO.js";
+import { FilterDTO } from "../DTO/filterDTO/filterDTO.js";
 
-export async function getInfoOnPageAPI(filterData: MainPageData): Promise<any> {
+export async function getInfoOnPageAPI(filterData: FilterDTO): Promise<PostsDTO> {
   const queryString: string = filtersToUrl(filterData);
   try {
     const token: string = localStorage.getItem("token")
@@ -24,7 +25,7 @@ export async function getInfoOnPageAPI(filterData: MainPageData): Promise<any> {
   }
 }
 
-export function filtersToUrl(filterData: MainPageData) {
+export function filtersToUrl(filterData: FilterDTO) {
   return (Object.entries(filterData)
     .filter(([key, value]) => {
       if (Array.isArray(value)) {

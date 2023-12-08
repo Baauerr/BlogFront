@@ -9,6 +9,7 @@ import { commentView } from "./commentFunction.js";
 import { sendComment } from "../api/commentAPI.js";
 import { createComment } from "./commentFunction.js";
 import { getAddressChainAPI } from "../api/addressAPI.js";
+import { getProfileAPI } from "../api/profileAPI.js";
 function parsePostId() {
     const url = new URL(window.location.href);
     const pathNameParts = url.pathname.split('/');
@@ -48,9 +49,9 @@ export async function showSinglePost() {
     postAuthor.textContent = getPostAuthor(post);
     postTags.textContent = getPostTags(post);
     readingTime.textContent = `Время чтения: ${post.readingTime} мин.`;
-    postLikes.textContent = post.likes;
+    postLikes.textContent = (post.likes).toString();
     postDescription.textContent = post.description.substring(0, 200);
-    postCommentsAmount.textContent = post.commentsCount;
+    postCommentsAmount.textContent = (post.commentsCount).toString();
     if (post.image) {
         setPostImage(postImage, post.image);
     }
@@ -81,9 +82,11 @@ async function commentViewLogic(post, sendCommentButton, commentInputText) {
     }
 }
 async function getUserFullName() {
-    const userEmail = localStorage.getItem("email");
-    const user = userEmail !== null ? userEmail : null;
-    return user === null ? null : userEmail;
+    if (localStorage.getItem("token")) {
+        const userInfo = await getProfileAPI();
+        return userInfo.fullName;
+    }
+    return null;
 }
 async function showAddress(addressId) {
     const addressChain = await getAddressChainAPI(addressId);

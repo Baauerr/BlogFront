@@ -5,11 +5,15 @@ import { setPostImage } from "../mainPage/getInfo.js";
 import { toggleShowMoreButton } from "../mainPage/buttonsOnMainPage.js";
 import { attachEventListeners } from "../mainPage/buttonsOnMainPage.js";
 import { getConcretePostAPI } from "../api/concrettePostAPI.js";
-import { CommentData, commentView } from "./commentFunction.js";
+import { commentView } from "./commentFunction.js";
+import { SendCommentDTO } from "../DTO/comment/commentDTO.js";
 import { sendComment } from "../api/commentAPI.js";
 import { createComment } from "./commentFunction.js";
-import { getProfileAPI } from "../api/profileAPI.js";
 import { getAddressChainAPI } from "../api/addressAPI.js";
+import { AddressChainDTO } from "../DTO/address/addressDTO.js";
+import { getProfileAPI } from "../api/profileAPI.js";
+import { ConcretePostDTO } from "../DTO/postDTO/postDTO.js";
+import { ProfileInfoDTO } from "../DTO/users/userDTO.js";
 
 function parsePostId() {
     const url = new URL(window.location.href);
@@ -25,20 +29,20 @@ function parsePostId() {
 
 export async function showPostPage() {
 
-    const postId = parsePostId();
-    const post = await getConcretePostAPI(postId);
+    const postId: string = parsePostId();
+    const post: ConcretePostDTO = await getConcretePostAPI(postId);
 
     const sendCommentButton = document.getElementById("send-comment") as HTMLButtonElement;
     const commentInputText = document.getElementById('comment-input-area') as HTMLTextAreaElement;
 
     await showSinglePost();
+
     await commentViewLogic(post, sendCommentButton, commentInputText);
 }
 
-
 export async function showSinglePost() {
-    const postId = parsePostId();
-    const post = await getConcretePostAPI(postId);
+    const postId: string = parsePostId();
+    const post: ConcretePostDTO = await getConcretePostAPI(postId);
     const postContainer = document.getElementById("post-container") as HTMLDivElement;
 
     const postDescription = postContainer.querySelector(".post-description") as HTMLSpanElement;
@@ -59,9 +63,9 @@ export async function showSinglePost() {
     postAuthor.textContent = getPostAuthor(post);
     postTags.textContent = getPostTags(post);
     readingTime.textContent = `Время чтения: ${post.readingTime} мин.`;
-    postLikes.textContent = post.likes;
+    postLikes.textContent = (post.likes).toString();
     postDescription.textContent = post.description.substring(0, 200);
-    postCommentsAmount.textContent = post.commentsCount;
+    postCommentsAmount.textContent = (post.commentsCount).toString();
 
     if (post.image) {
         setPostImage(postImage, post.image);
@@ -71,7 +75,7 @@ export async function showSinglePost() {
         postDescription.dataset.fullDescription = post.description;
     }
 
-    if (post.addressId !== null){
+    if (post.addressId !== null) {
         console.log(postAddress)
         postAddress.textContent = await showAddress(post.addressId);
     }
@@ -82,12 +86,12 @@ export async function showSinglePost() {
 
 async function commentViewLogic(post, sendCommentButton, commentInputText) {
 
-    const userFullName = await getUserFullName();
+    const userFullName: string = await getUserFullName();
 
     commentView(post.comments, post.id, userFullName);
 
     sendCommentButton.addEventListener("click", async function () {
-        const newComment: CommentData = createComment(commentInputText.value);
+        const newComment: SendCommentDTO = createComment(commentInputText.value);
         if (newComment !== null) {
             commentInputText.value = ""
             await sendComment(newComment, post.id);
@@ -101,16 +105,16 @@ async function commentViewLogic(post, sendCommentButton, commentInputText) {
     }
 }
 
-async function getUserFullName(){
-
-    const userEmail: string = localStorage.getItem("email")
-
-    const user = userEmail !== null ? userEmail : null;
-    return user === null ? null : userEmail;
+async function getUserFullName() {
+    if (localStorage.getItem("token")) {
+        const userInfo: ProfileInfoDTO = await getProfileAPI();
+        return userInfo.fullName
+    }
+    return null;
 }
 
-async function showAddress(addressId){
-    const addressChain = await getAddressChainAPI(addressId);
+async function showAddress(addressId: string) {
+    const addressChain: AddressChainDTO[] = await getAddressChainAPI(addressId);
     let addressString: string = "";
     addressChain.forEach(addressElement => {
         addressString = addressString + addressElement.text + " "

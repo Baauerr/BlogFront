@@ -2,8 +2,9 @@ import { showMainPagePosts } from "./mainPagePostView.js";
 import { updateUrl } from "./getDataFromPage.js";
 import { collectFormData } from "./getDataFromPage.js";
 import { clickOnLikeButton } from "./likeFunction.js";
+import { PostDTO } from "../DTO/postDTO/postDTO.js";
 
-export function attachEventListeners(post, postDescription, showMoreButton: HTMLAnchorElement, likeButton: HTMLImageElement, postLikesCountElement: HTMLSpanElement) {
+export function attachEventListeners(post: PostDTO, postDescription: HTMLSpanElement, showMoreButton: HTMLAnchorElement, likeButton: HTMLImageElement, postLikesCountElement: HTMLSpanElement) {
     showMoreButton.addEventListener("click", function () {
         readMore(postDescription, showMoreButton);
     });
@@ -13,13 +14,13 @@ export function attachEventListeners(post, postDescription, showMoreButton: HTML
     });
 }
 
-export function toggleShowMoreButton(showMoreButton, description) {
+export function toggleShowMoreButton(showMoreButton: HTMLAnchorElement, description: string) {
     if (description.length > 200) {
         showMoreButton.style.display = "block";
     }
 }
 
-export function readMore(postDescription, showMoreButton) {
+export function readMore(postDescription: HTMLSpanElement, showMoreButton: HTMLAnchorElement) {
     const fullDescription = postDescription.dataset.fullDescription;
     const shortDescription = fullDescription.substring(0, 200);
 
@@ -44,18 +45,17 @@ export function postLikeView(likePicture: HTMLImageElement, hasLike: boolean) {
     }
 }
 
-export function setupApplyButton() {
+export function setupApplyButton(callback: () => Promise<void>) {
     const applyButton: HTMLButtonElement = document.getElementById('apply_button') as HTMLButtonElement;
 
     if (applyButton) {
-        applyButton.addEventListener('click', function (event) {
-            console.log("jija");
+        applyButton.addEventListener('click', async function (event) {
             event.preventDefault();
             const formData = collectFormData();
             updateUrl(formData);
-            showMainPagePosts();
+            await callback(); 
         });
     } else {
-        console.log("Reply button doesn't exist");
+        console.log("Apply button doesn't exist");
     }
 }

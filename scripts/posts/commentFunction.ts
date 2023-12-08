@@ -6,19 +6,11 @@ import { editComment } from "../api/commentAPI.js";
 import { deleteComment } from "../api/commentAPI.js";
 import { toggleShowMoreButton } from "../mainPage/buttonsOnMainPage.js";
 import { readMore } from "../mainPage/buttonsOnMainPage.js";
+import { CommentDTO } from "../DTO/comment/commentDTO.js";
+import { SendCommentDTO } from "../DTO/comment/commentDTO.js";
+import { CommentEditDataDTO } from "../DTO/comment/commentDTO.js";
 
-
-export class CommentData {
-    content: string
-    parentId?: string;
-
-    constructor(content: string, parentId?: string) {
-        this.content = content;
-        this.parentId = parentId || null;
-    }
-}
-
-export async function commentView(comments, postId: string, userFullName: string) {
+export async function commentView(comments: CommentDTO[], postId: string, userFullName: string) {
 
     const commentBlock: HTMLDivElement = document.getElementById("comment-block") as HTMLDivElement;
     const commentTemplate: HTMLTemplateElement = document.getElementById("comment-template") as HTMLTemplateElement;
@@ -42,6 +34,7 @@ export async function commentView(comments, postId: string, userFullName: string
         const showMoreButton: HTMLAnchorElement = commentClone.querySelector(".show-more-comment") as HTMLAnchorElement;
 
         if (isUserComment(comment, userFullName) && comment.deleteDate === null) {
+            console.log(comment)
             showHiddenInput(editCommentButton);
             showHiddenInput(deleteCommentButton);
         }
@@ -96,12 +89,12 @@ export async function commentView(comments, postId: string, userFullName: string
 }
 
 
-async function subCommentsView(commentId, subCommentBlock, postId, userFullName) {
+async function subCommentsView(commentId: string, subCommentBlock: HTMLDivElement, postId: string, userFullName: string) {
 
     const subCommentTemplate: HTMLTemplateElement = document.getElementById("comment-template") as HTMLTemplateElement;
 
 
-    const subCommentsTree = await getCommentTreeAPI(commentId);
+    const subCommentsTree: CommentDTO[] = await getCommentTreeAPI(commentId);
 
     for (const subCommentData of subCommentsTree) {
 
@@ -132,6 +125,8 @@ async function subCommentsView(commentId, subCommentBlock, postId, userFullName)
         const editBox: HTMLDivElement = subCommentClone.querySelector(".comment-edit-box") as HTMLDivElement;
         const inputBox: HTMLInputElement = subCommentClone.querySelector(".edit-comment-input") as HTMLInputElement;
 
+
+
         if (isUserComment(subCommentData, userFullName) && subCommentData.deleteDate === null) {
             showHiddenInput(editCommentButton);
             showHiddenInput(deleteCommentButton);
@@ -156,7 +151,7 @@ async function subCommentsView(commentId, subCommentBlock, postId, userFullName)
     };
 }
 
-function showHiddenInput(replyBox) {
+function showHiddenInput(replyBox: any) {
     if (replyBox.style.display === "inline") {
         replyBox.style.display = "none"
     } else {
@@ -164,7 +159,7 @@ function showHiddenInput(replyBox) {
     }
 }
 
-function showReplies(replies, showRepliesButton) {
+function showReplies(replies: HTMLDivElement, showRepliesButton: HTMLAnchorElement) {
     if (replies.style.display === "block") {
         replies.style.display = "none"
         showRepliesButton.textContent = "Показать ответы";
@@ -174,24 +169,28 @@ function showReplies(replies, showRepliesButton) {
     }
 }
 
-export function createComment(content: string, parentId?: string): CommentData {
+export function createComment(content: string, parentId?: string): SendCommentDTO {
     if (parentId) {
-        const newComment: CommentData = content === "" ? null : new CommentData(content, parentId);
+        const newComment: SendCommentDTO = content === "" ? null : new SendCommentDTO(content, parentId);
         return newComment;
     }
     else {
-        const newComment: CommentData = content === "" ? null : new CommentData(content);
+        const newComment: SendCommentDTO = content === "" ? null : new SendCommentDTO(content);
         return newComment;
     }
 }
 
-async function addReplyFullFunctional(addReplyButton: HTMLAnchorElement, replyBox: HTMLDivElement, replyInput: HTMLInputElement, commentData, sendReply: HTMLButtonElement, postId: string) {
+async function addReplyFullFunctional(
+    addReplyButton: HTMLAnchorElement, replyBox: HTMLDivElement, replyInput: HTMLInputElement,
+    commentData: CommentDTO, sendReply: HTMLButtonElement, postId: string
+) {
+
     addReplyButton.addEventListener("click", function () {
         showHiddenInput(replyBox);
     });
 
     sendReply.addEventListener("click", async function () {
-        const newComment: CommentData = createComment(replyInput.value, commentData.id);
+        const newComment: SendCommentDTO = createComment(replyInput.value, commentData.id);
         if (newComment !== null) {
             replyInput.value = ""
             await sendComment(newComment, postId);
@@ -200,11 +199,15 @@ async function addReplyFullFunctional(addReplyButton: HTMLAnchorElement, replyBo
     });
 }
 
-function isUserComment(comment, userFullName) {
+function isUserComment(comment: CommentDTO, userFullName: string) {
     return (userFullName !== null && comment.author === userFullName)
 }
 
-function addEventsOnEditButton(editButton, applyEdit, commentContentVisual, editBox, inputBox, commentId, commentContentValue) {
+function addEventsOnEditButton(
+    editButton: HTMLImageElement, applyEdit: HTMLButtonElement, commentContentVisual: HTMLImageElement,
+    editBox: HTMLDivElement, inputBox: HTMLInputElement, commentId: string, commentContentValue: string
+) {
+
     editButton.addEventListener("click", function () {
         changeMessageBoxToEditBox(commentContentVisual, editBox, inputBox, commentContentValue);
     });
@@ -214,13 +217,13 @@ function addEventsOnEditButton(editButton, applyEdit, commentContentVisual, edit
     });
 }
 
-function addEventsOnDeleteButton(deleteButton, commentId) {
+function addEventsOnDeleteButton(deleteButton: HTMLImageElement, commentId: string) {
     deleteButton.addEventListener("click", function () {
         deleteCommentFromPage(commentId);
     });
 }
 
-function changeMessageBoxToEditBox(commentContentVisual, editBox, inputBox, commentContentValue) {
+function changeMessageBoxToEditBox(commentContentVisual: HTMLImageElement, editBox: HTMLDivElement, inputBox: HTMLInputElement, commentContentValue: string) {
     if (editBox.style.display === "none") {
         commentContentVisual.style.display = "none";
         editBox.style.display = "block";
@@ -233,18 +236,17 @@ function changeMessageBoxToEditBox(commentContentVisual, editBox, inputBox, comm
     }
 }
 
-async function applyEditComment(commentId, commentContentValue) {
-    const editCommentData: CommentEditData = new CommentEditData;
+async function applyEditComment(commentId: string, commentContentValue: string) {
+    let editCommentData: CommentEditDataDTO = new CommentEditDataDTO();
+    console.log(editCommentData)
+    console.log(commentContentValue)
     editCommentData.content = commentContentValue;
+    
     await editComment(editCommentData, commentId)
     await showPostPage();
 }
 
-async function deleteCommentFromPage(commentId) {
+async function deleteCommentFromPage(commentId: string) {
     await deleteComment(commentId)
     await showPostPage();
-}
-
-export class CommentEditData {
-    content: string;
 }

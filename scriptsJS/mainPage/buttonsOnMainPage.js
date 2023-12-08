@@ -1,4 +1,3 @@
-import { showMainPagePosts } from "./mainPagePostView.js";
 import { updateUrl } from "./getDataFromPage.js";
 import { collectFormData } from "./getDataFromPage.js";
 import { clickOnLikeButton } from "./likeFunction.js";
@@ -38,19 +37,18 @@ export function postLikeView(likePicture, hasLike) {
         }
     }
 }
-export function setupApplyButton() {
+export function setupApplyButton(callback) {
     const applyButton = document.getElementById('apply_button');
     if (applyButton) {
-        applyButton.addEventListener('click', function (event) {
-            console.log("jija");
+        applyButton.addEventListener('click', async function (event) {
             event.preventDefault();
             const formData = collectFormData();
             updateUrl(formData);
-            showMainPagePosts();
+            await callback();
         });
     }
     else {
-        console.log("Reply button doesn't exist");
+        console.log("Apply button doesn't exist");
     }
 }
 //# sourceMappingURL=buttonsOnMainPage.js.map

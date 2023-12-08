@@ -36,7 +36,7 @@ export function viewPagination(totalPages, currentPage) {
 }
 function updatePageQueryParam(pageNumber) {
     const newUrl = new URL(window.location.href);
-    newUrl.searchParams.set('page', pageNumber);
+    newUrl.searchParams.set('page', pageNumber.toString());
     history.pushState(null, null, newUrl.toString());
     router();
 }

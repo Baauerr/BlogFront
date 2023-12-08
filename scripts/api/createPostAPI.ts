@@ -1,7 +1,7 @@
-import { PostInfo } from "../posts/createPost.js";
+import { PostInfoDTO } from "../DTO/postDTO/postDTO.js";
 import { takeErrorTextAsync } from "../helpers/errorCreateHelper.js";
 
-export async function publicPostAPI(responseData: PostInfo) {
+export async function publicPostAPI(responseData: PostInfoDTO) {
   try {
     const token: string = localStorage.getItem("token");
     await fetch(`https://blog.kreosoft.space/api/post`, {
@@ -18,7 +18,6 @@ export async function publicPostAPI(responseData: PostInfo) {
           console.log(data.errors)
           const container = document.getElementById('input-create-post');
           const inputElements = container.querySelectorAll('input, select, textarea');
-          console.log(inputElements);
           await takeErrorTextAsync(data, container, inputElements);
         } else {
           window.location.pathname = ""

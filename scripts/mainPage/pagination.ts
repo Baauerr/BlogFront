@@ -45,9 +45,9 @@ export function viewPagination(totalPages: number, currentPage: number) {
     pagination.appendChild(ul);   
 }
 
-function updatePageQueryParam(pageNumber) {
+function updatePageQueryParam(pageNumber: number) {
     const newUrl: URL = new URL(window.location.href);
-    newUrl.searchParams.set('page', pageNumber);
+    newUrl.searchParams.set('page', pageNumber.toString());
     history.pushState(null, null, newUrl.toString());
     router();
 }

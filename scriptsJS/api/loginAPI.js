@@ -1,4 +1,5 @@
 import { updateNavBar } from "../helpers/navbarInfoHelper.js";
+import { router } from "../routing/routing.js";
 export async function loginUserOnServerAPI(responseData) {
     try {
         const response = await fetch('https://blog.kreosoft.space/api/account/login', {
@@ -9,13 +10,15 @@ export async function loginUserOnServerAPI(responseData) {
             body: JSON.stringify(responseData),
         });
         const data = await response.json();
-        if (data.errors) {
+        if (!response.ok) {
             console.log('request:', data);
         }
         else {
             localStorage.clear();
             localStorage.setItem("token", data.token);
             localStorage.setItem("email", responseData.email);
+            window.history.pushState({}, null, '/');
+            router();
             await updateNavBar();
         }
     }

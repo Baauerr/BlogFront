@@ -1,3 +1,5 @@
+import { loadCommunitiesToCreatePost } from "../posts/createPost.js";
+import { router } from "../routing/routing.js";
 export async function updateNavBar() {
     const loginButtonElement = document.getElementById("loginButton");
     const userMenuElement = document.getElementById("userMenu");
@@ -44,6 +46,14 @@ const logoutButton = document.getElementById('logout');
 if (logoutButton) {
     logoutButton.addEventListener('click', () => {
         logout();
+    });
+}
+const createPostButton = document.getElementById("create-post-button");
+if (createPostButton) {
+    createPostButton.addEventListener('click', () => {
+        window.history.pushState({}, null, "/post/create");
+        router();
+        loadCommunitiesToCreatePost();
     });
 }
 //# sourceMappingURL=navbarInfoHelper.js.map

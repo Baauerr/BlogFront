@@ -1,8 +1,8 @@
-import { RegistrationData } from "../account/registration.js";
+import { RegistrationResponseDTO } from "../DTO/users/userDTO.js";
 import { takeErrorTextAsync } from "../helpers/errorCreateHelper.js";
 
 
-export function registerUserAPI(responseData: RegistrationData) {
+export function registerUserAPI(responseData: RegistrationResponseDTO) {
 
     fetch('https://blog.kreosoft.space/api/account/register', {
         method: 'POST',

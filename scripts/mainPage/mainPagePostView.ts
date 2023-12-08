@@ -7,6 +7,24 @@ import { setPostImage } from "./getInfo.js";
 import { getPostTags } from "./getInfo.js";
 import { getInfoOnPageAPI } from "../api/mainPageAPI.js";
 import { viewPagination } from "./pagination.js";
+import { PostsDTO } from "../DTO/postDTO/postDTO.js";
+import { PostDTO } from "../DTO/postDTO/postDTO.js";
+
+
+export async function displayPosts(apiFunction, formData, id = null) {
+    updateUrl(formData);
+    document.getElementById("postsContainer").innerHTML = '';
+    const postTemplate = document.getElementById("postTemplate") as HTMLTemplateElement;
+    const postsContainer = document.getElementById("postsContainer") as HTMLDivElement;
+
+    try {
+        const data: PostsDTO = id ? await apiFunction(formData, id) : await apiFunction(formData);
+        data.posts.forEach(post => addPostToContainer(post, postTemplate, postsContainer));
+        viewPagination(data.pagination.count, data.pagination.current);
+    } catch (error) {
+        console.error("Ошибка при загрузке данных:", error);
+    }
+}
 
 export async function showMainPagePosts() {
     const formData = parseUrlParams();
@@ -16,7 +34,7 @@ export async function showMainPagePosts() {
         const postTemplate = document.getElementById("postTemplate") as HTMLTemplateElement;
         const postsContainer = document.getElementById("postsContainer") as HTMLDivElement;
         
-        const data = await getInfoOnPageAPI(formData);
+        const data: PostsDTO = await getInfoOnPageAPI(formData);
         data.posts.forEach(post => addPostToContainer(post, postTemplate, postsContainer));
 
         viewPagination(data.pagination.count, data.pagination.current);
@@ -26,7 +44,7 @@ export async function showMainPagePosts() {
     }
 }
 
-export function addPostToContainer (post: any, postTemplate, postsContainer) {
+export function addPostToContainer (post: PostDTO, postTemplate: HTMLTemplateElement, postsContainer: HTMLDivElement) {
     const postClone: DocumentFragment = document.importNode(postTemplate.content, true);
     const postDescription: HTMLSpanElement = postClone.querySelector(".post-description") as HTMLSpanElement;
     const postImage: HTMLImageElement = postClone.querySelector(".post-image") as HTMLImageElement;
@@ -46,9 +64,9 @@ export function addPostToContainer (post: any, postTemplate, postsContainer) {
     postAuthor.textContent = getPostAuthor(post);
     postTags.textContent = getPostTags(post);
     readingTime.textContent = `Время чтения: ${post.readingTime} мин.`;
-    postLikes.textContent = post.likes;
+    postLikes.textContent = (post.likes).toString();
     postDescription.textContent = post.description.substring(0, 200);
-    postComments.textContent = post.commentsCount;
+    postComments.textContent = (post.commentsCount).toString();
 
     if (post.image) {
         setPostImage(postImage, post.image);

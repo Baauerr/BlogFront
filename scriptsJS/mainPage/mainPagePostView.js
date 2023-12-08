@@ -7,6 +7,20 @@ import { setPostImage } from "./getInfo.js";
 import { getPostTags } from "./getInfo.js";
 import { getInfoOnPageAPI } from "../api/mainPageAPI.js";
 import { viewPagination } from "./pagination.js";
+export async function displayPosts(apiFunction, formData, id = null) {
+    updateUrl(formData);
+    document.getElementById("postsContainer").innerHTML = '';
+    const postTemplate = document.getElementById("postTemplate");
+    const postsContainer = document.getElementById("postsContainer");
+    try {
+        const data = id ? await apiFunction(formData, id) : await apiFunction(formData);
+        data.posts.forEach(post => addPostToContainer(post, postTemplate, postsContainer));
+        viewPagination(data.pagination.count, data.pagination.current);
+    }
+    catch (error) {
+        console.error("Ошибка при загрузке данных:", error);
+    }
+}
 export async function showMainPagePosts() {
     const formData = parseUrlParams();
     updateUrl(formData);
@@ -40,9 +54,9 @@ export function addPostToContainer(post, postTemplate, postsContainer) {
     postAuthor.textContent = getPostAuthor(post);
     postTags.textContent = getPostTags(post);
     readingTime.textContent = `Время чтения: ${post.readingTime} мин.`;
-    postLikes.textContent = post.likes;
+    postLikes.textContent = (post.likes).toString();
     postDescription.textContent = post.description.substring(0, 200);
-    postComments.textContent = post.commentsCount;
+    postComments.textContent = (post.commentsCount).toString();
     if (post.image) {
         setPostImage(postImage, post.image);
     }

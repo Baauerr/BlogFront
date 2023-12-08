@@ -1,3 +1,4 @@
+import { ProfileInfoDTO } from "../DTO/users/userDTO.js";
 import { getProfileAPI } from "../api/profileAPI.js";
 import { editProfileAPI } from "../api/profileAPI.js";
 
@@ -33,12 +34,9 @@ function edit_button_action() {
     editProfileAPI(requestData);
 }
 
-interface ProfileData {
-    [key: string]: string;
-}
 
 async function info() {
-    const profileInfo: ProfileData = await getProfileAPI();
+    const profileInfo: ProfileInfoDTO = await getProfileAPI();
     profileInfo.birthDate = profileInfo.birthDate.slice(0, 10);
     const container = document.getElementById('profilebox') as HTMLDivElement;
     const inputElements = container.querySelectorAll<HTMLInputElement>('input');
@@ -48,7 +46,5 @@ async function info() {
         input.value = fieldName === 'birthDate' ? profileInfo.birthDate : profileInfo[fieldName];
     });
 }
-
-
 
 registrationButton.addEventListener('click', edit_button_action);

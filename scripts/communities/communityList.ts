@@ -2,11 +2,8 @@ import { getListOfCommunitiesAPI } from "../api/communityAPI.js";
 import { getGreatestRoleInCommunityAPI } from "../api/communityAPI.js";
 import { subscribeAPI } from "../api/communityAPI.js";
 import { unsubscribeAPI } from "../api/communityAPI.js";
-
-enum UserRoles {
-    Administrator = "Administrator",
-    Subscriber = "Subscriber"
-}
+import { CommunityDTO, UserRoles } from "../DTO/communityDTO/communityDTO.js";
+import { navigateTo } from "../routing/routing.js";
 
 export async function communityListView() {
     document.getElementById("community-plates-place").innerHTML = '';
@@ -14,13 +11,13 @@ export async function communityListView() {
     const communityTemplate: HTMLTemplateElement = document.getElementById("communities-template") as HTMLTemplateElement;
     const communitiesContainer: HTMLDivElement = document.getElementById("community-plates-place") as HTMLDivElement;
 
-    const data = await getListOfCommunitiesAPI();
+    const data: CommunityDTO[] = await getListOfCommunitiesAPI();
     if (data.length > 0 && Array.isArray(data)) {
         data.forEach(plate => addCommunityToContainer(plate, communityTemplate, communitiesContainer));
     }
 }
 
-function addCommunityToContainer(plate, communityTemplate: HTMLTemplateElement, communitiesContainer: HTMLDivElement) {
+function addCommunityToContainer(plate: CommunityDTO, communityTemplate: HTMLTemplateElement, communitiesContainer: HTMLDivElement) {
     const communityPlate: DocumentFragment = document.importNode(communityTemplate.content, true);
 
     const communityTitle: HTMLAnchorElement = communityPlate.querySelector(".community-title") as HTMLAnchorElement;
@@ -38,30 +35,29 @@ function addCommunityToContainer(plate, communityTemplate: HTMLTemplateElement, 
 }
 
 async function correctButtons(subscribe: HTMLButtonElement, unsubscribe: HTMLButtonElement, id: string) {
-    const userRole = await getGreatestRoleInCommunityAPI(id);
+    const userRole: UserRoles = await getGreatestRoleInCommunityAPI(id);
 
-    console.log(userRole);
-    console.log(UserRoles.Subscriber);
     if (userRole === UserRoles.Subscriber) {
         unsubscribe.style.display = "block";
     }
-    else if (userRole === null) {
+    else if (userRole === UserRoles.NoRole) {
         subscribe.style.display = "block"
     }
 }
 
-async function subscribeAction(subscribeButton: HTMLButtonElement, unsubscribeButton: HTMLButtonElement, id: string){
-    subscribeButton.addEventListener("click", function(){
+export async function subscribeAction(subscribeButton: HTMLButtonElement, unsubscribeButton: HTMLButtonElement, id: string) {
+    subscribeButton.addEventListener("click", function () {
         subscribeAPI(id);
         subscribeButton.style.display = "none";
         unsubscribeButton.style.display = "block"
     })
 }
 
-async function unsubscribeAction(subscribeButton: HTMLButtonElement, unsubscribeButton: HTMLButtonElement, id: string){
-    unsubscribeButton.addEventListener("click", function(){
+export async function unsubscribeAction(subscribeButton: HTMLButtonElement, unsubscribeButton: HTMLButtonElement, id: string) {
+    unsubscribeButton.addEventListener("click", function () {
         unsubscribeAPI(id);
         subscribeButton.style.display = "block";
         unsubscribeButton.style.display = "none"
+        
     })
 }

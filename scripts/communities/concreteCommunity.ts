@@ -1,15 +1,17 @@
-import { postLikeView } from "../mainPage/buttonsOnMainPage.js";
-import { getPostAuthor } from "../mainPage/getInfo.js";
-import { getPostTags } from "../mainPage/getInfo.js";
-import { setPostImage } from "../mainPage/getInfo.js";
-import { toggleShowMoreButton } from "../mainPage/buttonsOnMainPage.js";
-import { attachEventListeners } from "../mainPage/buttonsOnMainPage.js";
-import { updateUrl } from "../mainPage/getDataFromPage.js";
-import { viewPagination } from "../mainPage/pagination.js";
 import { parseUrlParams } from "../mainPage/getDataFromPage.js";
 import { getCommunityPostsAPI } from "../api/communityAPI.js";
 import { getConcreteCommunityAPI } from "../api/communityAPI.js";
-import { MainPageData } from "../mainPage/mainPage.js";
+import { FilterDTO } from "../DTO/filterDTO/filterDTO.js";
+import { Gender } from "../DTO/users/userDTO.js";
+import { getGreatestRoleInCommunityAPI } from "../api/communityAPI.js";
+import { ConcreteCommunityDTO, UserRoles } from "../DTO/communityDTO/communityDTO.js";
+import { subscribeAction } from "./communityList.js";
+import { unsubscribeAction } from "./communityList.js";
+import { displayPosts } from "../mainPage/mainPagePostView.js";
+import { setupApplyButton } from "../mainPage/buttonsOnMainPage.js";
+import { loadCommunitiesToCreatePost } from "../posts/createPost.js";
+import { router } from "../routing/routing.js";
+
 
 function parseCommunityId(): string {
     const url = new URL(window.location.href);
@@ -24,88 +26,91 @@ function parseCommunityId(): string {
 }
 
 export async function showCommunityPosts() {
-    const formData: MainPageData = parseUrlParams();
-    updateUrl(formData);
-    document.getElementById("postsContainer").innerHTML = '';
-    const postTemplate: HTMLTemplateElement = document.getElementById("postTemplate") as HTMLTemplateElement;
-    const postsContainer: HTMLDivElement = document.getElementById("postsContainer") as HTMLDivElement;
-
+    const formData: FilterDTO = parseUrlParams();
     const id: string = parseCommunityId();
+    await displayPosts(getCommunityPostsAPI, formData, id);
 
-    const data = await getCommunityPostsAPI(formData, id);
-    data.posts.forEach(post => addPostToContainer(post, postTemplate, postsContainer));
-
-    viewPagination(data.pagination.count, data.pagination.current);
-
-    showAdministratorsList(id);
-}
-
-function showCommunityInfo(){
-    
+    const community: ConcreteCommunityDTO = await getConcreteCommunityAPI(id);
+    showAdministratorsList(community);
+    showCommunityInfo(id);
+    setupApplyButton(showCommunityPosts);
 }
 
 
-export function addPostToContainer(post: any, postTemplate: HTMLTemplateElement, postsContainer: HTMLDivElement) {
-    const postClone: DocumentFragment = document.importNode(postTemplate.content, true);
-    const postDescription: HTMLElement = postClone.querySelector(".post-description") as HTMLElement;
-    const postImage: HTMLImageElement = postClone.querySelector(".post-image") as HTMLImageElement;
-    const postLikes: HTMLSpanElement = postClone.querySelector(".post-likes") as HTMLSpanElement;
-    const postTitle: HTMLAnchorElement = postClone.querySelector(".post-title") as HTMLAnchorElement;
-    const postAuthor: HTMLElement = postClone.querySelector(".post-author") as HTMLElement;
-    const postTags: HTMLElement = postClone.querySelector(".post-tags") as HTMLElement;
-    const readingTime: HTMLElement = postClone.querySelector(".reading-time") as HTMLElement;
-    const postComments: HTMLElement = postClone.querySelector(".post-comments") as HTMLElement;
-    const showMoreButton: HTMLAnchorElement = postClone.querySelector(".show-more") as HTMLAnchorElement;
-    const likeButton: HTMLImageElement = postClone.querySelector(".post-like-button") as HTMLImageElement;
 
-    postLikeView(likeButton, post.hasLike);
-    postTitle.textContent = post.title;
-    postTitle.href = `/post/${post.id}`;
-    postAuthor.textContent = getPostAuthor(post);
-    postTags.textContent = getPostTags(post);
-    readingTime.textContent = `Время чтения: ${post.readingTime} мин.`;
-    postLikes.textContent = post.likes;
-    postDescription.textContent = post.description.substring(0, 200);
-    postComments.textContent = post.commentsCount;
+async function showCommunityInfo(id: string) {
 
-    if (post.image) {
-        setPostImage(postImage, post.image);
-    }
+    const community: ConcreteCommunityDTO = await getConcreteCommunityAPI(id);
 
-    if (postDescription) {
-        postDescription.dataset.fullDescription = post.description;
-    }
+    const communityTitle: HTMLParagraphElement = document.getElementById("concrete-community-title") as HTMLParagraphElement;
+    const subscribersCount: HTMLParagraphElement = document.getElementById("subscribers-amount") as HTMLParagraphElement;
+    const typeOfCommunity: HTMLParagraphElement = document.getElementById("community-type") as HTMLParagraphElement;
+    const subscribeButton: HTMLButtonElement = document.getElementById("subscribe-button") as HTMLButtonElement;
+    const unsubscribeButton: HTMLButtonElement = document.getElementById("unsubscribe-button") as HTMLButtonElement;
+    const createPostButton: HTMLButtonElement = document.getElementById("create-community-post-button") as HTMLButtonElement;
 
-    toggleShowMoreButton(showMoreButton, post.description);
+    communityTitle.textContent = "Группа " + '"' + community.name + '"';
+    subscribersCount.textContent = community.subscribersCount + " подписчиков"
 
-    attachEventListeners(post, postDescription, showMoreButton, likeButton, postLikes);
+    const type: string = community.isClosed ? "закрытое" : "открытое"
 
-    postsContainer.appendChild(postClone);
-};
+    typeOfCommunity.textContent = "Тип сообщества: " + type;
 
-async function showAdministratorsList(id: string) {
-    const community = await getConcreteCommunityAPI(id);
+    showButtonOnCommunityInfo(id, subscribeButton, unsubscribeButton, createPostButton)
+    subscribeAction(subscribeButton, unsubscribeButton, community.id);
+    unsubscribeAction(subscribeButton, unsubscribeButton, community.id);
+    createPostAction(id, createPostButton);
+}
+
+async function showAdministratorsList(community: ConcreteCommunityDTO) {
 
     const adminTemplate: HTMLTemplateElement = document.getElementById("administrators-template") as HTMLTemplateElement;
-    const adminsClone = document.importNode(adminTemplate.content, true);
     const adminsPlace: HTMLDivElement = document.getElementById("administrators-place") as HTMLDivElement;
+    const adminsClone = document.importNode(adminTemplate.content, true);
+
+    adminsPlace.innerHTML = '';
 
     community.administrators.forEach(administrator => {
+
 
         const adminNickname: HTMLAnchorElement = adminsClone.querySelector(".administrator-nickname") as HTMLAnchorElement;
         const adminAvatar: HTMLImageElement = adminsClone.querySelector(".avatar-image") as HTMLImageElement;
 
         adminNickname.href = `/?author=${administrator.fullName}`
         adminNickname.textContent = administrator.fullName
-        if (administrator.gender === "Female") {
+        if (administrator.gender === Gender.Female) {
             adminAvatar.src = '../images/manAvatar.svg'
         }
         else {
             adminAvatar.src = '../images/girlAvatar.svg'
         }
 
-        console.log(adminAvatar.src)
-
         adminsPlace.appendChild(adminsClone);
     });
 }
+
+
+export async function showButtonOnCommunityInfo(id: string, subscribeButtin: HTMLButtonElement, unsubscribeButton: HTMLButtonElement, createPostButton: HTMLButtonElement) {
+
+    const userRole = await getGreatestRoleInCommunityAPI(id);
+
+    if (userRole === UserRoles.Administrator) {
+        createPostButton.style.display = "inline";
+    }
+    else if (userRole === UserRoles.Subscriber) {
+        unsubscribeButton.style.display = "inline";
+    }
+    else {
+        subscribeButtin.style.display = "inline";
+    }
+}
+
+function createPostAction(id: string, createPostButton: HTMLButtonElement) {
+    createPostButton.addEventListener("click", () => {
+        window.history.pushState({}, null, '/post/create');
+        router();
+        loadCommunitiesToCreatePost(id);
+    })
+}
+
+

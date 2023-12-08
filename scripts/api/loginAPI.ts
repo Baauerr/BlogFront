@@ -1,5 +1,6 @@
 import { LoginData } from "../account/login.js";
 import { updateNavBar } from "../helpers/navbarInfoHelper.js";
+import { router } from "../routing/routing.js";
 
 export async function loginUserOnServerAPI(responseData: LoginData) {
     try {
@@ -13,12 +14,14 @@ export async function loginUserOnServerAPI(responseData: LoginData) {
 
         const data = await response.json();
 
-        if (data.errors) {
+        if (!response.ok) {
             console.log('request:', data);
         } else {
             localStorage.clear();
             localStorage.setItem("token", data.token);
-            localStorage.setItem("email", responseData.email)
+            localStorage.setItem("email", responseData.email);
+            window.history.pushState({}, null, '/');
+            router();
             await updateNavBar();
         }
     } catch (error) {

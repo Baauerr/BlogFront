@@ -1,0 +1,34 @@
+<meta class="title-of-page" name="hidden" content="Профиль">
+<link rel="stylesheet" href="../styles/login.css">
+<div class="container">
+    <div class="profilebox border rounded p-4 col-12 col-sm-10 col-md-8 col-lg-6 mx-auto" id="profilebox">
+        <div class="content">
+            <div class="form-group">
+                <label for="email">ФИО</label>
+                <input class="form-control" id="fullName" placeholder="Иванов Иван Иванович">
+            </div>
+            <div class="form-group">
+                <label for="date">Дата рождения</label>
+                <input type="date" name = "Date" class="form-control" id="birthDate" placeholder="дд.мм.гггг">
+            </div>
+            <div class="form-group">
+                <label for="gender">Пол</label>
+                <select class="form-control" id="gender">
+                    <option value="male">Мужчина</option>
+                    <option value="female">Женщина</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="email">Номер телефона</label>
+                <input type = "text" class="form-control" id="phoneNumber" placeholder="+7 (xxx) xxx-xx-xx">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="name@example.com">
+            </div>
+            <button class="btn btn-primary btn-block" id="save_button">Сохранить</button>
+        </div>
+    </div>
+</div>
+<script type="module" src="/scriptsJS/account/profile.js"></script>
+<script>document.getElementById('birthDate').valueAsDate = new Date();</script>

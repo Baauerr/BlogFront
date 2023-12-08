@@ -2,11 +2,7 @@ import { getListOfCommunitiesAPI } from "../api/communityAPI.js";
 import { getGreatestRoleInCommunityAPI } from "../api/communityAPI.js";
 import { subscribeAPI } from "../api/communityAPI.js";
 import { unsubscribeAPI } from "../api/communityAPI.js";
-var UserRoles;
-(function (UserRoles) {
-    UserRoles["Administrator"] = "Administrator";
-    UserRoles["Subscriber"] = "Subscriber";
-})(UserRoles || (UserRoles = {}));
+import { UserRoles } from "../DTO/communityDTO/communityDTO.js";
 export async function communityListView() {
     document.getElementById("community-plates-place").innerHTML = '';
     const communityTemplate = document.getElementById("communities-template");
@@ -30,23 +26,21 @@ function addCommunityToContainer(plate, communityTemplate, communitiesContainer)
 }
 async function correctButtons(subscribe, unsubscribe, id) {
     const userRole = await getGreatestRoleInCommunityAPI(id);
-    console.log(userRole);
-    console.log(UserRoles.Subscriber);
     if (userRole === UserRoles.Subscriber) {
         unsubscribe.style.display = "block";
     }
-    else if (userRole === null) {
+    else if (userRole === UserRoles.NoRole) {
         subscribe.style.display = "block";
     }
 }
-async function subscribeAction(subscribeButton, unsubscribeButton, id) {
+export async function subscribeAction(subscribeButton, unsubscribeButton, id) {
     subscribeButton.addEventListener("click", function () {
         subscribeAPI(id);
         subscribeButton.style.display = "none";
         unsubscribeButton.style.display = "block";
     });
 }
-async function unsubscribeAction(subscribeButton, unsubscribeButton, id) {
+export async function unsubscribeAction(subscribeButton, unsubscribeButton, id) {
     unsubscribeButton.addEventListener("click", function () {
         unsubscribeAPI(id);
         subscribeButton.style.display = "block";

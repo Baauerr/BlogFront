@@ -2,21 +2,9 @@ import { publicPostAPI } from "../api/createPostAPI.js";
 import { getUsersCommunitiesAPI } from "../api/communityAPI.js";
 import { getConcreteCommunityAPI } from "../api/communityAPI.js";
 import { createPostInCommunityAPI } from "../api/communityAPI.js";
-export class PostInfo {
-    readingTime = 0;
-    title;
-    tags;
-    description;
-    addressId = null;
-    image = null;
-    constructor(title, tags, description) {
-        this.title = title;
-        this.tags = tags;
-        this.description = description;
-    }
-}
+import { PostInfoDTO } from "../DTO/postDTO/postDTO.js";
 export function collectDataForPosrCreating() {
-    const formData = new PostInfo("", [], "");
+    const formData = new PostInfoDTO("", [], "");
     const tagsInput = document.querySelectorAll('#tags option:checked');
     formData.tags = tagsInput.length > 0 ? Array.from(tagsInput).map(option => option.value).filter(tag => tag !== "null") : undefined;
     const readingTimeInput = document.getElementById('reading-time-input');
@@ -47,7 +35,7 @@ async function publishPost() {
         await publicPostAPI(dataFromPage);
     }
 }
-export async function loadAvailableCommunities() {
+export async function loadCommunitiesToCreatePost(selectedId) {
     const userCommunities = await getUsersCommunitiesAPI();
     const userCommunitySelect = document.getElementById("user-communities");
     for (const community of userCommunities) {
@@ -56,6 +44,9 @@ export async function loadAvailableCommunities() {
             const newOption = document.createElement("option");
             newOption.value = thisCommunity.id;
             newOption.text = thisCommunity.name;
+            if (selectedId && thisCommunity.id === selectedId) {
+                newOption.selected = true;
+            }
             userCommunitySelect.add(newOption);
         }
     }

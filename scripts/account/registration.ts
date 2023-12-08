@@ -1,13 +1,5 @@
+import { RegistrationResponseDTO } from "../DTO/users/userDTO.js";
 import { registerUserAPI } from "../api/registrationAPI.js";
-
-export class RegistrationData {
-    email: string;
-    password: string;
-    fullName: string;
-    gender: string;
-    phoneNumber: string;
-    birthDate: string;
-}
 
 export class DateInfo {
     year: number;
@@ -30,7 +22,7 @@ function registration_button_action() {
         serverDate = isoDateString.toISOString();
     }
 
-    const requestData: RegistrationData = {
+    const requestData: RegistrationResponseDTO = {
         email: inputEmail.value,
         password: inputPassword.value,
         phoneNumber: inputPhoneNumber.value,

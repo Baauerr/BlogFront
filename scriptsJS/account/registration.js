@@ -1,12 +1,4 @@
 import { registerUserAPI } from "../api/registrationAPI.js";
-export class RegistrationData {
-    email;
-    password;
-    fullName;
-    gender;
-    phoneNumber;
-    birthDate;
-}
 export class DateInfo {
     year;
     month;

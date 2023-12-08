@@ -6,14 +6,8 @@ import { editComment } from "../api/commentAPI.js";
 import { deleteComment } from "../api/commentAPI.js";
 import { toggleShowMoreButton } from "../mainPage/buttonsOnMainPage.js";
 import { readMore } from "../mainPage/buttonsOnMainPage.js";
-export class CommentData {
-    content;
-    parentId;
-    constructor(content, parentId) {
-        this.content = content;
-        this.parentId = parentId || null;
-    }
-}
+import { SendCommentDTO } from "../DTO/comment/commentDTO.js";
+import { CommentEditDataDTO } from "../DTO/comment/commentDTO.js";
 export async function commentView(comments, postId, userFullName) {
     const commentBlock = document.getElementById("comment-block");
     const commentTemplate = document.getElementById("comment-template");
@@ -34,6 +28,7 @@ export async function commentView(comments, postId, userFullName) {
         const inputBox = commentClone.querySelector(".edit-comment-input");
         const showMoreButton = commentClone.querySelector(".show-more-comment");
         if (isUserComment(comment, userFullName) && comment.deleteDate === null) {
+            console.log(comment);
             showHiddenInput(editCommentButton);
             showHiddenInput(deleteCommentButton);
         }
@@ -130,11 +125,11 @@ function showReplies(replies, showRepliesButton) {
 }
 export function createComment(content, parentId) {
     if (parentId) {
-        const newComment = content === "" ? null : new CommentData(content, parentId);
+        const newComment = content === "" ? null : new SendCommentDTO(content, parentId);
         return newComment;
     }
     else {
-        const newComment = content === "" ? null : new CommentData(content);
+        const newComment = content === "" ? null : new SendCommentDTO(content);
         return newComment;
     }
 }
@@ -180,7 +175,9 @@ function changeMessageBoxToEditBox(commentContentVisual, editBox, inputBox, comm
     }
 }
 async function applyEditComment(commentId, commentContentValue) {
-    const editCommentData = new CommentEditData;
+    let editCommentData = new CommentEditDataDTO();
+    console.log(editCommentData);
+    console.log(commentContentValue);
     editCommentData.content = commentContentValue;
     await editComment(editCommentData, commentId);
     await showPostPage();
@@ -188,8 +185,5 @@ async function applyEditComment(commentId, commentContentValue) {
 async function deleteCommentFromPage(commentId) {
     await deleteComment(commentId);
     await showPostPage();
-}
-export class CommentEditData {
-    content;
 }
 //# sourceMappingURL=commentFunction.js.map

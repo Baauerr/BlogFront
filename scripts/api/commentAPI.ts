@@ -1,8 +1,9 @@
-import { CommentData } from "../posts/commentFunction.js";
-import { CommentEditData } from "../posts/commentFunction.js";
+import { CommentEditDataDTO } from "../DTO/comment/commentDTO.js";
+import { SendCommentDTO } from "../DTO/comment/commentDTO.js";
+import { CommentDTO } from "../DTO/comment/commentDTO.js";
 
 
-export async function getCommentTreeAPI(commentId: string): Promise<any> {
+export async function getCommentTreeAPI(commentId: string): Promise<CommentDTO[]> {
   try {
     const response = await fetch(`https://blog.kreosoft.space/api/comment/${commentId}/tree`, {
       method: 'GET',
@@ -18,7 +19,7 @@ export async function getCommentTreeAPI(commentId: string): Promise<any> {
   }
 }
 
-export async function sendComment(commentInfo: CommentData, id: string): Promise<any> {
+export async function sendComment(commentInfo: SendCommentDTO, id: string){
   try {
     console.log(id);
     const token:string = localStorage.getItem("token")
@@ -38,7 +39,7 @@ export async function sendComment(commentInfo: CommentData, id: string): Promise
 }
 
 
-export async function editComment(content: CommentEditData, commentId: string) {
+export async function editComment(content: CommentEditDataDTO, commentId: string) {
   try {
     const token: string = localStorage.getItem("token")
     console.log(content)

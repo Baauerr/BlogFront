@@ -1,4 +1,6 @@
-export async function getTagsAPI() {
+import { TagDTO } from "../DTO/tagDTO/tagDTO";
+
+export async function getTagsAPI(): Promise<TagDTO[]> {
   try {
     const response = await fetch('https://blog.kreosoft.space/api/tag', {
       method: 'GET',

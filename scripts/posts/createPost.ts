@@ -2,25 +2,13 @@ import { publicPostAPI } from "../api/createPostAPI.js";
 import { getUsersCommunitiesAPI } from "../api/communityAPI.js";
 import { getConcreteCommunityAPI } from "../api/communityAPI.js";
 import { createPostInCommunityAPI } from "../api/communityAPI.js";
+import { PostInfoDTO } from "../DTO/postDTO/postDTO.js";
+import { ConcreteCommunityDTO, UsersCommunityDTO } from "../DTO/communityDTO/communityDTO.js";
 
-export class PostInfo {
-    readingTime?: number = 0;
-    title: string;
-    tags: string[];
-    description: string;
-    addressId?: string | null = null;
-    image?: string | null = null;
-
-    constructor(title: string, tags: string[], description: string) {
-        this.title = title;
-        this.tags = tags;
-        this.description = description;
-    }
-}
 
 export function collectDataForPosrCreating() {
 
-    const formData = new PostInfo("", [], "");
+    const formData = new PostInfoDTO("", [], "");
 
     const tagsInput: NodeListOf<HTMLOptionElement> = document.querySelectorAll('#tags option:checked') as NodeListOf<HTMLOptionElement>;
     formData.tags = tagsInput.length > 0 ? Array.from(tagsInput).map(option => option.value).filter(tag => tag !== "null") : undefined;
@@ -52,7 +40,7 @@ if (createPostButton) {
 }
 
 async function publishPost(){
-    const dataFromPage = collectDataForPosrCreating();
+    const dataFromPage: PostInfoDTO = collectDataForPosrCreating();
 
     const postSource: HTMLSelectElement = document.getElementById("user-communities") as HTMLSelectElement
         if (postSource.value !== null && postSource.value !== "user"){
@@ -63,19 +51,23 @@ async function publishPost(){
         }
 }
 
-
-export async function loadAvailableCommunities() {
-    const userCommunities = await getUsersCommunitiesAPI();
+export async function loadCommunitiesToCreatePost(selectedId?: string) {
+    const userCommunities: UsersCommunityDTO[] = await getUsersCommunitiesAPI();
     const userCommunitySelect: HTMLSelectElement = document.getElementById("user-communities") as HTMLSelectElement;
+
 
     for (const community of userCommunities) {
         if (community.role === "Administrator") {
 
-            const thisCommunity = await getConcreteCommunityAPI(community.communityId);
+            const thisCommunity: ConcreteCommunityDTO = await getConcreteCommunityAPI(community.communityId);
 
             const newOption = document.createElement("option");
             newOption.value = thisCommunity.id;
             newOption.text = thisCommunity.name;
+
+            if (selectedId && thisCommunity.id === selectedId) {
+                newOption.selected = true;
+            }
 
             userCommunitySelect.add(newOption);
         }

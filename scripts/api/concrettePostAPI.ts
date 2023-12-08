@@ -1,4 +1,6 @@
-export async function getConcretePostAPI(postId: string): Promise<any> {
+import { ConcretePostDTO } from "../DTO/postDTO/postDTO.js";
+
+export async function getConcretePostAPI(postId: string): Promise<ConcretePostDTO> {
   try {
     const token: string = localStorage.getItem("token")
     const response = await fetch(`https://blog.kreosoft.space/api/post/${postId}`, {

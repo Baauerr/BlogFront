@@ -1,4 +1,5 @@
 import { takeErrorTextAsync } from "../helpers/errorCreateHelper.js";
+import { filtersToUrl } from "./mainPageAPI.js";
 export async function getConcreteCommunityAPI(id) {
     try {
         const token = localStorage.getItem("token");
@@ -17,7 +18,6 @@ export async function getConcreteCommunityAPI(id) {
     }
     catch (error) {
         console.error('Произошла ошибка:', error);
-        throw error;
     }
 }
 export async function getUsersCommunitiesAPI() {
@@ -112,6 +112,7 @@ export async function createPostInCommunityAPI(responseData, id) {
     }
 }
 export async function subscribeAPI(id) {
+    console.log(id);
     try {
         const token = localStorage.getItem("token");
         await fetch(`https://blog.kreosoft.space/api/community/${id}/subscribe`, {
@@ -124,10 +125,10 @@ export async function subscribeAPI(id) {
     }
     catch (error) {
         console.error('Произошла ошибка:', error);
-        throw error;
     }
 }
 export async function unsubscribeAPI(id) {
+    console.log(id);
     try {
         const token = localStorage.getItem("token");
         await fetch(`https://blog.kreosoft.space/api/community/${id}/unsubscribe`, {
@@ -140,29 +141,11 @@ export async function unsubscribeAPI(id) {
     }
     catch (error) {
         console.error('Произошла ошибка:', error);
-        throw error;
     }
 }
 export async function getCommunityPostsAPI(filterData, id) {
     try {
-        const queryString = Object.entries(filterData)
-            .filter(([key, value]) => {
-            if (Array.isArray(value)) {
-                return value.length > 0;
-            }
-            else {
-                return value !== null && value !== "" && !Number.isNaN(value);
-            }
-        })
-            .flatMap(([key, value]) => {
-            if (Array.isArray(value)) {
-                return value.map(tag => `${encodeURIComponent(key)}=${encodeURIComponent(tag)}`);
-            }
-            else {
-                return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-            }
-        })
-            .join('&');
+        const queryString = filtersToUrl(filterData);
         const token = localStorage.getItem("token");
         const response = await fetch(`https://blog.kreosoft.space/api/community/${id}/post?${queryString}`, {
             method: 'GET',
@@ -172,14 +155,13 @@ export async function getCommunityPostsAPI(filterData, id) {
             },
         });
         if (!response.ok) {
-            throw new Error(`Ошибка HTTP: ${response.status} ${response.statusText}`);
+            alert("Контент этого сообщества могут просматривать только подписчики");
         }
         const data = await response.json();
         return data;
     }
     catch (error) {
         console.error('Произошла ошибка:', error);
-        throw error;
     }
 }
 //# sourceMappingURL=communityAPI.js.map

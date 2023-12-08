@@ -1,8 +1,11 @@
-import { PostInfo } from "../posts/createPost.js";
+import { PostInfoDTO } from "../DTO/postDTO/postDTO.js";
 import { takeErrorTextAsync } from "../helpers/errorCreateHelper.js";
-import { MainPageData } from "../mainPage/mainPage.js";
+import { FilterDTO } from "../DTO/filterDTO/filterDTO.js";
+import { CommunityDTO, ConcreteCommunityDTO, UserRoles, UsersCommunityDTO } from "../DTO/communityDTO/communityDTO.js";
+import { PostsDTO } from "../DTO/postDTO/postDTO.js";
+import { filtersToUrl } from "./mainPageAPI.js";
 
-export async function getConcreteCommunityAPI(id: string): Promise<any> {
+export async function getConcreteCommunityAPI(id: string): Promise<ConcreteCommunityDTO> {
     try {
         const token: string = localStorage.getItem("token")
         const response = await fetch(`https://blog.kreosoft.space/api/community/${id}`, {
@@ -19,11 +22,10 @@ export async function getConcreteCommunityAPI(id: string): Promise<any> {
         return data;
     } catch (error) {
         console.error('Произошла ошибка:', error);
-        throw error;
     }
 }
 
-export async function getUsersCommunitiesAPI(): Promise<any> {
+export async function getUsersCommunitiesAPI(): Promise<UsersCommunityDTO[]> {
     try {
         const token: string = localStorage.getItem("token")
         const response = await fetch(`https://blog.kreosoft.space/api/community/my`, {
@@ -44,7 +46,7 @@ export async function getUsersCommunitiesAPI(): Promise<any> {
     }
 }
 
-export async function getGreatestRoleInCommunityAPI(id: string): Promise<any> {
+export async function getGreatestRoleInCommunityAPI(id: string): Promise<UserRoles> {
     try {
         const token: string = localStorage.getItem("token")
         const response = await fetch(`https://blog.kreosoft.space/api/community/${id}/role`, {
@@ -65,7 +67,7 @@ export async function getGreatestRoleInCommunityAPI(id: string): Promise<any> {
     }
 }
 
-export async function getListOfCommunitiesAPI(): Promise<any> {
+export async function getListOfCommunitiesAPI(): Promise<CommunityDTO[]> {
     try {
         const response = await fetch(`https://blog.kreosoft.space/api/community`, {
             method: 'GET',
@@ -84,7 +86,7 @@ export async function getListOfCommunitiesAPI(): Promise<any> {
     }
 }
 
-export async function createPostInCommunityAPI(responseData: PostInfo, id: string) {
+export async function createPostInCommunityAPI(responseData: PostInfoDTO, id: string) {
     try {
         const token: string = localStorage.getItem("token");
         await fetch(`https://blog.kreosoft.space/api/community/${id}/post`, {
@@ -114,6 +116,7 @@ export async function createPostInCommunityAPI(responseData: PostInfo, id: strin
 }
 
 export async function subscribeAPI(id: string) {
+    console.log(id);
     try {
         const token: string = localStorage.getItem("token");
         await fetch(`https://blog.kreosoft.space/api/community/${id}/subscribe`, {
@@ -125,11 +128,11 @@ export async function subscribeAPI(id: string) {
         })
     } catch (error) {
         console.error('Произошла ошибка:', error);
-        throw error;
     }
 }
 
 export async function unsubscribeAPI(id: string) {
+    console.log(id);
     try {
         const token: string = localStorage.getItem("token");
         await fetch(`https://blog.kreosoft.space/api/community/${id}/unsubscribe`, {
@@ -141,31 +144,15 @@ export async function unsubscribeAPI(id: string) {
         })
     } catch (error) {
         console.error('Произошла ошибка:', error);
-        throw error;
     }
 }
 
-export async function getCommunityPostsAPI(filterData: MainPageData, id: string): Promise<any> {
+export async function getCommunityPostsAPI(filterData: FilterDTO, id: string): Promise<PostsDTO> {
     try {
-        const queryString: string = Object.entries(filterData)
-            .filter(([key, value]) => {
-                if (Array.isArray(value)) {
-                    return value.length > 0;
-                } else {
-                    return value !== null && value !== "" && !Number.isNaN(value);
-                }
-            })
-            .flatMap(([key, value]) => {
-                if (Array.isArray(value)) {
-                    return value.map(tag => `${encodeURIComponent(key)}=${encodeURIComponent(tag)}`);
-                } else {
-                    return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-                }
-            })
-            .join('&');
-            
-            const token = localStorage.getItem("token");
-            
+        const queryString: string = filtersToUrl(filterData);
+
+        const token = localStorage.getItem("token");
+
         const response = await fetch(`https://blog.kreosoft.space/api/community/${id}/post?${queryString}`, {
             method: 'GET',
             headers: {
@@ -174,12 +161,11 @@ export async function getCommunityPostsAPI(filterData: MainPageData, id: string)
             },
         });
         if (!response.ok) {
-            throw new Error(`Ошибка HTTP: ${response.status} ${response.statusText}`);
+            alert("Контент этого сообщества могут просматривать только подписчики");
         }
         const data = await response.json();
         return data;
     } catch (error) {
         console.error('Произошла ошибка:', error);
-        throw error;
     }
 }
