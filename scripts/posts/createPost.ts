@@ -4,6 +4,9 @@ import { getConcreteCommunityAPI } from "../api/communityAPI.js";
 import { createPostInCommunityAPI } from "../api/communityAPI.js";
 import { PostInfoDTO } from "../DTO/postDTO/postDTO.js";
 import { ConcreteCommunityDTO, UsersCommunityDTO } from "../DTO/communityDTO/communityDTO.js";
+import { ErrorsDTO } from "../DTO/errorDTO/errorDTO.js";
+import { validateNewPostInfo } from "./postValidation.js";
+import { takeErrorTextAsync } from "../helpers/errorCreateHelper.js";
 
 
 export function collectDataForPosrCreating() {
@@ -39,16 +42,27 @@ if (createPostButton) {
     });
 }
 
-async function publishPost(){
+async function publishPost() {
     const dataFromPage: PostInfoDTO = collectDataForPosrCreating();
 
-    const postSource: HTMLSelectElement = document.getElementById("user-communities") as HTMLSelectElement
-        if (postSource.value !== null && postSource.value !== "user"){
-           await createPostInCommunityAPI(dataFromPage, postSource.value);
+    let errorsArray: ErrorsDTO = new ErrorsDTO();
+    errorsArray = validateNewPostInfo(dataFromPage, errorsArray);
+    const container: HTMLDivElement = document.getElementById('input-create-post') as HTMLDivElement;
+    const inputElements: NodeListOf<HTMLElement> = container.querySelectorAll('input, select, textarea');
+    const postSource: HTMLSelectElement = document.getElementById("user-communities") as HTMLSelectElement;
+    if (errorsArray.errors.length > 0) {
+        await takeErrorTextAsync(errorsArray, container, inputElements);
+    }
+    else {
+        await takeErrorTextAsync(errorsArray, container, inputElements);
+        if (postSource.value !== null && postSource.value !== "user") {
+            await createPostInCommunityAPI(dataFromPage, postSource.value);
         }
-        else{
+        else {
             await publicPostAPI(dataFromPage);
         }
+    }
+
 }
 
 export async function loadCommunitiesToCreatePost(selectedId?: string) {

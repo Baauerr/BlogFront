@@ -1,1 +1,1 @@
-{"version":3,"file":"errorDTO.js","sourceRoot":"","sources":["../../../scripts/DTO/errorDTO/errorDTO.ts"],"names":[],"mappings":"AAAA,MAAM,OAAO,QAAQ;IACjB,MAAM,CAAS;IACf,OAAO,CAAS;CACnB"}
+{"version":3,"file":"errorDTO.js","sourceRoot":"","sources":["../../../scripts/DTO/errorDTO/errorDTO.ts"],"names":[],"mappings":"AAAA,MAAM,OAAO,SAAS;IAClB,MAAM,CAAU;IAChB;QACI,IAAI,CAAC,MAAM,GAAG,EAAE,CAAC;IACrB,CAAC;CACJ;AAED,MAAM,OAAO,KAAK;IACd,EAAE,CAAS;IACX,OAAO,CAAS;CACnB"}

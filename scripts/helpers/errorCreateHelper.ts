@@ -1,4 +1,6 @@
-export async function takeErrorTextAsync(data: any, container, inputElements) {
+import { ErrorsDTO } from "../DTO/errorDTO/errorDTO.js";
+
+export async function takeErrorTextAsync(data: ErrorsDTO, container, inputElements) {
     await new Promise(resolve => setTimeout(resolve, 0));
 
     const inputErrorMapping: Record<string, HTMLDivElement> = {};
@@ -6,24 +8,23 @@ export async function takeErrorTextAsync(data: any, container, inputElements) {
 
     createErrorElement(inputErrorMapping, container, inputElements)
 
-    Object.keys(data.errors).forEach((fieldName: string) => {
-        console.log(data.errors);
-        const errorMessages: string[] = data.errors[fieldName];
-        const errorElement: HTMLDivElement | undefined = inputErrorMapping[fieldName.toLowerCase()];
-        console.log(errorElement);
+    for (const error of data.errors) {
+        const fieldName = error.id;
+        const errorMessages = error.message;
+        const errorElement = inputErrorMapping[fieldName];
 
         if (errorElement) {
             errorElement.textContent = '';
-            errorElement.textContent = errorMessages[0];
+            errorElement.textContent = errorMessages;
         }
-    });
+    }
 }
 
 export function createErrorElement(inputErrorMapping: Record<string, HTMLDivElement>, container, inputElements) {
 
     container.querySelectorAll('.error-message').forEach(element => element.remove());
 
-    
+
     const inputIds: string[] = [];
     inputElements.forEach(input => {
         inputIds.push(input.id);

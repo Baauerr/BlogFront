@@ -1,5 +1,6 @@
 export async function getInfoOnPageAPI(filterData) {
     const queryString = filtersToUrl(filterData);
+    console.log(filterData);
     try {
         const token = localStorage.getItem("token");
         const response = await fetch(`https://blog.kreosoft.space/api/post?${queryString}`, {
@@ -21,13 +22,16 @@ export async function getInfoOnPageAPI(filterData) {
     }
 }
 export function filtersToUrl(filterData) {
-    return (Object.entries(filterData)
+    return Object.entries(filterData)
         .filter(([key, value]) => {
         if (Array.isArray(value)) {
             return value.length > 0;
         }
+        else if (typeof value === 'number') {
+            return value >= 0;
+        }
         else {
-            return value !== null && value !== "" && !Number.isNaN(value);
+            return value !== null && value !== "";
         }
     })
         .flatMap(([key, value]) => {
@@ -38,6 +42,6 @@ export function filtersToUrl(filterData) {
             return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
         }
     })
-        .join('&'));
+        .join('&');
 }
 //# sourceMappingURL=mainPageAPI.js.map

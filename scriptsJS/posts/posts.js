@@ -21,13 +21,17 @@ function parsePostId() {
         return null;
     }
 }
-export async function showPostPage() {
+export async function showPostPage(anchor) {
     const postId = parsePostId();
     const post = await getConcretePostAPI(postId);
     const sendCommentButton = document.getElementById("send-comment");
     const commentInputText = document.getElementById('comment-input-area');
     await showSinglePost();
     await commentViewLogic(post, sendCommentButton, commentInputText);
+    if (anchor) {
+        const commentBlock = document.getElementById("comment-box");
+        commentBlock.scrollIntoView({ behavior: 'smooth' });
+    }
 }
 export async function showSinglePost() {
     const postId = parsePostId();

@@ -37,7 +37,7 @@ function showDefaultMenu(loginButtonElement, userMenuElement, createPostElement,
         authorsCommunitiesLinks.style.display = "none";
     }
 }
-function logout() {
+export function logout() {
     localStorage.clear();
     window.history.pushState({}, null, '/');
     updateNavBar();

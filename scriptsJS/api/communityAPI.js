@@ -1,5 +1,6 @@
 import { takeErrorTextAsync } from "../helpers/errorCreateHelper.js";
 import { filtersToUrl } from "./mainPageAPI.js";
+import { errorHandler } from "./errorHandler.js";
 export async function getConcreteCommunityAPI(id) {
     try {
         const token = localStorage.getItem("token");
@@ -63,22 +64,22 @@ export async function getGreatestRoleInCommunityAPI(id) {
     }
 }
 export async function getListOfCommunitiesAPI() {
+    const apiUrl = `https://blog.kreosoft.space/api/community`;
     try {
-        const response = await fetch(`https://blog.kreosoft.space/api/community`, {
+        const response = await fetch(apiUrl, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
         });
         if (!response.ok) {
-            throw new Error(`Ошибка HTTP: ${response.status} ${response.statusText}`);
+            throw new Error(JSON.stringify({ response, apiUrl }));
         }
         const data = await response.json();
         return data;
     }
     catch (error) {
-        console.error('Произошла ошибка:', error);
-        throw error;
+        errorHandler(error);
     }
 }
 export async function createPostInCommunityAPI(responseData, id) {
@@ -155,7 +156,8 @@ export async function getCommunityPostsAPI(filterData, id) {
             },
         });
         if (!response.ok) {
-            alert("Контент этого сообщества могут просматривать только подписчики");
+            errorHandler(response);
+            return null;
         }
         const data = await response.json();
         return data;

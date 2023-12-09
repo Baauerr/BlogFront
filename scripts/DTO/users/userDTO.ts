@@ -1,6 +1,6 @@
 export enum Gender{
-    "Male",
-    "Female"
+    Male = "Male",
+    Female = "Female"
 }
 
 export class ProfileInfoDTO{
@@ -35,6 +35,6 @@ export class editProfileDTO{
     email: string;
     fullName: string;
     birthDate: string;
-    gender: Gender;
+    gender: string;
     phoneNumber: string
 }

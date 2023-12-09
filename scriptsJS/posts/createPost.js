@@ -3,6 +3,9 @@ import { getUsersCommunitiesAPI } from "../api/communityAPI.js";
 import { getConcreteCommunityAPI } from "../api/communityAPI.js";
 import { createPostInCommunityAPI } from "../api/communityAPI.js";
 import { PostInfoDTO } from "../DTO/postDTO/postDTO.js";
+import { ErrorsDTO } from "../DTO/errorDTO/errorDTO.js";
+import { validateNewPostInfo } from "./postValidation.js";
+import { takeErrorTextAsync } from "../helpers/errorCreateHelper.js";
 export function collectDataForPosrCreating() {
     const formData = new PostInfoDTO("", [], "");
     const tagsInput = document.querySelectorAll('#tags option:checked');
@@ -27,12 +30,22 @@ if (createPostButton) {
 }
 async function publishPost() {
     const dataFromPage = collectDataForPosrCreating();
+    let errorsArray = new ErrorsDTO();
+    errorsArray = validateNewPostInfo(dataFromPage, errorsArray);
+    const container = document.getElementById('input-create-post');
+    const inputElements = container.querySelectorAll('input, select, textarea');
     const postSource = document.getElementById("user-communities");
-    if (postSource.value !== null && postSource.value !== "user") {
-        await createPostInCommunityAPI(dataFromPage, postSource.value);
+    if (errorsArray.errors.length > 0) {
+        await takeErrorTextAsync(errorsArray, container, inputElements);
     }
     else {
-        await publicPostAPI(dataFromPage);
+        await takeErrorTextAsync(errorsArray, container, inputElements);
+        if (postSource.value !== null && postSource.value !== "user") {
+            await createPostInCommunityAPI(dataFromPage, postSource.value);
+        }
+        else {
+            await publicPostAPI(dataFromPage);
+        }
     }
 }
 export async function loadCommunitiesToCreatePost(selectedId) {

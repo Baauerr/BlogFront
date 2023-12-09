@@ -49,7 +49,7 @@ function findComponentByUrlElements(urlElements, routes) {
     }
     return undefined;
 }
-function validateDynamicParam(param, type) {
+export function validateDynamicParam(param, type) {
     if (type === 'id') {
         const guidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
         return guidRegex.test(param);
@@ -61,8 +61,7 @@ export async function router() {
     const path = (currentState && currentState.path) || parseLocation();
     const [local, params] = path.split("?");
     const parts = local.split("/").filter(Boolean);
-    console.log(parts);
-    const errorComponent = "/error/error.html";
+    const errorComponent = "/errorPages/error.html";
     const component = findComponentByUrlElements(parts, routes)?.component || errorComponent;
     const htmlCode = await loadHTML(component);
     const appElement = document.getElementById("app");
@@ -70,7 +69,7 @@ export async function router() {
         appElement.innerHTML = htmlCode;
         document.title = document.querySelector(".title-of-page")?.getAttribute("content") || "";
         prevent(local);
-        runScripts(htmlCode);
+        await runScripts(htmlCode);
     }
 }
 document.addEventListener("click", (event) => {
@@ -82,5 +81,11 @@ document.addEventListener("click", (event) => {
     }
 });
 window.addEventListener("popstate", router);
+// document.addEventListener('DOMContentLoaded', (event) => {
+//   const isValid: boolean = tokenValidChecker();
+//   if (!isValid) {
+//     logout();
+//   }
+// });
 router();
 //# sourceMappingURL=routing.js.map

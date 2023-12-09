@@ -19,6 +19,7 @@ function login_button_action() {
     loginUserOnServerAPI(requestData)
 }
 
+
 const loginButton: HTMLButtonElement = document.getElementById('login_button') as HTMLButtonElement;
 
 loginButton.addEventListener('click', async () => {

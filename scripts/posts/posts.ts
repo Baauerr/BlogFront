@@ -27,7 +27,7 @@ function parsePostId() {
     }
 }
 
-export async function showPostPage() {
+export async function showPostPage(anchor?: string) {
 
     const postId: string = parsePostId();
     const post: ConcretePostDTO = await getConcretePostAPI(postId);
@@ -38,6 +38,11 @@ export async function showPostPage() {
     await showSinglePost();
 
     await commentViewLogic(post, sendCommentButton, commentInputText);
+
+    if (anchor){
+        const commentBlock: HTMLDivElement = document.getElementById("comment-box") as HTMLDivElement;
+        commentBlock.scrollIntoView({ behavior: 'smooth' });
+    }
 }
 
 export async function showSinglePost() {

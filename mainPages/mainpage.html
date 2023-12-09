@@ -6,67 +6,69 @@
         <div class="container d-flex">
             <button type="button" class="btn btn-primary ml-auto" style="display: none;">Написать пост</button>
         </div>
-        <div class="card mb-3">
-            <div class="card-header">
-                Фильтры
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 mb-2">
-                        <label for="inputWide">Поиск по имени автора</label>
-                        <input type="text" class="form-control" id="inputWide">
+        <form id="filter-form">
+            <div class="card mb-3 ">
+                <div class="card-header">
+                    Фильтры
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label for="author">Поиск по имени автора</label>
+                            <input type="text" class="form-control" name = "author" id="author">
+                        </div>
+                        <div class="col-md-6 mb-2 d-flex flex-row">
+                            <div class="d-flex flex-column w-100 mr-4">
+                                <label for="tags" class="form-label">Поиск по тэгам</label>
+                                <select class="form-select w-100 border p-1" name = "tags" id="tags" multiple>
+                                    <option value="null">--</option>
+                                </select>
+                            </div>
+                            <div class="d-flex flex-column w-100">
+                                <label for="size" class="d-block">Количество постов на странице</label>
+                                <input type="number" id="size" min = "1" name = "size" class="form-control w-100">
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-6 mb-2 d-flex flex-row">
-                        <div class="d-flex flex-column w-100 mr-4">
-                            <label for="tags" class="form-label">Поиск по тэгам</label>
-                            <select class="form-select w-100 border p-1" id="tags" multiple>
-                                <option value="null">--</option>
+
+                    <div class="row align-items-center">
+                        <div class="col-md-4">
+                            <label for="sorting" class="d-block">Сортировать</label>
+                            <select class="form-control w-100 border p-1" name = "sorting" id="sorting">
+                                <option value="CreateDesc" id="CreateDesc">По дате создания (сначала новые)</option>
+                                <option value="CreateAsc" id="CreateAsc">По дате создания (сначала старые)</option>
+                                <option value="LikeAsc" id="LikeAsc">По количеству лайков (сначала меньше)</option>
+                                <option value="LikeDesc" id="LikeDesc">По количеству лайков (сначала больше)</option>
                             </select>
                         </div>
-                        <div class="d-flex flex-column w-100">
-                            <label for="post-amount" class="d-block">Количество постов на странице</label>
-                            <input type="number" id="post-amount" class="form-control w-100">
+                        <div class="col-md-2">
+                            <label for="min">Время чтения от</label>
+                            <input type="number" name = "min" min = "0" class="form-control" id="min">
                         </div>
-                    </div>
-                </div>
-
-                <div class="row align-items-center">
-                    <div class="col-md-4">
-                        <label for="filterSingle" class="d-block">Сортировать</label>
-                        <select class="form-control w-100 border p-1" id="filterSingle">
-                            <option value="CreateDesc" id="CreateDesc">По дате создания (сначала новые)</option>
-                            <option value="CreateAsc" id="CreateAsc">По дате создания (сначала старые)</option>
-                            <option value="LikeAsc" id="LikeAsc">По количеству лайков (сначала меньше)</option>
-                            <option value="LikeDesc" id="LikeDesc">По количеству лайков (сначала больше)</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="input2">Время чтения от</label>
-                        <input type="text" class="form-control" id="input2">
-                    </div>
-                    <div class="col-md-2">
-                        <label for="input3">Время чтения до</label>
-                        <input type="text" class="form-control" id="input3">
-                    </div>
-                    <div class="col-md-4 d-flex flex-column justify-content-center">
-                        <div class="d-flex align-items-center">
-                            <input type="checkbox" id="only_my_groups" value="yes">
-                            <label for="only_my_groups" class="mb-0 ml-1">Только мои группы</label>
-                            <button class="btn btn-primary ml-auto mt-3" id="apply_button">Применить</button>
+                        <div class="col-md-2">
+                            <label for="max">Время чтения до</label>
+                            <input type="number" name = "max" min = "0" class="form-control" id="max">
+                        </div>
+                        <div class="col-md-4 d-flex flex-column justify-content-center">
+                            <div class="d-flex align-items-center">
+                                <input type="checkbox" name = "onlyMyCommunities" id="only_my_groups" value="true">
+                                <label for="only_my_groups"  class="mb-0 ml-1">Только мои группы</label>
+                                <button class="btn btn-primary ml-auto mt-3" id="apply_button">Применить</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <template id="postTemplate">
-            <div class="post_template">
+        </form>
+        <template id="post-template">
+            <div class="post-box">
                 <div class="card mb-3">
                     <div class="card-body">
                         <p class="authors">
                             <span class="post-author"></span>
                         </p>
                         <p class="name">
-                            <a href="" class="post-title"></a>
+                            <b class="post-title" data-info=""></b>
                         </p>
                         <hr class="my-4">
                         <p class="post-info">
@@ -84,7 +86,7 @@
                             <span class="post-comments"></span>
                             <img width="22" height="22"
                                 src="https://img.icons8.com/fluency-systems-regular/48/comments--v2.png"
-                                alt="comments--v2" class="post-comments-button" />
+                                alt="comments--v2" data-info="" class="post-comments-button" />
                             <span class="post-likes"></span>
                             <img width="27" height="27" src="../images/like.png" alt="hearts--v1"
                                 class="post-like-button" />

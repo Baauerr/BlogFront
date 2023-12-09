@@ -3,7 +3,7 @@ export function runScripts(htmlCode) {
     const doc = parser.parseFromString(htmlCode, 'text/html');
     const scriptElements = doc.querySelectorAll('script[type="module"]');
     scriptElements.forEach((script) => {
-        const existingScripts = document.querySelectorAll(`script[type="module"][data-src="${script.src}"]`);
+        const existingScripts = document.querySelectorAll(`script[type="module"]`);
         existingScripts.forEach((existingScript) => {
             existingScript.parentNode?.removeChild(existingScript);
         });
@@ -11,7 +11,6 @@ export function runScripts(htmlCode) {
         const randomValue = Math.random();
         newScript.src = `${script.src}?random=${randomValue}`;
         newScript.type = "module";
-        newScript.setAttribute('data-src', script.src);
         document.body.appendChild(newScript);
     });
 }

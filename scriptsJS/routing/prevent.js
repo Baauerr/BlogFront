@@ -8,8 +8,9 @@ import { showAuthorsPlates } from "../authors/author.js";
 export function prevent(path) {
     switch (true) {
         case path.includes("/communities/"):
-            showCommunityPosts();
             showTags();
+            setupApplyButton(showCommunityPosts);
+            showCommunityPosts();
             break;
         case path.includes("/authors"):
             showAuthorsPlates();

@@ -13,10 +13,11 @@ export async function loginUserOnServerAPI(responseData: LoginData) {
         });
 
         const data = await response.json();
-
+        const wrongInfo = document.getElementById("wrong-data");
         if (!response.ok) {
-            console.log('request:', data);
+            wrongInfo.style.display = "block";
         } else {
+            wrongInfo.style.display = "none";
             localStorage.clear();
             localStorage.setItem("token", data.token);
             localStorage.setItem("email", responseData.email);

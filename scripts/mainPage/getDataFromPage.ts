@@ -1,4 +1,5 @@
 import { FilterDTO } from "../DTO/filterDTO/filterDTO.js";
+import { filtersToUrl } from "../api/mainPageAPI.js";
 
 export function parseUrlParams(): FilterDTO {
 
@@ -20,44 +21,60 @@ export function parseUrlParams(): FilterDTO {
 }
 
 
-export function collectFormData() {
-    const formData: FilterDTO = new FilterDTO();
+export function collectFormData(): FilterDTO {
+    const formElement: HTMLFormElement = document.getElementById('filter-form') as HTMLFormElement;
+    const formDataObject = new FormData(formElement);
 
-    formData.tags = Array.from((document.querySelectorAll('#tags option:checked') as NodeListOf<HTMLOptionElement>))
-        .map(option => option.value)
-        .filter(tag => tag !== "null");
+    const formDataDTO: FilterDTO = new FilterDTO();
+    formDataObject.forEach((value, key) => {
+        (formDataDTO as any)[key] = value;
+    });
 
-    const authorInput = document.getElementById('inputWide') as HTMLInputElement | null;
-    formData.author = authorInput ? authorInput.value : '';
-
-    const minInput = document.getElementById('input2') as HTMLInputElement | null;
-    formData.min = minInput ? parseFloat(minInput.value) : 0;
-
-    const maxInput = document.getElementById('input3') as HTMLInputElement | null;
-    formData.max = maxInput ? parseFloat(maxInput.value) : 0;
-
-    const sortingSelect = document.getElementById('filterSingle') as HTMLSelectElement | null;
-    formData.sorting = sortingSelect ? sortingSelect.value : '';
-
-    const onlyMyGroupsCheckbox = document.getElementById('only_my_groups') as HTMLInputElement | null;
-    formData.onlyMyCommunities = onlyMyGroupsCheckbox ? onlyMyGroupsCheckbox.checked : false;
-
-    const activePage = document.querySelector('#pagination .page-item.active a') as HTMLElement | null;
-    formData.page = activePage ? parseInt(activePage.textContent || '1', 10) : 1;
-
-    const numberOfPostsInput = document.getElementById('post-amount') as HTMLInputElement | null;
-    const numberOfPosts = numberOfPostsInput ? parseInt(numberOfPostsInput.value, 10) : 5;
-    formData.size = numberOfPosts !== 0 ? numberOfPosts : 5;
-
-    console.log(formData.size);
-    return formData;
+    return formDataDTO;
 }
 
 export function updateUrl(formData: FilterDTO) {
-    const queryString: string = Object.entries(formData)
-        .filter(([key, value]) => value !== null && value !== "" && !(Array.isArray(value) && value.length === 0) && !Number.isNaN(value))
-        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-        .join('&');
+    if (typeof formData.size === "string"){
+        formData.size = parseInt(formData.size, 10);
+    }
+    const queryString: string = filtersToUrl(formData);    
 
-    window.history.pushState(null, null, `?${queryString}`);
+    const newUrl = `?${queryString}`;
+    console.log(newUrl)
+
+    window.history.pushState(null, null, newUrl);
+}
+
+
+
+
+export function setFormDataToInputs(formData: FilterDTO): void {
+    const setInputValue = (elementId: string, value: string | number | boolean | string[]): void => {
+        const inputElement = document.getElementById(elementId) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | HTMLInputElement;
+
+        if (inputElement) {
+            switch (inputElement.type) {
+                case 'checkbox':
+                    if (Array.isArray(value)) {
+                        (inputElement as HTMLInputElement).checked = value.includes(inputElement.value);
+                    } else {
+                        (inputElement as HTMLInputElement).checked = value as boolean;
+                    }
+                    break;
+                default:
+                    inputElement.value = value.toString();
+            }
+        }
+    };
+
+    console.log(formData);
+
+    setInputValue('tags', formData.tags || []);
+    setInputValue('author', formData.author || '');
+    setInputValue('min', formData.min !== null ? formData.min : '');
+    setInputValue('max', formData.max !== null ? formData.max : '');
+    setInputValue('sorting', formData.sorting || '');
+    setInputValue('onlyMyCommunities', formData.onlyMyCommunities || false);
+    setInputValue('page', formData.page !== null ? formData.page : '');
+    setInputValue('size', formData.size !== null ? formData.size : '');
 }

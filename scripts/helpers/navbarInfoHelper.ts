@@ -47,7 +47,7 @@ function showDefaultMenu(loginButtonElement: HTMLAnchorElement, userMenuElement:
   }
 }
 
-function logout() {
+export function logout() {
   localStorage.clear();
   window.history.pushState({}, null, '/');
   updateNavBar();

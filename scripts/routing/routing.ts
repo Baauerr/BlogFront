@@ -1,5 +1,7 @@
 import { prevent } from "./prevent.js";
 import { runScripts } from "./parsingScriptsFromHTML.js";
+import { tokenValidChecker } from "./jwtChecker.js";
+import { logout } from "../helpers/navbarInfoHelper.js";
 
 const loadHTML = async (path: string) => {
   try {
@@ -52,9 +54,9 @@ function findComponentByUrlElements(urlElements: string[], routes: Route[]): Rou
     const routeElements = route.path.split('/').filter(Boolean);
 
     const isMatch = (urlElements.length === routeElements.length && urlElements.every((element, i) => {
-        const routeElement = routeElements[i];
-        return routeElement.startsWith(':') ? validateDynamicParam(element, routeElement.substring(1)) : element === routeElement;
-      }));
+      const routeElement = routeElements[i];
+      return routeElement.startsWith(':') ? validateDynamicParam(element, routeElement.substring(1)) : element === routeElement;
+    }));
 
     if (isMatch) {
       return route;
@@ -64,7 +66,7 @@ function findComponentByUrlElements(urlElements: string[], routes: Route[]): Rou
 }
 
 
-function validateDynamicParam(param: string, type: string): boolean {
+export function validateDynamicParam(param: string, type: string): boolean {
   if (type === 'id') {
     const guidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
     return guidRegex.test(param);
@@ -79,11 +81,8 @@ export async function router() {
   const [local, params] = path.split("?");
   const parts = local.split("/").filter(Boolean);
 
-  console.log(parts);
-
-  const errorComponent = "/error/error.html";
+  const errorComponent = "/errorPages/error.html";
   const component = findComponentByUrlElements(parts, routes)?.component || errorComponent;
-
   const htmlCode = await loadHTML(component);
   const appElement = document.getElementById("app");
 
@@ -91,8 +90,9 @@ export async function router() {
     appElement.innerHTML = htmlCode;
     document.title = document.querySelector(".title-of-page")?.getAttribute("content") || "";
     prevent(local);
-    runScripts(htmlCode);
+    await runScripts(htmlCode);
   }
+
 }
 
 document.addEventListener("click", (event: MouseEvent) => {
@@ -106,5 +106,12 @@ document.addEventListener("click", (event: MouseEvent) => {
 });
 
 window.addEventListener("popstate", router);
+
+// document.addEventListener('DOMContentLoaded', (event) => {
+//   const isValid: boolean = tokenValidChecker();
+//   if (!isValid) {
+//     logout();
+//   }
+// });
 
 router();

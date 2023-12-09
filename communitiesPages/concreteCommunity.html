@@ -1,14 +1,18 @@
 <link rel="stylesheet" href="../styles/communities.css">
 <link rel="stylesheet" href="../styles/main-page.css">
+
 <body>
     <div class="container mt-3">
         <div class="card mb-3">
             <div class="card-body">
-                <div class="d-flex justify-content-between flex-wrap mb-4">
-                    <p class="text-break my-auto" id="concrete-community-title">Закрытое сообщество</p>
-                    <button class="btn btn-primary my-auto" id="subscribe-button" style = "display: none">Подписаться</button>
-                    <button class="btn btn-danger my-auto" id="unsubscribe-button" style = "display: none">Отписаться</button>
-                    <button class="btn btn-primary my-auto" id="create-community-post-button" style = "display: none">Написать пост</button>
+                <div class="d-flex justify-content-between flex-wrap mb-2">
+                    <p class="text-break mb-2" id="concrete-community-title">Закрытое сообщество</p>
+                    <button class="btn btn-primary my-auto" id="subscribe-button"
+                        style="display: none">Подписаться</button>
+                    <button class="btn btn-danger my-auto" id="unsubscribe-button"
+                        style="display: none">Отписаться</button>
+                    <button class="btn btn-primary my-auto" id="create-community-post-button"
+                        style="display: none">Написать пост</button>
                 </div>
                 <div>
                     <div class="d-flex flex-row mb-2 ">
@@ -24,44 +28,46 @@
             </div>
         </div>
 
-
-        <div class="card mb-3">
-            <div class="card-header">
-                Фильтры
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 col-sm-6">
-                        <div class="form-group">
-                            <label for="tags" class="form-label">Поиск по тэгам</label>
-                            <select class="form-select w-100 border p-1" id="tags" multiple>
-                                <option value="null">--</option>
-                            </select>
+        <form id="filter-form">
+            <div class="card mb-3">
+                <div class="card-header">
+                    Фильтры
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-6">
+                            <div class="form-group">
+                                <label for="tags"  class="form-label">Поиск по тэгам</label>
+                                <select class="form-select w-100 border p-1" name = "tags" id="tags" multiple>
+                                    <option value="null">--</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="form-group">
-                            <label for="filterSingle" class="d-block">Сортировать</label>
-                            <select class="form-control w-100 border p-1" id="filterSingle">
-                                <option value="CreateDesc" id="CreateDesc">По дате создания (сначала новые)</option>
-                                <option value="CreateAsc" id="CreateAsc">По дате создания (сначала старые)</option>
-                                <option value="LikeAsc" id="LikeAsc">По количеству лайков (сначала меньше)</option>
-                                <option value="LikeDesc" id="LikeDesc">По количеству лайков (сначала больше)</option>
-                            </select>
+                        <div class="col-md-4 col-sm-6">
+                            <div class="form-group">
+                                <label for="sorting" class="d-block">Сортировать</label>
+                                <select class="form-control w-100 border p-1" name = "sorting" id="sorting">
+                                    <option value="CreateDesc" id="CreateDesc">По дате создания (сначала новые)</option>
+                                    <option value="CreateAsc" id="CreateAsc">По дате создания (сначала старые)</option>
+                                    <option value="LikeAsc" id="LikeAsc">По количеству лайков (сначала меньше)</option>
+                                    <option value="LikeDesc" id="LikeDesc">По количеству лайков (сначала больше)
+                                    </option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4 col-sm-12">
-                        <div class="form-group">
-                            <label for="post-amount" class="d-block">Количество постов на странице</label>
-                            <input type="number" id="post-amount" class="form-control">
+                        <div class="col-md-4 col-sm-12">
+                            <div class="form-group">
+                                <label for="size" class="d-block" >Количество постов на странице</label>
+                                <input type="number" name = "size" min="1" id="size" class="form-control">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-2 col-sm-12 ml-auto">
-                        <button class="btn btn-primary w-100" id="apply_button">Применить</button>
+                        <div class="col-md-2 col-sm-12 ml-auto">
+                            <button class="btn btn-primary w-100" id="apply_button">Применить</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
 
         <template id="administrators-template">
             <div class="administrators-plate">
@@ -70,8 +76,8 @@
             </div>
         </template>
 
-        <template id="postTemplate">
-            <div class="post_template">
+        <template id="post-template">
+            <div class="post-box">
                 <div class="card mb-3">
                     <div class="card-body">
                         <p class="authors">
@@ -108,18 +114,9 @@
         <div id="postsContainer"></div>
         <nav aria-label="Page navigation example">
             <ul class="pagination" id="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next" data-page="2">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
+            
             </ul>
         </nav>
     </div>
 </body>
-<script type = "module" src = "/scriptsJS/communities/concreteCommunity.js"></script>
+<script type="module" src="/scriptsJS/communities/concreteCommunity.js"></script>

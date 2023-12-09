@@ -3,6 +3,7 @@ import { FilterDTO } from "../DTO/filterDTO/filterDTO.js";
 
 export async function getInfoOnPageAPI(filterData: FilterDTO): Promise<PostsDTO> {
   const queryString: string = filtersToUrl(filterData);
+  console.log(filterData)
   try {
     const token: string = localStorage.getItem("token")
     const response = await fetch(`https://blog.kreosoft.space/api/post?${queryString}`, {
@@ -26,12 +27,14 @@ export async function getInfoOnPageAPI(filterData: FilterDTO): Promise<PostsDTO>
 }
 
 export function filtersToUrl(filterData: FilterDTO) {
-  return (Object.entries(filterData)
+  return Object.entries(filterData)
     .filter(([key, value]) => {
       if (Array.isArray(value)) {
         return value.length > 0;
+      } else if (typeof value === 'number') {
+        return value >= 0;
       } else {
-        return value !== null && value !== "" && !Number.isNaN(value);
+        return value !== null && value !== "";
       }
     })
     .flatMap(([key, value]) => {
@@ -41,6 +44,6 @@ export function filtersToUrl(filterData: FilterDTO) {
         return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
       }
     })
-    .join('&'));
+    .join('&');
 }
 

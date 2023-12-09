@@ -13,11 +13,11 @@ export function registerUserAPI(responseData: RegistrationResponseDTO) {
     })
         .then(async (response) => {
             const data = await response.json();
-            if (data.errors) {
-                const container: HTMLDivElement = document.getElementById('loginbox') as HTMLDivElement;
-                const inputElements: NodeListOf<HTMLElement> = container.querySelectorAll('input, #birthdate');
-                await takeErrorTextAsync(data, container, inputElements);
+            const duplicateEmailError = document.getElementById("repetitive-email-error");
+            if (data.DuplicateUserName) {
+                duplicateEmailError.style.display = "block"
             } else {
+                duplicateEmailError.style.display = "none"
                 localStorage.setItem("token", data.token)
                 window.location.pathname = ""
             }

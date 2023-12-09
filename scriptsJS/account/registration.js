@@ -1,10 +1,13 @@
+import { ErrorsDTO } from "../DTO/errorDTO/errorDTO.js";
 import { registerUserAPI } from "../api/registrationAPI.js";
+import { validateUser } from "./dataValidator.js";
+import { takeErrorTextAsync } from "../helpers/errorCreateHelper.js";
 export class DateInfo {
     year;
     month;
     day;
 }
-function registration_button_action() {
+async function registration_button_action() {
     const inputName = document.getElementById('fullname');
     const inputPassword = document.getElementById('password');
     const inputEmail = document.getElementById('email');
@@ -24,7 +27,18 @@ function registration_button_action() {
         fullName: inputName.value,
         birthDate: serverDate,
     };
-    registerUserAPI(requestData);
+    let errorsArray = new ErrorsDTO();
+    const isRegistration = true;
+    errorsArray = validateUser(requestData, errorsArray, isRegistration);
+    const container = document.getElementById('loginbox');
+    const inputElements = container.querySelectorAll('input, #birthdate');
+    if (errorsArray.errors.length > 0) {
+        await takeErrorTextAsync(errorsArray, container, inputElements);
+    }
+    else {
+        await takeErrorTextAsync(errorsArray, container, inputElements);
+        registerUserAPI(requestData);
+    }
 }
 const registrationButton = document.getElementById('registration_button');
 registrationButton.addEventListener('click', registration_button_action);

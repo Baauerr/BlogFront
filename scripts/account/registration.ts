@@ -1,5 +1,8 @@
+import { ErrorsDTO } from "../DTO/errorDTO/errorDTO.js";
 import { RegistrationResponseDTO } from "../DTO/users/userDTO.js";
 import { registerUserAPI } from "../api/registrationAPI.js";
+import { validateUser } from "./dataValidator.js";
+import { takeErrorTextAsync } from "../helpers/errorCreateHelper.js";
 
 export class DateInfo {
     year: number;
@@ -7,7 +10,7 @@ export class DateInfo {
     day: number;
 }
 
-function registration_button_action() {
+async function registration_button_action() {
 
     const inputName: HTMLInputElement = document.getElementById('fullname') as HTMLInputElement;
     const inputPassword: HTMLInputElement = document.getElementById('password') as HTMLInputElement;
@@ -30,7 +33,19 @@ function registration_button_action() {
         fullName: inputName.value,
         birthDate: serverDate,
     };
-    registerUserAPI(requestData)
+
+    let errorsArray: ErrorsDTO = new ErrorsDTO();
+    const isRegistration = true;
+    errorsArray = validateUser(requestData, errorsArray, isRegistration);
+    const container: HTMLDivElement = document.getElementById('loginbox') as HTMLDivElement;
+    const inputElements: NodeListOf<HTMLElement> = container.querySelectorAll('input, #birthdate');
+    if (errorsArray.errors.length > 0) {
+        await takeErrorTextAsync(errorsArray, container, inputElements);
+    }
+    else {
+        await takeErrorTextAsync(errorsArray, container, inputElements);
+        registerUserAPI(requestData)
+    }
 }
 
 const registrationButton: HTMLButtonElement = document.getElementById('registration_button') as HTMLButtonElement;

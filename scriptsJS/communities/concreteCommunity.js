@@ -7,7 +7,6 @@ import { UserRoles } from "../DTO/communityDTO/communityDTO.js";
 import { subscribeAction } from "./communityList.js";
 import { unsubscribeAction } from "./communityList.js";
 import { displayPosts } from "../mainPage/mainPagePostView.js";
-import { setupApplyButton } from "../mainPage/buttonsOnMainPage.js";
 import { loadCommunitiesToCreatePost } from "../posts/createPost.js";
 import { router } from "../routing/routing.js";
 function parseCommunityId() {
@@ -28,7 +27,6 @@ export async function showCommunityPosts() {
     const community = await getConcreteCommunityAPI(id);
     showAdministratorsList(community);
     showCommunityInfo(id);
-    setupApplyButton(showCommunityPosts);
 }
 async function showCommunityInfo(id) {
     const community = await getConcreteCommunityAPI(id);
@@ -57,25 +55,22 @@ async function showAdministratorsList(community) {
         const adminAvatar = adminsClone.querySelector(".avatar-image");
         adminNickname.href = `/?author=${administrator.fullName}`;
         adminNickname.textContent = administrator.fullName;
-        if (administrator.gender === Gender.Female) {
-            adminAvatar.src = '../images/manAvatar.svg';
-        }
-        else {
-            adminAvatar.src = '../images/girlAvatar.svg';
-        }
+        adminAvatar.src = administrator.gender === Gender.Female ? '../images/girlAvatar.svg' : '../images/manAvatar.svg';
         adminsPlace.appendChild(adminsClone);
     });
 }
 export async function showButtonOnCommunityInfo(id, subscribeButtin, unsubscribeButton, createPostButton) {
     const userRole = await getGreatestRoleInCommunityAPI(id);
-    if (userRole === UserRoles.Administrator) {
-        createPostButton.style.display = "inline";
-    }
-    else if (userRole === UserRoles.Subscriber) {
-        unsubscribeButton.style.display = "inline";
-    }
-    else {
-        subscribeButtin.style.display = "inline";
+    switch (userRole) {
+        case UserRoles.Administrator:
+            createPostButton.style.display = "inline";
+            break;
+        case UserRoles.Subscriber:
+            unsubscribeButton.style.display = "inline";
+            break;
+        default:
+            subscribeButtin.style.display = "inline";
+            break;
     }
 }
 function createPostAction(id, createPostButton) {

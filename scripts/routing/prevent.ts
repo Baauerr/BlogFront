@@ -6,11 +6,13 @@ import { communityListView } from "../communities/communityList.js";
 import { showCommunityPosts } from "../communities/concreteCommunity.js";
 import { showAuthorsPlates } from "../authors/author.js";
 
+
 export function prevent(path: string) {
     switch (true) {
         case path.includes("/communities/"):
-            showCommunityPosts();
             showTags();
+            setupApplyButton(showCommunityPosts)
+            showCommunityPosts();
             break;
         case path.includes("/authors"):
             showAuthorsPlates();

@@ -14,9 +14,10 @@
     cursor: pointer;
 }
 
-a.post-title {
+.post-title {
     font-weight: bold;
     color: black;
+    cursor: pointer;
   }
 
   .input-stretch {

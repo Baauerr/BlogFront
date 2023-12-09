@@ -1,23 +1,22 @@
 .author-nickname {
-    text-decoration: none; 
-    color: #333; 
-    font-size: 19px
+    text-decoration: none;
+    color: #333;
+    font-size: 19px;
 }
 
-.author-nickname, .create-time, .birth-date{
+.author-nickname,
+.create-time,
+.birth-date {
     font-weight: bold;
 }
 
-
-
-
-.create-time{
+.create-time {
     font-style: italic;
     color: #bdbdbd;
 }
 
-.birth-date{
-    color: rgb(128, 128, 128)
+.birth-date {
+    color: rgb(128, 128, 128);
 }
 
 .avatar-image {
@@ -29,4 +28,15 @@
     border: 1px solid rgb(215, 215, 215);
     object-fit: cover;
     background-size: cover;
+    position: relative;
+}
+
+.avatar-crown-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 40px;
+    width: 40px;
+    transform: rotate(-40deg) translateY(5px) translateX(5px);
+    z-index: 2;
 }

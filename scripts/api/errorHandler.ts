@@ -1,14 +1,13 @@
-import { updateNavBar } from "../helpers/navbarInfoHelper.js";
 import { router } from "../routing/routing.js";
+import { logout } from "../helpers/navbarInfoHelper.js";
 
 
 export function errorHandler(response: Response) {
     switch (response.status) {
         case 401:
             alert("Время сессии истекло. Авторизуйтесь снова")
-            window.history.pushState({}, null, '/');
-            updateNavBar();
-            router()
+            logout();
+            router();
             break;
         case 400:
             break;

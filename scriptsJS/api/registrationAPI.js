@@ -1,4 +1,3 @@
-import { takeErrorTextAsync } from "../helpers/errorCreateHelper.js";
 export function registerUserAPI(responseData) {
     fetch('https://blog.kreosoft.space/api/account/register', {
         method: 'POST',
@@ -9,12 +8,12 @@ export function registerUserAPI(responseData) {
     })
         .then(async (response) => {
         const data = await response.json();
-        if (data.errors) {
-            const container = document.getElementById('loginbox');
-            const inputElements = container.querySelectorAll('input, #birthdate');
-            await takeErrorTextAsync(data, container, inputElements);
+        const duplicateEmailError = document.getElementById("repetitive-email-error");
+        if (data.DuplicateUserName) {
+            duplicateEmailError.style.display = "block";
         }
         else {
+            duplicateEmailError.style.display = "none";
             localStorage.setItem("token", data.token);
             window.location.pathname = "";
         }

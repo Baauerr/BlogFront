@@ -33,7 +33,6 @@ export async function showCommunityPosts() {
     const community: ConcreteCommunityDTO = await getConcreteCommunityAPI(id);
     showAdministratorsList(community);
     showCommunityInfo(id);
-    setupApplyButton(showCommunityPosts);
 }
 
 
@@ -78,12 +77,7 @@ async function showAdministratorsList(community: ConcreteCommunityDTO) {
 
         adminNickname.href = `/?author=${administrator.fullName}`
         adminNickname.textContent = administrator.fullName
-        if (administrator.gender === Gender.Female) {
-            adminAvatar.src = '../images/manAvatar.svg'
-        }
-        else {
-            adminAvatar.src = '../images/girlAvatar.svg'
-        }
+        adminAvatar.src = administrator.gender === Gender.Female ? '../images/girlAvatar.svg' : '../images/manAvatar.svg';
 
         adminsPlace.appendChild(adminsClone);
     });
@@ -94,14 +88,16 @@ export async function showButtonOnCommunityInfo(id: string, subscribeButtin: HTM
 
     const userRole = await getGreatestRoleInCommunityAPI(id);
 
-    if (userRole === UserRoles.Administrator) {
-        createPostButton.style.display = "inline";
-    }
-    else if (userRole === UserRoles.Subscriber) {
-        unsubscribeButton.style.display = "inline";
-    }
-    else {
-        subscribeButtin.style.display = "inline";
+    switch (userRole) {
+        case UserRoles.Administrator:
+            createPostButton.style.display = "inline";
+            break;
+        case UserRoles.Subscriber:
+            unsubscribeButton.style.display = "inline";
+            break;
+        default:
+            subscribeButtin.style.display = "inline";
+            break;
     }
 }
 

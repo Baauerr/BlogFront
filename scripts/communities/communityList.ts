@@ -3,7 +3,6 @@ import { getGreatestRoleInCommunityAPI } from "../api/communityAPI.js";
 import { subscribeAPI } from "../api/communityAPI.js";
 import { unsubscribeAPI } from "../api/communityAPI.js";
 import { CommunityDTO, UserRoles } from "../DTO/communityDTO/communityDTO.js";
-import { navigateTo } from "../routing/routing.js";
 
 export async function communityListView() {
     document.getElementById("community-plates-place").innerHTML = '';

@@ -3,16 +3,15 @@ export async function takeErrorTextAsync(data, container, inputElements) {
     const inputErrorMapping = {};
     Object.values(inputErrorMapping).forEach(errorElement => errorElement.textContent = '');
     createErrorElement(inputErrorMapping, container, inputElements);
-    Object.keys(data.errors).forEach((fieldName) => {
-        console.log(data.errors);
-        const errorMessages = data.errors[fieldName];
-        const errorElement = inputErrorMapping[fieldName.toLowerCase()];
-        console.log(errorElement);
+    for (const error of data.errors) {
+        const fieldName = error.id;
+        const errorMessages = error.message;
+        const errorElement = inputErrorMapping[fieldName];
         if (errorElement) {
             errorElement.textContent = '';
-            errorElement.textContent = errorMessages[0];
+            errorElement.textContent = errorMessages;
         }
-    });
+    }
 }
 export function createErrorElement(inputErrorMapping, container, inputElements) {
     container.querySelectorAll('.error-message').forEach(element => element.remove());
