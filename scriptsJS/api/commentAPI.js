@@ -16,9 +16,7 @@ export async function getCommentTreeAPI(commentId) {
 }
 export async function sendComment(commentInfo, id) {
     try {
-        console.log(id);
         const token = localStorage.getItem("token");
-        console.log(commentInfo);
         await fetch(`https://blog.kreosoft.space/api/post/${id}/comment`, {
             method: 'POST',
             headers: {

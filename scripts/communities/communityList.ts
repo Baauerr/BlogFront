@@ -3,6 +3,7 @@ import { getGreatestRoleInCommunityAPI } from "../api/communityAPI.js";
 import { subscribeAPI } from "../api/communityAPI.js";
 import { unsubscribeAPI } from "../api/communityAPI.js";
 import { CommunityDTO, UserRoles } from "../DTO/communityDTO/communityDTO.js";
+import { showCommunityPosts } from "./concreteCommunity.js";
 
 export async function communityListView() {
     document.getElementById("community-plates-place").innerHTML = '';
@@ -44,19 +45,28 @@ async function correctButtons(subscribe: HTMLButtonElement, unsubscribe: HTMLBut
     }
 }
 
-export async function subscribeAction(subscribeButton: HTMLButtonElement, unsubscribeButton: HTMLButtonElement, id: string) {
-    subscribeButton.addEventListener("click", function () {
+export async function subscribeAction(
+    subscribeButton: HTMLButtonElement, unsubscribeButton: HTMLButtonElement, id: string, fromCommunityPage?: boolean
+    ) {
+    subscribeButton.addEventListener("click", async function () {
         subscribeAPI(id);
         subscribeButton.style.display = "none";
         unsubscribeButton.style.display = "block"
+        if (fromCommunityPage){
+            showCommunityPosts(); 
+        }
     })
 }
 
-export async function unsubscribeAction(subscribeButton: HTMLButtonElement, unsubscribeButton: HTMLButtonElement, id: string) {
-    unsubscribeButton.addEventListener("click", function () {
+export async function unsubscribeAction(
+    subscribeButton: HTMLButtonElement, unsubscribeButton: HTMLButtonElement, id: string, fromCommunityPage?: boolean
+) {
+    unsubscribeButton.addEventListener("click", async function () {
         unsubscribeAPI(id);
         subscribeButton.style.display = "block";
         unsubscribeButton.style.display = "none"
-        
+        if (fromCommunityPage){
+            showCommunityPosts(); 
+        }
     })
 }

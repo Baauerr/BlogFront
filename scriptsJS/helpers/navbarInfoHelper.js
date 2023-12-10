@@ -2,26 +2,28 @@ import { loadCommunitiesToCreatePost } from "../posts/createPost.js";
 import { router } from "../routing/routing.js";
 export async function updateNavBar() {
     const loginButtonElement = document.getElementById("loginButton");
-    const userMenuElement = document.getElementById("userMenu");
-    const createPostElement = document.getElementById("create-post-container");
-    const authorsCommunitiesLinks = document.getElementById("authors-community-navigation");
+    const userMenuElement = document.getElementById("user-menu");
+    const createPostButton = document.getElementById("create-post");
+    const authors = document.getElementById("authors");
+    const communities = document.getElementById("communities");
     const token = localStorage.getItem("token");
     if (token !== null) {
-        await showLoggedInMenu(loginButtonElement, userMenuElement, createPostElement, authorsCommunitiesLinks);
+        await showLoggedInMenu(loginButtonElement, userMenuElement, createPostButton, authors, communities);
     }
     else {
-        showDefaultMenu(loginButtonElement, userMenuElement, createPostElement, authorsCommunitiesLinks);
+        showDefaultMenu(loginButtonElement, userMenuElement, createPostButton, authors, communities);
     }
 }
 document.addEventListener('DOMContentLoaded', (event) => {
     updateNavBar();
 });
-async function showLoggedInMenu(loginButtonElement, userMenuElement, createPostElement, authorsCommunitiesLinks) {
+async function showLoggedInMenu(loginButtonElement, userMenuElement, createPostButton, authors, communities) {
     if (loginButtonElement && userMenuElement) {
         loginButtonElement.style.display = "none";
         userMenuElement.style.display = "block";
-        createPostElement.style.display = "inline";
-        authorsCommunitiesLinks.style.display = "inline";
+        createPostButton.style.display = "inline";
+        authors.style.display = "inline",
+            communities.style.display = "inline";
         const dropdownMenuButton = document.getElementById("dropdownMenuButton");
         if (dropdownMenuButton) {
             const email = localStorage.getItem('email');
@@ -29,18 +31,20 @@ async function showLoggedInMenu(loginButtonElement, userMenuElement, createPostE
         }
     }
 }
-function showDefaultMenu(loginButtonElement, userMenuElement, createPostElement, authorsCommunitiesLinks) {
+function showDefaultMenu(loginButtonElement, userMenuElement, createPostButton, authors, communities) {
     if (loginButtonElement && userMenuElement) {
         loginButtonElement.style.display = "block";
         userMenuElement.style.display = "none";
-        createPostElement.style.display = "none";
-        authorsCommunitiesLinks.style.display = "none";
+        createPostButton.style.display = "none";
+        authors.style.display = "none",
+            communities.style.display = "none";
     }
 }
 export function logout() {
     localStorage.clear();
     window.history.pushState({}, null, '/');
     updateNavBar();
+    router();
 }
 const logoutButton = document.getElementById('logout');
 if (logoutButton) {

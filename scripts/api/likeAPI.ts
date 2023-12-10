@@ -8,14 +8,16 @@ export async function setLike(id: string) {
                 'Content-Type': 'application/json',
             },
         });
-        // if (!response.ok) {
-        //     throw new Error(`Ошибка HTTP: ${response.status} ${response.statusText}`);
-        // }
+        if (!response.ok) {
+            console.log(response);
+            throw new Error(`Ошибка HTTP: ${response.status} ${response.statusText}`);
+        }
     } catch (error) {
         console.error('Произошла ошибка:', error);
         throw error;
     }
 }
+
 
 export async function deleteLikeAPI(id: string) {
     try {

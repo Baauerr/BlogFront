@@ -142,7 +142,8 @@ async function addReplyFullFunctional(addReplyButton, replyBox, replyInput, comm
         if (newComment !== null) {
             replyInput.value = "";
             await sendComment(newComment, postId);
-            await showPostPage();
+            const isReload = true;
+            showPostPage("", isReload);
         }
     });
 }
@@ -176,14 +177,14 @@ function changeMessageBoxToEditBox(commentContentVisual, editBox, inputBox, comm
 }
 async function applyEditComment(commentId, commentContentValue) {
     let editCommentData = new CommentEditDataDTO();
-    console.log(editCommentData);
-    console.log(commentContentValue);
     editCommentData.content = commentContentValue;
     await editComment(editCommentData, commentId);
-    await showPostPage();
+    const isReload = true;
+    showPostPage("", isReload);
 }
 async function deleteCommentFromPage(commentId) {
     await deleteComment(commentId);
-    await showPostPage();
+    const isReload = true;
+    showPostPage("", isReload);
 }
 //# sourceMappingURL=commentFunction.js.map

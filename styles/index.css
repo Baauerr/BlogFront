@@ -18,18 +18,5 @@ html, body {
     color: rgb(143, 143, 143)
   }
 
-  .nav-wrapper {
-    display: flex;
-    flex-direction: row;
-}
-
-.nav-element {
-    color: black;
-    transition: color 0.3s ease;
-}
-.nav-element:hover {
-    text-decoration: none;
-    color: rgb(125, 125, 125);
-}
 
 

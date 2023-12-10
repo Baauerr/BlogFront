@@ -1,6 +1,7 @@
 import { AuthorDTO } from "../DTO/author/authorDTO.js";
 import { Gender } from "../DTO/users/userDTO.js";
 import { getListOfAuthorsAPI } from "../api/authorAPI.js";
+import { router } from "../routing/routing.js";
 
 export async function showAuthorsPlates() {
     const authorTemplate: HTMLTemplateElement = document.getElementById("author-template") as HTMLTemplateElement;
@@ -27,14 +28,16 @@ function addAuthorToContainer(plate: AuthorDTO, authorTemplate: HTMLTemplateElem
     const postAmount: HTMLSpanElement = authorPlate.querySelector(".posts-amount") as HTMLSpanElement;
     const likesAmount: HTMLSpanElement = authorPlate.querySelector(".likes-amount") as HTMLSpanElement;
     const userPosition: HTMLImageElement = authorPlate.querySelector(".avatar-crown-image") as HTMLImageElement;
+    const authorPlateButton: HTMLDivElement = authorPlate.querySelector(".author-plate") as HTMLDivElement;
 
     authorName.textContent = plate.fullName
     authorAvatar.src = plate.gender === Gender.Female ? "../images/girlAvatar.svg" : "../images/manAvatar.svg"
-    
-    authorName.href = `/?author=${plate.fullName}`;
+
+    addEventOnPlate(authorPlateButton, plate.fullName);
+
     createTime.textContent = "Создан: " + normalizeDate(plate.created);
     birthDate.textContent = plate.birthDate !== null ?
-        "Дата рождения: " + normalizeDate(plate.birthDate): "Дата рождения: -";
+        "Дата рождения: " + normalizeDate(plate.birthDate) : "Дата рождения: -";
     postAmount.textContent = "Постов: " + plate.posts;
     likesAmount.textContent = "Лайков: " + plate.likes;
 
@@ -63,7 +66,14 @@ function compareAuthors(a: AuthorDTO, b: AuthorDTO): number {
     }
 }
 
-function normalizeDate(date: string): string{
+function normalizeDate(date: string): string {
     let normalDate: Date = new Date(date);
     return normalDate.toLocaleDateString();
+}
+
+function addEventOnPlate(plate: HTMLDivElement, fullName: string) {
+    plate.addEventListener("click", () => {
+        window.history.pushState({}, null, `/?author=${fullName}`);
+        router();
+    })
 }

@@ -40,9 +40,10 @@ async function showCommunityInfo(id) {
     subscribersCount.textContent = community.subscribersCount + " подписчиков";
     const type = community.isClosed ? "закрытое" : "открытое";
     typeOfCommunity.textContent = "Тип сообщества: " + type;
+    const fromCommunityPage = true;
     showButtonOnCommunityInfo(id, subscribeButton, unsubscribeButton, createPostButton);
-    subscribeAction(subscribeButton, unsubscribeButton, community.id);
-    unsubscribeAction(subscribeButton, unsubscribeButton, community.id);
+    subscribeAction(subscribeButton, unsubscribeButton, community.id, fromCommunityPage);
+    unsubscribeAction(subscribeButton, unsubscribeButton, community.id, fromCommunityPage);
     createPostAction(id, createPostButton);
 }
 async function showAdministratorsList(community) {

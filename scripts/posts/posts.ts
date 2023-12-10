@@ -27,25 +27,24 @@ function parsePostId() {
     }
 }
 
-export async function showPostPage(anchor?: string) {
+export async function showPostPage(anchor?: string, reloadPage?: boolean) {
 
     const postId: string = parsePostId();
     const post: ConcretePostDTO = await getConcretePostAPI(postId);
 
     const sendCommentButton = document.getElementById("send-comment") as HTMLButtonElement;
     const commentInputText = document.getElementById('comment-input-area') as HTMLTextAreaElement;
-
-    await showSinglePost();
+    await showSinglePost(reloadPage);
 
     await commentViewLogic(post, sendCommentButton, commentInputText);
 
-    if (anchor){
+    if (anchor) {
         const commentBlock: HTMLDivElement = document.getElementById("comment-box") as HTMLDivElement;
         commentBlock.scrollIntoView({ behavior: 'smooth' });
     }
 }
 
-export async function showSinglePost() {
+export async function showSinglePost(reloadPage?: boolean) {
     const postId: string = parsePostId();
     const post: ConcretePostDTO = await getConcretePostAPI(postId);
     const postContainer = document.getElementById("post-container") as HTMLDivElement;
@@ -86,7 +85,9 @@ export async function showSinglePost() {
     }
 
     toggleShowMoreButton(showMoreButton, post.description);
-    attachEventListeners(post, postDescription, showMoreButton, likeButton, postLikes);
+    if (!reloadPage) {
+         attachEventListeners(post, postDescription, showMoreButton, likeButton, postLikes);
+    }
 }
 
 async function commentViewLogic(post, sendCommentButton, commentInputText) {
@@ -100,7 +101,8 @@ async function commentViewLogic(post, sendCommentButton, commentInputText) {
         if (newComment !== null) {
             commentInputText.value = ""
             await sendComment(newComment, post.id);
-            await showPostPage();
+            const reloadPage = true;
+            await showPostPage("", reloadPage);
         }
     });
 

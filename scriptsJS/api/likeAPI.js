@@ -8,9 +8,10 @@ export async function setLike(id) {
                 'Content-Type': 'application/json',
             },
         });
-        // if (!response.ok) {
-        //     throw new Error(`Ошибка HTTP: ${response.status} ${response.statusText}`);
-        // }
+        if (!response.ok) {
+            console.log(response);
+            throw new Error(`Ошибка HTTP: ${response.status} ${response.statusText}`);
+        }
     }
     catch (error) {
         console.error('Произошла ошибка:', error);

@@ -40,3 +40,7 @@
     transform: rotate(-40deg) translateY(5px) translateX(5px);
     z-index: 2;
 }
+
+.author-plate{
+    cursor: pointer;
+}

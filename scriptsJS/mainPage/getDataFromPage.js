@@ -19,7 +19,15 @@ export function collectFormData() {
     const formDataObject = new FormData(formElement);
     const formDataDTO = new FilterDTO();
     formDataObject.forEach((value, key) => {
-        formDataDTO[key] = value;
+        if (key === 'tags' && typeof value === 'string') {
+            if (!formDataDTO.tags) {
+                formDataDTO.tags = [];
+            }
+            formDataDTO.tags.push(...value.split(',').map(tag => tag.trim()));
+        }
+        else {
+            formDataDTO[key] = value;
+        }
     });
     return formDataDTO;
 }
@@ -29,28 +37,36 @@ export function updateUrl(formData) {
     }
     const queryString = filtersToUrl(formData);
     const newUrl = `?${queryString}`;
-    console.log(newUrl);
     window.history.pushState(null, null, newUrl);
 }
 export function setFormDataToInputs(formData) {
     const setInputValue = (elementId, value) => {
         const inputElement = document.getElementById(elementId);
         if (inputElement) {
-            switch (inputElement.type) {
-                case 'checkbox':
-                    if (Array.isArray(value)) {
-                        inputElement.checked = value.includes(inputElement.value);
+            if (inputElement.type === 'checkbox') {
+                if (Array.isArray(value)) {
+                    inputElement.checked = value.includes(inputElement.value);
+                }
+                else {
+                    inputElement.checked = value;
+                }
+            }
+            else if (inputElement.type === 'select-multiple') {
+                const selectElement = inputElement;
+                const options = selectElement.options;
+                if (Array.isArray(value)) {
+                    for (let i = 0; i < options.length; i++) {
+                        if (value.includes(options[i].value)) {
+                            options[i].selected = true;
+                        }
                     }
-                    else {
-                        inputElement.checked = value;
-                    }
-                    break;
-                default:
-                    inputElement.value = value.toString();
+                }
+            }
+            else {
+                inputElement.value = value.toString();
             }
         }
     };
-    console.log(formData);
     setInputValue('tags', formData.tags || []);
     setInputValue('author', formData.author || '');
     setInputValue('min', formData.min !== null ? formData.min : '');

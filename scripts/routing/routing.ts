@@ -29,7 +29,7 @@ const routes: Route[] = [
   { path: "/", component: '/mainPages/mainpage.html' },
   { path: "/authors/", component: '/authorsPages/authorsList.html' },
   { path: "/login/", component: '/accountPages/login.html' },
-  { path: "/registration", component: '/accountPages/registration.html' },
+  { path: "/registration/", component: '/accountPages/registration.html' },
   { path: "/profile", component: '/accountPages/profile.html' },
   { path: '/post/:id', component: '/postsPages/post.html' },
   { path: "/post/create", component: "/postsPages/createPost.html" },

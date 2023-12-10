@@ -2,7 +2,7 @@ import { updateUrl } from "./getDataFromPage.js";
 import { collectFormData } from "./getDataFromPage.js";
 import { clickOnLikeButton } from "./likeFunction.js";
 import { PostDTO } from "../DTO/postDTO/postDTO.js";
-import { showMainPagePosts } from "./mainPagePostView.js";
+
 
 export function attachEventListeners(post: PostDTO, postDescription: HTMLSpanElement, showMoreButton: HTMLAnchorElement, likeButton: HTMLImageElement, postLikesCountElement: HTMLSpanElement) {
     showMoreButton.addEventListener("click", function () {

@@ -24,14 +24,18 @@ export async function displayPosts(apiFunction, formData, id = null) {
     try {
         const data: PostsDTO = id ? await apiFunction(formData, id) : await apiFunction(formData);
         console.log(data);
+         if (!data){
+            throw new Error("В доступе отказано");
+        }
 
         data.posts.forEach(post => addPostToContainer(post, postTemplate, postsContainer));
         viewPagination(data.pagination.count, data.pagination.current);
     }
-    catch (error) {
-        console.log(error)
+     catch (error) {
+         console.log(error)
     }
 }
+
 
 
 export async function showMainPagePosts() {
@@ -51,7 +55,7 @@ function titleButtonFunction(goToComments: HTMLAnchorElement) {
     goToComments.addEventListener("click", () => {
         history.pushState({}, null, goToComments.dataset.info);
         router();
-        showPostPage();
+      //  showPostPage();
     })
 }
 

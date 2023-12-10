@@ -21,9 +21,7 @@ export async function getCommentTreeAPI(commentId: string): Promise<CommentDTO[]
 
 export async function sendComment(commentInfo: SendCommentDTO, id: string){
   try {
-    console.log(id);
     const token:string = localStorage.getItem("token")
-    console.log(commentInfo)
     await fetch(`https://blog.kreosoft.space/api/post/${id}/comment`, {
       method: 'POST',
       headers: {

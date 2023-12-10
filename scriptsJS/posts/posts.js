@@ -21,19 +21,19 @@ function parsePostId() {
         return null;
     }
 }
-export async function showPostPage(anchor) {
+export async function showPostPage(anchor, reloadPage) {
     const postId = parsePostId();
     const post = await getConcretePostAPI(postId);
     const sendCommentButton = document.getElementById("send-comment");
     const commentInputText = document.getElementById('comment-input-area');
-    await showSinglePost();
+    await showSinglePost(reloadPage);
     await commentViewLogic(post, sendCommentButton, commentInputText);
     if (anchor) {
         const commentBlock = document.getElementById("comment-box");
         commentBlock.scrollIntoView({ behavior: 'smooth' });
     }
 }
-export async function showSinglePost() {
+export async function showSinglePost(reloadPage) {
     const postId = parsePostId();
     const post = await getConcretePostAPI(postId);
     const postContainer = document.getElementById("post-container");
@@ -67,7 +67,9 @@ export async function showSinglePost() {
         postAddress.textContent = await showAddress(post.addressId);
     }
     toggleShowMoreButton(showMoreButton, post.description);
-    attachEventListeners(post, postDescription, showMoreButton, likeButton, postLikes);
+    if (!reloadPage) {
+        attachEventListeners(post, postDescription, showMoreButton, likeButton, postLikes);
+    }
 }
 async function commentViewLogic(post, sendCommentButton, commentInputText) {
     const userFullName = await getUserFullName();
@@ -77,7 +79,8 @@ async function commentViewLogic(post, sendCommentButton, commentInputText) {
         if (newComment !== null) {
             commentInputText.value = "";
             await sendComment(newComment, post.id);
-            await showPostPage();
+            const reloadPage = true;
+            await showPostPage("", reloadPage);
         }
     });
     const newCommentBlock = document.getElementById("new-comment");

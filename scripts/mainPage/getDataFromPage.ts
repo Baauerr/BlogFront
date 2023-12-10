@@ -24,23 +24,29 @@ export function parseUrlParams(): FilterDTO {
 export function collectFormData(): FilterDTO {
     const formElement: HTMLFormElement = document.getElementById('filter-form') as HTMLFormElement;
     const formDataObject = new FormData(formElement);
-
     const formDataDTO: FilterDTO = new FilterDTO();
     formDataObject.forEach((value, key) => {
-        (formDataDTO as any)[key] = value;
+        if (key === 'tags' && typeof value === 'string') {
+            if (!formDataDTO.tags) {
+                formDataDTO.tags = [];
+            }
+            formDataDTO.tags.push(...value.split(',').map(tag => tag.trim()));
+        } else {
+            (formDataDTO as any)[key] = value;
+        }
     });
-
     return formDataDTO;
 }
 
 export function updateUrl(formData: FilterDTO) {
-    if (typeof formData.size === "string"){
+
+    if (typeof formData.size === "string") {
         formData.size = parseInt(formData.size, 10);
     }
-    const queryString: string = filtersToUrl(formData);    
+    
+    const queryString: string = filtersToUrl(formData);
 
     const newUrl = `?${queryString}`;
-    console.log(newUrl)
 
     window.history.pushState(null, null, newUrl);
 }
@@ -50,24 +56,30 @@ export function updateUrl(formData: FilterDTO) {
 
 export function setFormDataToInputs(formData: FilterDTO): void {
     const setInputValue = (elementId: string, value: string | number | boolean | string[]): void => {
-        const inputElement = document.getElementById(elementId) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | HTMLInputElement;
+        const inputElement = document.getElementById(elementId) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
         if (inputElement) {
-            switch (inputElement.type) {
-                case 'checkbox':
-                    if (Array.isArray(value)) {
-                        (inputElement as HTMLInputElement).checked = value.includes(inputElement.value);
-                    } else {
-                        (inputElement as HTMLInputElement).checked = value as boolean;
+            if (inputElement.type === 'checkbox') {
+                if (Array.isArray(value)) {
+                    (inputElement as HTMLInputElement).checked = value.includes(inputElement.value);
+                } else {
+                    (inputElement as HTMLInputElement).checked = value as boolean;
+                }
+            } else if (inputElement.type === 'select-multiple') {
+                const selectElement: HTMLSelectElement = inputElement as HTMLSelectElement;
+                const options = selectElement.options;
+                if (Array.isArray(value)) {
+                    for (let i = 0; i < options.length; i++) {
+                        if (value.includes(options[i].value)) {
+                            options[i].selected = true;
+                        }
                     }
-                    break;
-                default:
-                    inputElement.value = value.toString();
+                }
+            } else {
+                inputElement.value = value.toString();
             }
         }
     };
-
-    console.log(formData);
 
     setInputValue('tags', formData.tags || []);
     setInputValue('author', formData.author || '');

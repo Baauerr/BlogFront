@@ -1,5 +1,6 @@
 import { Gender } from "../DTO/users/userDTO.js";
 import { getListOfAuthorsAPI } from "../api/authorAPI.js";
+import { router } from "../routing/routing.js";
 export async function showAuthorsPlates() {
     const authorTemplate = document.getElementById("author-template");
     const authorsContainer = document.getElementById("authors-place");
@@ -20,9 +21,10 @@ function addAuthorToContainer(plate, authorTemplate, authorsContainer, topAuthor
     const postAmount = authorPlate.querySelector(".posts-amount");
     const likesAmount = authorPlate.querySelector(".likes-amount");
     const userPosition = authorPlate.querySelector(".avatar-crown-image");
+    const authorPlateButton = authorPlate.querySelector(".author-plate");
     authorName.textContent = plate.fullName;
     authorAvatar.src = plate.gender === Gender.Female ? "../images/girlAvatar.svg" : "../images/manAvatar.svg";
-    authorName.href = `/?author=${plate.fullName}`;
+    addEventOnPlate(authorPlateButton, plate.fullName);
     createTime.textContent = "Создан: " + normalizeDate(plate.created);
     birthDate.textContent = plate.birthDate !== null ?
         "Дата рождения: " + normalizeDate(plate.birthDate) : "Дата рождения: -";
@@ -55,5 +57,11 @@ function compareAuthors(a, b) {
 function normalizeDate(date) {
     let normalDate = new Date(date);
     return normalDate.toLocaleDateString();
+}
+function addEventOnPlate(plate, fullName) {
+    plate.addEventListener("click", () => {
+        window.history.pushState({}, null, `/?author=${fullName}`);
+        router();
+    });
 }
 //# sourceMappingURL=author.js.map
