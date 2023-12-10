@@ -1,6 +1,7 @@
 import { filtersToUrl } from "../helpers/filtersToUrl.js";
 import { makeRequestAPI } from "./mainFetcherAPI.js";
 import { Request } from "./mainFetcherAPI.js";
+import { router } from "../routing/routing.js";
 export async function getConcreteCommunityAPI(id) {
     const url = `https://blog.kreosoft.space/api/community/${id}`;
     return makeRequestAPI(url, Request.GET);
@@ -19,6 +20,8 @@ export async function getListOfCommunitiesAPI() {
 }
 export async function createPostInCommunityAPI(responseData, id) {
     const url = `https://blog.kreosoft.space/api/community/${id}/post`;
+    window.history.pushState({}, null, '/');
+    router();
     return makeRequestAPI(url, Request.POST, responseData);
 }
 export async function subscribeAPI(id) {

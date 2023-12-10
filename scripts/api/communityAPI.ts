@@ -5,6 +5,7 @@ import { PostsDTO } from "../DTO/postDTO/postDTO.js";
 import { filtersToUrl } from "../helpers/filtersToUrl.js";
 import { makeRequestAPI } from "./mainFetcherAPI.js";
 import { Request } from "./mainFetcherAPI.js";
+import { router } from "../routing/routing.js";
 
 
 export async function getConcreteCommunityAPI(id: string): Promise<ConcreteCommunityDTO> {
@@ -29,7 +30,10 @@ export async function getListOfCommunitiesAPI(): Promise<CommunityDTO[]> {
 
 export async function createPostInCommunityAPI(responseData: PostInfoDTO, id: string) {
     const url = `https://blog.kreosoft.space/api/community/${id}/post`;
+    window.history.pushState({}, null, '/');
+    router();
     return makeRequestAPI(url, Request.POST, responseData);
+
 }
 
 export async function subscribeAPI(id: string) {
