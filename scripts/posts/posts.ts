@@ -5,31 +5,17 @@ import { setPostImage } from "../mainPage/getInfo.js";
 import { toggleShowMoreButton } from "../mainPage/buttonsOnMainPage.js";
 import { attachEventListeners } from "../mainPage/buttonsOnMainPage.js";
 import { getConcretePostAPI } from "../api/concrettePostAPI.js";
-import { commentView } from "./commentFunction.js";
-import { SendCommentDTO } from "../DTO/comment/commentDTO.js";
-import { sendComment } from "../api/commentAPI.js";
-import { createComment } from "./commentFunction.js";
 import { getAddressChainAPI } from "../api/addressAPI.js";
 import { AddressChainDTO } from "../DTO/address/addressDTO.js";
 import { getProfileAPI } from "../api/profileAPI.js";
 import { ConcretePostDTO } from "../DTO/postDTO/postDTO.js";
 import { ProfileInfoDTO } from "../DTO/users/userDTO.js";
-
-function parsePostId() {
-    const url = new URL(window.location.href);
-    const pathNameParts = url.pathname.split('/');
-    const postIdIndex = pathNameParts.indexOf('post');
-
-    if (postIdIndex !== -1 && postIdIndex < pathNameParts.length - 1) {
-        return pathNameParts[postIdIndex + 1];
-    } else {
-        return null;
-    }
-}
+import { commentViewLogic } from "./commentPreViewLogic.js";
+import { parseIdFromUrl } from "../helpers/parserIdFromUrl.js";
 
 export async function showPostPage(anchor?: string, reloadPage?: boolean) {
 
-    const postId: string = parsePostId();
+    const postId: string = parseIdFromUrl('post');
     const post: ConcretePostDTO = await getConcretePostAPI(postId);
 
     const sendCommentButton = document.getElementById("send-comment") as HTMLButtonElement;
@@ -45,7 +31,7 @@ export async function showPostPage(anchor?: string, reloadPage?: boolean) {
 }
 
 export async function showSinglePost(reloadPage?: boolean) {
-    const postId: string = parsePostId();
+    const postId: string = parseIdFromUrl('post');
     const post: ConcretePostDTO = await getConcretePostAPI(postId);
     const postContainer = document.getElementById("post-container") as HTMLDivElement;
 
@@ -89,29 +75,9 @@ export async function showSinglePost(reloadPage?: boolean) {
     }
 }
 
-async function commentViewLogic(post, sendCommentButton, commentInputText) {
 
-    const userFullName: string = await getUserFullName();
 
-    commentView(post.comments, post.id, userFullName);
-
-    sendCommentButton.addEventListener("click", async function () {
-        const newComment: SendCommentDTO = createComment(commentInputText.value);
-        if (newComment !== null) {
-            commentInputText.value = ""
-            await sendComment(newComment, post.id);
-            const reloadPage = true;
-            await showPostPage("", reloadPage);
-        }
-    });
-
-    const newCommentBlock = document.getElementById("new-comment") as HTMLDivElement;
-    if (localStorage.getItem("token") !== null) {
-        newCommentBlock.style.display = "block"
-    }
-}
-
-async function getUserFullName() {
+export async function getUserFullName() {
     if (localStorage.getItem("token")) {
         const userInfo: ProfileInfoDTO = await getProfileAPI();
         return userInfo.fullName

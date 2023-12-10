@@ -7,22 +7,11 @@ import { UserRoles } from "../DTO/communityDTO/communityDTO.js";
 import { subscribeAction } from "./communityList.js";
 import { unsubscribeAction } from "./communityList.js";
 import { displayPosts } from "../mainPage/mainPagePostView.js";
-import { loadCommunitiesToCreatePost } from "../posts/createPost.js";
-import { router } from "../routing/routing.js";
-function parseCommunityId() {
-    const url = new URL(window.location.href);
-    const pathNameParts = url.pathname.split('/');
-    const postIdIndex = pathNameParts.indexOf('communities');
-    if (postIdIndex !== -1 && postIdIndex < pathNameParts.length - 1) {
-        return pathNameParts[postIdIndex + 1];
-    }
-    else {
-        return null;
-    }
-}
+import { parseIdFromUrl } from "../helpers/parserIdFromUrl.js";
+import { createPostAction } from "../posts/createPost.js";
 export async function showCommunityPosts() {
     const formData = parseUrlParams();
-    const id = parseCommunityId();
+    const id = parseIdFromUrl('communities');
     await displayPosts(getCommunityPostsAPI, formData, id);
     const community = await getConcreteCommunityAPI(id);
     showAdministratorsList(community);
@@ -73,12 +62,5 @@ export async function showButtonOnCommunityInfo(id, subscribeButtin, unsubscribe
             subscribeButtin.style.display = "inline";
             break;
     }
-}
-function createPostAction(id, createPostButton) {
-    createPostButton.addEventListener("click", () => {
-        window.history.pushState({}, null, '/post/create');
-        router();
-        loadCommunitiesToCreatePost(id);
-    });
 }
 //# sourceMappingURL=concreteCommunity.js.map

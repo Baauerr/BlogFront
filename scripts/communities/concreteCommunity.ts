@@ -8,25 +8,13 @@ import { ConcreteCommunityDTO, UserRoles } from "../DTO/communityDTO/communityDT
 import { subscribeAction } from "./communityList.js";
 import { unsubscribeAction } from "./communityList.js";
 import { displayPosts } from "../mainPage/mainPagePostView.js";
-import { loadCommunitiesToCreatePost } from "../posts/createPost.js";
-import { router } from "../routing/routing.js";
+import { parseIdFromUrl } from "../helpers/parserIdFromUrl.js";
+import { createPostAction } from "../posts/createPost.js";
 
-
-function parseCommunityId(): string {
-    const url = new URL(window.location.href);
-    const pathNameParts = url.pathname.split('/');
-    const postIdIndex = pathNameParts.indexOf('communities');
-
-    if (postIdIndex !== -1 && postIdIndex < pathNameParts.length - 1) {
-        return pathNameParts[postIdIndex + 1];
-    } else {
-        return null;
-    }
-}
 
 export async function showCommunityPosts() {
     const formData: FilterDTO = parseUrlParams();
-    const id: string = parseCommunityId();
+    const id: string = parseIdFromUrl('communities');
     await displayPosts(getCommunityPostsAPI, formData, id);
 
     const community: ConcreteCommunityDTO = await getConcreteCommunityAPI(id);
@@ -102,12 +90,5 @@ export async function showButtonOnCommunityInfo(id: string, subscribeButtin: HTM
     }
 }
 
-function createPostAction(id: string, createPostButton: HTMLButtonElement) {
-    createPostButton.addEventListener("click", () => {
-        window.history.pushState({}, null, '/post/create');
-        router();
-        loadCommunitiesToCreatePost(id);
-    })
-}
 
 

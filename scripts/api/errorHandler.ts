@@ -34,7 +34,7 @@ function showNotification(message) {
     }, 4000);
 }
 
-function authorizeChecker(){
+export function authorizeChecker(){
     if (localStorage.getItem("token") === null) {
         window.history.pushState({}, null, '/');
         router();

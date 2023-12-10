@@ -6,6 +6,7 @@ import { PostInfoDTO } from "../DTO/postDTO/postDTO.js";
 import { ErrorsDTO } from "../DTO/errorDTO/errorDTO.js";
 import { validateNewPostInfo } from "./postValidation.js";
 import { takeErrorTextAsync } from "../helpers/errorCreateHelper.js";
+import { router } from "../routing/routing.js";
 export function collectDataForPosrCreating() {
     const formData = new PostInfoDTO("", [], "");
     const tagsInput = document.querySelectorAll('#tags option:checked');
@@ -63,5 +64,12 @@ export async function loadCommunitiesToCreatePost(selectedId) {
             userCommunitySelect.add(newOption);
         }
     }
+}
+export function createPostAction(id, createPostButton) {
+    createPostButton.addEventListener("click", () => {
+        window.history.pushState({}, null, '/post/create');
+        router();
+        loadCommunitiesToCreatePost(id);
+    });
 }
 //# sourceMappingURL=createPost.js.map

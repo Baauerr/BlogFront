@@ -5,24 +5,12 @@ import { setPostImage } from "../mainPage/getInfo.js";
 import { toggleShowMoreButton } from "../mainPage/buttonsOnMainPage.js";
 import { attachEventListeners } from "../mainPage/buttonsOnMainPage.js";
 import { getConcretePostAPI } from "../api/concrettePostAPI.js";
-import { commentView } from "./commentFunction.js";
-import { sendComment } from "../api/commentAPI.js";
-import { createComment } from "./commentFunction.js";
 import { getAddressChainAPI } from "../api/addressAPI.js";
 import { getProfileAPI } from "../api/profileAPI.js";
-function parsePostId() {
-    const url = new URL(window.location.href);
-    const pathNameParts = url.pathname.split('/');
-    const postIdIndex = pathNameParts.indexOf('post');
-    if (postIdIndex !== -1 && postIdIndex < pathNameParts.length - 1) {
-        return pathNameParts[postIdIndex + 1];
-    }
-    else {
-        return null;
-    }
-}
+import { commentViewLogic } from "./commentPreViewLogic.js";
+import { parseIdFromUrl } from "../helpers/parserIdFromUrl.js";
 export async function showPostPage(anchor, reloadPage) {
-    const postId = parsePostId();
+    const postId = parseIdFromUrl('post');
     const post = await getConcretePostAPI(postId);
     const sendCommentButton = document.getElementById("send-comment");
     const commentInputText = document.getElementById('comment-input-area');
@@ -34,7 +22,7 @@ export async function showPostPage(anchor, reloadPage) {
     }
 }
 export async function showSinglePost(reloadPage) {
-    const postId = parsePostId();
+    const postId = parseIdFromUrl('post');
     const post = await getConcretePostAPI(postId);
     const postContainer = document.getElementById("post-container");
     const postDescription = postContainer.querySelector(".post-description");
@@ -70,24 +58,7 @@ export async function showSinglePost(reloadPage) {
         attachEventListeners(post, postDescription, showMoreButton, likeButton, postLikes);
     }
 }
-async function commentViewLogic(post, sendCommentButton, commentInputText) {
-    const userFullName = await getUserFullName();
-    commentView(post.comments, post.id, userFullName);
-    sendCommentButton.addEventListener("click", async function () {
-        const newComment = createComment(commentInputText.value);
-        if (newComment !== null) {
-            commentInputText.value = "";
-            await sendComment(newComment, post.id);
-            const reloadPage = true;
-            await showPostPage("", reloadPage);
-        }
-    });
-    const newCommentBlock = document.getElementById("new-comment");
-    if (localStorage.getItem("token") !== null) {
-        newCommentBlock.style.display = "block";
-    }
-}
-async function getUserFullName() {
+export async function getUserFullName() {
     if (localStorage.getItem("token")) {
         const userInfo = await getProfileAPI();
         return userInfo.fullName;

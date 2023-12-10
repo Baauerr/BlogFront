@@ -106,4 +106,4 @@ async function subCommentsView(commentId, subCommentBlock, postId, userFullName)
 function isUserComment(comment, userFullName) {
     return (userFullName !== null && comment.author === userFullName);
 }
-//# sourceMappingURL=commentFunction.js.map
+//# sourceMappingURL=commentView.js.map

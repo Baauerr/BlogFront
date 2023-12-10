@@ -7,6 +7,7 @@ import { ConcreteCommunityDTO, UsersCommunityDTO } from "../DTO/communityDTO/com
 import { ErrorsDTO } from "../DTO/errorDTO/errorDTO.js";
 import { validateNewPostInfo } from "./postValidation.js";
 import { takeErrorTextAsync } from "../helpers/errorCreateHelper.js";
+import { router } from "../routing/routing.js";
 
 
 export function collectDataForPosrCreating() {
@@ -86,4 +87,13 @@ export async function loadCommunitiesToCreatePost(selectedId?: string) {
             userCommunitySelect.add(newOption);
         }
     }
+}
+
+
+export function createPostAction(id: string, createPostButton: HTMLButtonElement) {
+    createPostButton.addEventListener("click", () => {
+        window.history.pushState({}, null, '/post/create');
+        router();
+        loadCommunitiesToCreatePost(id);
+    })
 }

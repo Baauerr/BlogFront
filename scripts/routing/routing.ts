@@ -80,6 +80,7 @@ export async function router() {
   const parts = local.split("/").filter(Boolean);
 
   const errorComponent = "/errorPages/error.html";
+  
   const component = findComponentByUrlElements(parts, routes)?.component || errorComponent;
   const htmlCode = await loadHTML(component);
   const appElement = document.getElementById("app");
