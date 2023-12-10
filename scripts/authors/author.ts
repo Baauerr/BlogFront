@@ -20,13 +20,6 @@ export async function showAuthorsPlates() {
 function addAuthorToContainer(plate: AuthorDTO, authorTemplate: HTMLTemplateElement, authorsContainer: HTMLDivElement, topAuthors: AuthorDTO[]) {
     const authorPlate: DocumentFragment = document.importNode(authorTemplate.content, true);
 
-    // const authorName: HTMLAnchorElement = document.querySelector<HTMLAnchorElement>(".author-nickname");
-    // const createTime: HTMLSpanElement = document.querySelector<HTMLSpanElement>(".create-time");
-    // const authorAvatar: HTMLImageElement = document.querySelector<HTMLImageElement>(".avatar-image");
-    // const birthDate: HTMLSpanElement = document.querySelector<HTMLSpanElement>(".birth-date");
-    // const postAmount: HTMLSpanElement = document.querySelector<HTMLSpanElement>(".posts-amount");
-    // const likesAmount: HTMLSpanElement = document.querySelector<HTMLSpanElement>(".likes-amount");
-
     const authorName: HTMLAnchorElement = authorPlate.querySelector(".author-nickname") as HTMLAnchorElement;
     const createTime: HTMLSpanElement = authorPlate.querySelector(".create-time") as HTMLSpanElement;
     const authorAvatar: HTMLImageElement = authorPlate.querySelector(".avatar-image") as HTMLImageElement;
@@ -39,13 +32,13 @@ function addAuthorToContainer(plate: AuthorDTO, authorTemplate: HTMLTemplateElem
     authorAvatar.src = plate.gender === Gender.Female ? "../images/girlAvatar.svg" : "../images/manAvatar.svg"
     
     authorName.href = `/?author=${plate.fullName}`;
-    createTime.textContent = "Создан: " + plate.created;
-    birthDate.textContent = plate.birthDate !== null ? "Дата рождения: " + plate.birthDate : "Дата рождения: -";
+    createTime.textContent = "Создан: " + normalizeDate(plate.created);
+    birthDate.textContent = plate.birthDate !== null ?
+        "Дата рождения: " + normalizeDate(plate.birthDate): "Дата рождения: -";
     postAmount.textContent = "Постов: " + plate.posts;
     likesAmount.textContent = "Лайков: " + plate.likes;
 
     const index = topAuthors.findIndex((author) => author.fullName === plate.fullName);
-
     switch (index) {
         case 2:
         case 1:
@@ -68,4 +61,9 @@ function compareAuthors(a: AuthorDTO, b: AuthorDTO): number {
     } else {
         return new Date(b.created).getTime() - new Date(a.created).getTime();
     }
+}
+
+function normalizeDate(date: string): string{
+    let normalDate: Date = new Date(date);
+    return normalDate.toLocaleDateString();
 }

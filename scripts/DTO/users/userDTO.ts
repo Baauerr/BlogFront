@@ -18,8 +18,8 @@ export class RegistrationResponseDTO {
     password: string;
     fullName: string;
     gender: string;
-    phoneNumber: string;
-    birthDate: string;
+    phoneNumber?: string;
+    birthDate?: string;
 }
 
 export class TokenDTO{

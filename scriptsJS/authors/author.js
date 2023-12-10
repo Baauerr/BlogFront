@@ -13,12 +13,6 @@ export async function showAuthorsPlates() {
 }
 function addAuthorToContainer(plate, authorTemplate, authorsContainer, topAuthors) {
     const authorPlate = document.importNode(authorTemplate.content, true);
-    // const authorName: HTMLAnchorElement = document.querySelector<HTMLAnchorElement>(".author-nickname");
-    // const createTime: HTMLSpanElement = document.querySelector<HTMLSpanElement>(".create-time");
-    // const authorAvatar: HTMLImageElement = document.querySelector<HTMLImageElement>(".avatar-image");
-    // const birthDate: HTMLSpanElement = document.querySelector<HTMLSpanElement>(".birth-date");
-    // const postAmount: HTMLSpanElement = document.querySelector<HTMLSpanElement>(".posts-amount");
-    // const likesAmount: HTMLSpanElement = document.querySelector<HTMLSpanElement>(".likes-amount");
     const authorName = authorPlate.querySelector(".author-nickname");
     const createTime = authorPlate.querySelector(".create-time");
     const authorAvatar = authorPlate.querySelector(".avatar-image");
@@ -29,8 +23,9 @@ function addAuthorToContainer(plate, authorTemplate, authorsContainer, topAuthor
     authorName.textContent = plate.fullName;
     authorAvatar.src = plate.gender === Gender.Female ? "../images/girlAvatar.svg" : "../images/manAvatar.svg";
     authorName.href = `/?author=${plate.fullName}`;
-    createTime.textContent = "Создан: " + plate.created;
-    birthDate.textContent = plate.birthDate !== null ? "Дата рождения: " + plate.birthDate : "Дата рождения: -";
+    createTime.textContent = "Создан: " + normalizeDate(plate.created);
+    birthDate.textContent = plate.birthDate !== null ?
+        "Дата рождения: " + normalizeDate(plate.birthDate) : "Дата рождения: -";
     postAmount.textContent = "Постов: " + plate.posts;
     likesAmount.textContent = "Лайков: " + plate.likes;
     const index = topAuthors.findIndex((author) => author.fullName === plate.fullName);
@@ -56,5 +51,9 @@ function compareAuthors(a, b) {
     else {
         return new Date(b.created).getTime() - new Date(a.created).getTime();
     }
+}
+function normalizeDate(date) {
+    let normalDate = new Date(date);
+    return normalDate.toLocaleDateString();
 }
 //# sourceMappingURL=author.js.map

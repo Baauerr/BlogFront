@@ -15,7 +15,6 @@ export async function getProfileAPI() {
 }
 export async function editProfileAPI(editData) {
     const token = localStorage.getItem('token');
-    console.log(editData);
     await fetch('https://blog.kreosoft.space/api/account/profile', {
         method: 'PUT',
         headers: {
@@ -24,8 +23,16 @@ export async function editProfileAPI(editData) {
         },
         body: JSON.stringify(editData),
     })
-        .catch(error => {
-        console.error('Message:', error);
+        .then(async (response) => {
+        const data = await response.json();
+        const duplicateEmailError = document.getElementById("repetitive-email-error");
+        if (data) {
+            console.log("agagaga");
+            duplicateEmailError.style.display = "block";
+        }
+        else {
+            duplicateEmailError.style.display = "block";
+        }
     });
 }
 //# sourceMappingURL=profileAPI.js.map

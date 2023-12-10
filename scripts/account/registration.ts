@@ -20,7 +20,7 @@ async function registration_button_action() {
     const inputPhoneNumber: HTMLInputElement = document.getElementById('phonenumber') as HTMLInputElement;
 
     let serverDate: string;
-    if (inputBirthDate.value) {
+    if (inputBirthDate.value && inputBirthDate.value !== undefined) {
         const isoDateString: Date = new Date(inputBirthDate.value)
         serverDate = isoDateString.toISOString();
     }
@@ -28,18 +28,27 @@ async function registration_button_action() {
     const requestData: RegistrationResponseDTO = {
         email: inputEmail.value,
         password: inputPassword.value,
-        phoneNumber: inputPhoneNumber.value,
-        gender: inputGender.value,
+        gender: (inputGender.value).toString(),
         fullName: inputName.value,
-        birthDate: serverDate,
     };
+
+    if (inputPhoneNumber.value.trim() !== '') {
+        requestData.phoneNumber = inputPhoneNumber.value;
+    }
+
+    if (serverDate !== undefined) {
+        requestData.birthDate = serverDate
+    }
+    console.log(requestData)
 
     let errorsArray: ErrorsDTO = new ErrorsDTO();
     const isRegistration = true;
     errorsArray = validateUser(requestData, errorsArray, isRegistration);
+    const duplicateEmailError = document.getElementById("repetitive-email-error");
     const container: HTMLDivElement = document.getElementById('loginbox') as HTMLDivElement;
     const inputElements: NodeListOf<HTMLElement> = container.querySelectorAll('input, #birthdate');
     if (errorsArray.errors.length > 0) {
+        duplicateEmailError.style.display = "none"
         await takeErrorTextAsync(errorsArray, container, inputElements);
     }
     else {

@@ -1,5 +1,5 @@
 import { RegistrationResponseDTO } from "../DTO/users/userDTO.js";
-import { takeErrorTextAsync } from "../helpers/errorCreateHelper.js";
+
 
 
 export function registerUserAPI(responseData: RegistrationResponseDTO) {
@@ -17,8 +17,10 @@ export function registerUserAPI(responseData: RegistrationResponseDTO) {
             if (data.DuplicateUserName) {
                 duplicateEmailError.style.display = "block"
             } else {
+                localStorage.clear();
                 duplicateEmailError.style.display = "none"
                 localStorage.setItem("token", data.token)
+                localStorage.setItem("email", responseData.email);
                 window.location.pathname = ""
             }
         })

@@ -3,7 +3,7 @@ import { logout } from "../helpers/navbarInfoHelper.js";
 export function errorHandler(response) {
     switch (response.status) {
         case 401:
-            alert("Время сессии истекло. Авторизуйтесь снова");
+            alert("Войдите");
             logout();
             router();
             break;

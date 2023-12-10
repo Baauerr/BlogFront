@@ -27,18 +27,23 @@ async function edit_button_action() {
     const isRegistration = false;
     errorsArray = validateUser(requestData, errorsArray, isRegistration);
     const container = document.getElementById('profilebox');
+    const duplicateEmailError = document.getElementById("repetitive-email-error");
     const inputElements = container.querySelectorAll('input, #birthdate');
     if (errorsArray.errors.length > 0) {
+        duplicateEmailError.style.display = "none";
         await takeErrorTextAsync(errorsArray, container, inputElements);
     }
     else {
+        duplicateEmailError.style.display = "none";
         await takeErrorTextAsync(errorsArray, container, inputElements);
         editProfileAPI(requestData);
     }
 }
 async function info() {
     const profileInfo = await getProfileAPI();
-    profileInfo.birthDate = profileInfo.birthDate.slice(0, 10);
+    if (profileInfo.birthDate !== null) {
+        profileInfo.birthDate = profileInfo.birthDate.slice(0, 10);
+    }
     const container = document.getElementById('profilebox');
     const inputElements = container.querySelectorAll('input, #birthdate');
     const lowercaseData = new ProfileInfoDTO();

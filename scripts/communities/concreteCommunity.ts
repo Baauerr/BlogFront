@@ -8,7 +8,6 @@ import { ConcreteCommunityDTO, UserRoles } from "../DTO/communityDTO/communityDT
 import { subscribeAction } from "./communityList.js";
 import { unsubscribeAction } from "./communityList.js";
 import { displayPosts } from "../mainPage/mainPagePostView.js";
-import { setupApplyButton } from "../mainPage/buttonsOnMainPage.js";
 import { loadCommunitiesToCreatePost } from "../posts/createPost.js";
 import { router } from "../routing/routing.js";
 

@@ -13,8 +13,10 @@ export function registerUserAPI(responseData) {
             duplicateEmailError.style.display = "block";
         }
         else {
+            localStorage.clear();
             duplicateEmailError.style.display = "none";
             localStorage.setItem("token", data.token);
+            localStorage.setItem("email", responseData.email);
             window.location.pathname = "";
         }
     })

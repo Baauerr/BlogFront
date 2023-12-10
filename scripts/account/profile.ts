@@ -33,12 +33,14 @@ async function edit_button_action() {
     const isRegistration = false;
     errorsArray = validateUser(requestData, errorsArray, isRegistration);
     const container: HTMLDivElement = document.getElementById('profilebox') as HTMLDivElement;
+    const duplicateEmailError = document.getElementById("repetitive-email-error");
     const inputElements: NodeListOf<HTMLElement> = container.querySelectorAll('input, #birthdate');
     if (errorsArray.errors.length > 0) {
-
+        duplicateEmailError.style.display = "none";
         await takeErrorTextAsync(errorsArray, container, inputElements);
     }
     else {
+        duplicateEmailError.style.display = "none";
         await takeErrorTextAsync(errorsArray, container, inputElements);
         editProfileAPI(requestData);
     }
@@ -47,13 +49,14 @@ async function edit_button_action() {
 
 async function info() {
     const profileInfo: ProfileInfoDTO = await getProfileAPI();
-    profileInfo.birthDate = profileInfo.birthDate.slice(0, 10);
+    if (profileInfo.birthDate !== null) {
+         profileInfo.birthDate = profileInfo.birthDate.slice(0, 10); 
+    }
     const container = document.getElementById('profilebox') as HTMLDivElement;
     const inputElements = container.querySelectorAll<HTMLInputElement>('input, #birthdate');
     const lowercaseData: ProfileInfoDTO = new ProfileInfoDTO();
     for (const key in profileInfo) {
         lowercaseData[key.toLowerCase()] = profileInfo[key];
-        
     }
     inputElements.forEach(input => {
         const fieldName: string = input.id;
