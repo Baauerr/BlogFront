@@ -1,0 +1,13 @@
+#notification {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: #d54118;
+    color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: none;
+  }
+  

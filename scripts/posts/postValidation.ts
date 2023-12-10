@@ -11,7 +11,7 @@ export function validateNewPostInfo(postInfo: PostInfoDTO, errorsDTO: ErrorsDTO)
         errorsDTO.errors.push({ id: "description", message: "Текст поста не может быть такой длины" })
     }
     if (postInfo.tags === undefined){
-        errorsDTO.errors.push({ id: "tags", message: "У поста должны быть теги" })
+        errorsDTO.errors.push({ id: "tags", message: "У поста должны быть тэги" })
     }
 
     if (postInfo.image !== undefined) {

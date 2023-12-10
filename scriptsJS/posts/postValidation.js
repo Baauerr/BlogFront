@@ -7,7 +7,7 @@ export function validateNewPostInfo(postInfo, errorsDTO) {
         errorsDTO.errors.push({ id: "description", message: "Текст поста не может быть такой длины" });
     }
     if (postInfo.tags === undefined) {
-        errorsDTO.errors.push({ id: "tags", message: "У поста должны быть теги" });
+        errorsDTO.errors.push({ id: "tags", message: "У поста должны быть тэги" });
     }
     if (postInfo.image !== undefined) {
         const imageError = validateImageUrl(postInfo.image);

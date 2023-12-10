@@ -1,7 +1,5 @@
 import { prevent } from "./prevent.js";
 import { runScripts } from "./parsingScriptsFromHTML.js";
-import { tokenValidChecker } from "./jwtChecker.js";
-import { logout } from "../helpers/navbarInfoHelper.js";
 
 const loadHTML = async (path: string) => {
   try {
@@ -106,12 +104,5 @@ document.addEventListener("click", (event: MouseEvent) => {
 });
 
 window.addEventListener("popstate", router);
-
-// document.addEventListener('DOMContentLoaded', (event) => {
-//   const isValid: boolean = tokenValidChecker();
-//   if (!isValid) {
-//     logout();
-//   }
-// });
 
 router();

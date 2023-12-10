@@ -1,33 +1,26 @@
 import { PostInfoDTO } from "../DTO/postDTO/postDTO.js";
 import { takeErrorTextAsync } from "../helpers/errorCreateHelper.js";
+import { makeRequestAPI } from "./mainFetcherAPI.js";
+import { Request } from "./mainFetcherAPI.js";
 
 export async function publicPostAPI(responseData: PostInfoDTO) {
+  const url = 'https://blog.kreosoft.space/api/post';
   try {
-    const token: string = localStorage.getItem("token");
-    await fetch(`https://blog.kreosoft.space/api/post`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(responseData),
-    })
-      .then(async (response) => {
-        const data = await response.json();
-        if (data.errors) {
-          console.log(data.errors)
+      const data = await makeRequestAPI(url, Request.POST, responseData);
+
+      if (data.errors) {
           const container = document.getElementById('input-create-post');
           const inputElements = container.querySelectorAll('input, select, textarea');
           await takeErrorTextAsync(data, container, inputElements);
-        } else {
-          window.location.pathname = ""
-        }
-      })
+      } else {
+          window.location.pathname = '';
+      }
   } catch (error) {
-    console.error('Произошла ошибка:', error);
-    throw error;
+      console.error('Произошла ошибка:', error);
+      throw error;
   }
 }
+
 
 
 

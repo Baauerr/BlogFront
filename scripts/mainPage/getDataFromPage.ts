@@ -1,5 +1,5 @@
 import { FilterDTO } from "../DTO/filterDTO/filterDTO.js";
-import { filtersToUrl } from "../api/mainPageAPI.js";
+import { filtersToUrl } from "../helpers/filtersToUrl.js";
 
 export function parseUrlParams(): FilterDTO {
 
@@ -43,7 +43,7 @@ export function updateUrl(formData: FilterDTO) {
     if (typeof formData.size === "string") {
         formData.size = parseInt(formData.size, 10);
     }
-    
+
     const queryString: string = filtersToUrl(formData);
 
     const newUrl = `?${queryString}`;

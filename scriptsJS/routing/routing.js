@@ -81,11 +81,5 @@ document.addEventListener("click", (event) => {
     }
 });
 window.addEventListener("popstate", router);
-// document.addEventListener('DOMContentLoaded', (event) => {
-//   const isValid: boolean = tokenValidChecker();
-//   if (!isValid) {
-//     logout();
-//   }
-// });
 router();
 //# sourceMappingURL=routing.js.map

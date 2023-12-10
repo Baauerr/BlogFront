@@ -40,18 +40,6 @@ function showDefaultMenu(loginButtonElement, userMenuElement, createPostButton, 
             communities.style.display = "none";
     }
 }
-export function logout() {
-    localStorage.clear();
-    window.history.pushState({}, null, '/');
-    updateNavBar();
-    router();
-}
-const logoutButton = document.getElementById('logout');
-if (logoutButton) {
-    logoutButton.addEventListener('click', () => {
-        logout();
-    });
-}
 const createPostButton = document.getElementById("create-post-button");
 if (createPostButton) {
     createPostButton.addEventListener('click', () => {

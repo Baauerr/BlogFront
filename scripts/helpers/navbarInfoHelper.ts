@@ -65,21 +65,6 @@ function showDefaultMenu(
 
 }
 
-export function logout() {
-  localStorage.clear();
-  window.history.pushState({}, null, '/');
-  updateNavBar();
-  router();
-}
-
-const logoutButton: HTMLAnchorElement = document.getElementById('logout') as HTMLAnchorElement;
-
-if (logoutButton) {
-  logoutButton.addEventListener('click', () => {
-    logout();
-  });
-}
-
 const createPostButton: HTMLButtonElement = document.getElementById("create-post-button") as HTMLButtonElement;
 
 if (createPostButton) {

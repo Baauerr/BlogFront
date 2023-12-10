@@ -1,5 +1,5 @@
 import { FilterDTO } from "../DTO/filterDTO/filterDTO.js";
-import { filtersToUrl } from "../api/mainPageAPI.js";
+import { filtersToUrl } from "../helpers/filtersToUrl.js";
 export function parseUrlParams() {
     const queryString = window.location.search;
     const params = new URLSearchParams(queryString);

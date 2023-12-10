@@ -1,24 +1,20 @@
 import { updateNavBar } from "../helpers/navbarInfoHelper.js";
 import { router } from "../routing/routing.js";
+import { Request } from "./mainFetcherAPI.js";
+import { makeRequestAPI } from "./mainFetcherAPI.js";
 export async function loginUserOnServerAPI(responseData) {
+    const url = 'https://blog.kreosoft.space/api/account/login';
     try {
-        const response = await fetch('https://blog.kreosoft.space/api/account/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(responseData),
-        });
-        const data = await response.json();
-        const wrongInfo = document.getElementById("wrong-data");
-        if (!response.ok) {
-            wrongInfo.style.display = "block";
+        const data = await makeRequestAPI(url, Request.POST, responseData);
+        const wrongInfo = document.getElementById('wrong-data');
+        if (data.errors) {
+            wrongInfo.style.display = 'block';
         }
         else {
-            wrongInfo.style.display = "none";
+            wrongInfo.style.display = 'none';
             localStorage.clear();
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("email", responseData.email);
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('email', responseData.email);
             window.history.pushState({}, null, '/');
             router();
             await updateNavBar();

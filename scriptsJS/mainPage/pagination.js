@@ -4,7 +4,7 @@ export function viewPagination(totalPages, currentPage) {
     pagination.innerHTML = '';
     const ul = document.createElement('ul');
     ul.classList.add('pagination');
-    const maxButtonsToShow = 10;
+    const maxButtonsToShow = 7;
     const halfMaxButtonsToShow = Math.floor(maxButtonsToShow / 2);
     let startPage = 1;
     let endPage = totalPages;
