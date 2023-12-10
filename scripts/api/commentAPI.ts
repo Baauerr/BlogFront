@@ -40,7 +40,6 @@ export async function sendComment(commentInfo: SendCommentDTO, id: string){
 export async function editComment(content: CommentEditDataDTO, commentId: string) {
   try {
     const token: string = localStorage.getItem("token")
-    console.log(content)
     await fetch(`https://blog.kreosoft.space/api/comment/${commentId}`, {
       method: 'PUT',
       headers: {

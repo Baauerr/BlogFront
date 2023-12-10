@@ -14,8 +14,6 @@ export function tokenValidChecker() {
                 const expirationTime = tokenObject.exp;
                 const currentTime = Math.floor(Date.now() / 1000);
                 if (currentTime < expirationTime) {
-                    console.log(currentTime);
-                    console.log(expirationTime);
                     return true;
                 }
                 else {

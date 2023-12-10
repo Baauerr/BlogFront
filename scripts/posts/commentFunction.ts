@@ -34,7 +34,6 @@ export async function commentView(comments: CommentDTO[], postId: string, userFu
         const showMoreButton: HTMLAnchorElement = commentClone.querySelector(".show-more-comment") as HTMLAnchorElement;
 
         if (isUserComment(comment, userFullName) && comment.deleteDate === null) {
-            console.log(comment)
             showHiddenInput(editCommentButton);
             showHiddenInput(deleteCommentButton);
         }

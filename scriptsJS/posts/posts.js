@@ -63,7 +63,6 @@ export async function showSinglePost(reloadPage) {
         postDescription.dataset.fullDescription = post.description;
     }
     if (post.addressId !== null) {
-        console.log(postAddress);
         postAddress.textContent = await showAddress(post.addressId);
     }
     toggleShowMoreButton(showMoreButton, post.description);

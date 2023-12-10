@@ -80,7 +80,6 @@ export async function showSinglePost(reloadPage?: boolean) {
     }
 
     if (post.addressId !== null) {
-        console.log(postAddress)
         postAddress.textContent = await showAddress(post.addressId);
     }
 

@@ -28,7 +28,6 @@ export async function commentView(comments, postId, userFullName) {
         const inputBox = commentClone.querySelector(".edit-comment-input");
         const showMoreButton = commentClone.querySelector(".show-more-comment");
         if (isUserComment(comment, userFullName) && comment.deleteDate === null) {
-            console.log(comment);
             showHiddenInput(editCommentButton);
             showHiddenInput(deleteCommentButton);
         }

@@ -1,4 +1,3 @@
-import { takeErrorTextAsync } from "../helpers/errorCreateHelper.js";
 import { filtersToUrl } from "./mainPageAPI.js";
 import { errorHandler } from "./errorHandler.js";
 export async function getConcreteCommunityAPI(id) {
@@ -97,10 +96,6 @@ export async function createPostInCommunityAPI(responseData, id) {
             const data = await response.json();
             if (data.errors) {
                 console.log(data.errors);
-                const container = document.getElementById('input-create-post');
-                const inputElements = container.querySelectorAll('input, select, textarea');
-                console.log(inputElements);
-                await takeErrorTextAsync(data, container, inputElements);
             }
             else {
                 window.location.pathname = "";

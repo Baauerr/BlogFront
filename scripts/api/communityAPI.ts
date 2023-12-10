@@ -102,10 +102,7 @@ export async function createPostInCommunityAPI(responseData: PostInfoDTO, id: st
                 const data = await response.json();
                 if (data.errors) {
                     console.log(data.errors)
-                    const container = document.getElementById('input-create-post');
-                    const inputElements = container.querySelectorAll('input, select, textarea');
-                    console.log(inputElements);
-                    await takeErrorTextAsync(data, container, inputElements);
+
                 } else {
                     window.location.pathname = ""
                 }

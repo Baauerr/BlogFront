@@ -23,7 +23,6 @@ export async function displayPosts(apiFunction, formData, id = null) {
 
     try {
         const data: PostsDTO = id ? await apiFunction(formData, id) : await apiFunction(formData);
-        console.log(data);
          if (!data){
             throw new Error("В доступе отказано");
         }
